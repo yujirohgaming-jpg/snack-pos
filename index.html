@@ -159,7 +159,7 @@
       <span class="bottom-total" id="barTotal">₱0.00</span>
     </div>
     <div class="bottom-btns">
-      <button class="btn-quick-sale" onclick="quickExactPay()">⚡ Exact Pay</button>
+      <button class="btn-quick-sale" onclick="quickInstaPay()">⚡ Insta Pay</button>
       <button class="btn-view-cart" onclick="openCartScreen()">
         <span>🛒 View</span>
         <span class="cart-badge" id="barCount">0</span>
@@ -757,12 +757,12 @@
     function clearOrder() { currentOrder = []; renderOrder(); renderMenu(); closeCartScreen(); }
     function getOrderSum() { return currentOrder.reduce((sum, item) => sum + item.price, 0); }
 
-    function quickExactPay() {
+    function quickInstaPay() {
       if (currentOrder.length === 0) return alert("Tap at least one item on the menu first!");
       const total = getOrderSum();
       const count = currentOrder.length;
       const label = count === 1 ? "1 item" : count + " items";
-      if (confirm("Confirm Exact Pay for " + label + " (₱" + total.toFixed(2) + ")?")) {
+      if (confirm("Confirm payment for " + label + " for a total amount of ₱" + total.toFixed(2) + "?")) {
         confirmSale();
       }
     }
