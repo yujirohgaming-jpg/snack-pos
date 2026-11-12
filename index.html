@@ -31,19 +31,24 @@
     .cat-mini-btn { background: white; border: 1px solid #d97706; color: #92400e; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-weight: 800; cursor: pointer; }
     .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .menu-card-item { position: relative; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 18px; padding: 10px 10px 12px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); display: flex; flex-direction: column; align-items: center; justify-content: space-between; transition: transform 0.12s ease, border-color 0.2s ease, background-color 0.2s ease; }
-    .menu-card-item:active { transform: scale(0.95); }
+    .menu-card-item:active { transform: scale(0.96); }
     .menu-card-item.just-added { border-color: #16a34a; background: #dcfce7; }
-    .in-cart-pill { position: absolute; top: 10px; right: 10px; font-size: 11px; font-weight: 900; color: #ffffff; background: #16a34a; padding: 3px 8px; border-radius: 10px; z-index: 3; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.35); }
+    .visual-wrap { position: relative; width: 100%; margin-bottom: 6px; }
+    .card-minus-btn { position: absolute; top: 6px; left: 6px; width: 28px; height: 28px; border-radius: 50%; background: #dc2626; color: #ffffff; border: 2px solid #ffffff; font-size: 18px; font-weight: 900; line-height: 22px; text-align: center; cursor: pointer; z-index: 4; box-shadow: 0 2px 6px rgba(220, 38, 38, 0.45); padding: 0; }
+    .card-minus-btn:active { transform: scale(0.9); }
+    .edit-mode .card-minus-btn { display: none; }
+    .in-cart-pill { position: absolute; top: 6px; right: 6px; font-size: 11px; font-weight: 900; color: #ffffff; background: #16a34a; padding: 3px 8px; border-radius: 10px; z-index: 3; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.35); }
     .edit-mode .in-cart-pill { display: none; }
-    .food-icon { font-size: 46px; line-height: 1; margin: 8px 0; height: 64px; display: flex; align-items: center; justify-content: center; }
-    .food-photo { width: 100%; height: 105px; object-fit: cover; border-radius: 12px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
+    .food-icon { font-size: 46px; line-height: 1; margin: 4px 0; height: 68px; display: flex; align-items: center; justify-content: center; }
+    .food-photo { width: 100%; height: 105px; object-fit: cover; border-radius: 12px; display: block; border: 1px solid #e2e8f0; }
+    .mix-badge { display: inline-block; font-size: 10px; font-weight: 800; color: #6b21a8; background: #f3e8ff; border: 1px solid #d8b4fe; padding: 2px 8px; border-radius: 8px; margin-bottom: 4px; }
     .food-name { font-weight: 800; font-size: 14px; color: #0f172a; line-height: 1.25; margin-bottom: 6px; }
-    .food-bottom { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: auto; padding-top: 6px; border-top: 1px solid #f1f5f9; }
-    .food-price { font-size: 15px; font-weight: 900; color: var(--primary); }
-    .food-plus { background: var(--accent); color: #111827; width: 26px; height: 26px; border-radius: 50%; font-size: 17px; font-weight: 900; line-height: 26px; text-align: center; }
-    .addon-badge { position: absolute; top: 10px; left: 10px; font-size: 10px; font-weight: 800; color: #1d4ed8; background: rgba(219, 234, 254, 0.95); padding: 3px 7px; border-radius: 8px; z-index: 2; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .food-bottom { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: auto; padding-top: 6px; border-top: 1px solid #f1f5f9; gap: 4px; }
+    .food-price { font-size: 14px; font-weight: 900; color: var(--primary); }
+    .btn-options-pill { background: var(--accent); color: #111827; border: 1.5px solid #eab308; border-radius: 10px; padding: 6px 10px; font-size: 11px; font-weight: 900; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); white-space: nowrap; }
+    .btn-options-pill:active { transform: scale(0.93); }
     .edit-mode .menu-card-item { background: #fffbeb; border-color: #f59e0b; padding-top: 22px; }
-    .delete-badge { display: none; position: absolute; top: -6px; right: -6px; background: #dc2626; color: white; border: 2px solid white; width: 26px; height: 26px; border-radius: 50%; font-size: 15px; font-weight: 800; line-height: 20px; text-align: center; cursor: pointer; z-index: 4; }
+    .delete-badge { display: none; position: absolute; top: -6px; right: -6px; background: #dc2626; color: white; border: 2px solid white; width: 26px; height: 26px; border-radius: 50%; font-size: 15px; font-weight: 800; line-height: 20px; text-align: center; cursor: pointer; z-index: 5; }
     .edit-mode .delete-badge { display: block; }
     .reorder-row { display: none; justify-content: center; gap: 8px; margin-top: 8px; width: 100%; }
     .edit-mode .reorder-row { display: flex; }
@@ -57,8 +62,13 @@
     .report-accordion-btn.open { border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0; background: #f8fafc; border-color: #94a3b8; }
     .report-accordion-body { display: none; background: #ffffff; border: 1.5px solid #94a3b8; border-top: none; border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; padding: 12px 14px; margin-bottom: 12px; }
     .report-accordion-body.open { display: block; }
-    .order-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 15px; font-weight: 700; }
-    .remove-btn { background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; padding: 5px 10px; font-weight: 800; margin-left: 8px; cursor: pointer; }
+    .order-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; font-weight: 700; gap: 8px; }
+    .order-item-info { flex: 1; line-height: 1.3; }
+    .order-qty-tag { color: #2563eb; font-weight: 900; margin-right: 4px; }
+    .order-item-right { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .cart-step-btn { width: 28px; height: 28px; border-radius: 8px; border: none; font-size: 16px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .cart-step-minus { background: #fee2e2; color: #dc2626; }
+    .cart-step-plus { background: #dcfce7; color: #16a34a; }
     .order-total { display: flex; justify-content: space-between; font-weight: 900; font-size: 20px; margin-top: 12px; padding-top: 10px; border-top: 2px solid #e2e8f0; }
     .restock-item { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed #e2e8f0; font-size: 14px; font-weight: 600; }
     .restock-qty { font-weight: 800; color: #2563eb; background: #eff6ff; padding: 2px 9px; border-radius: 8px; }
@@ -80,6 +90,7 @@
     .drawer-header { background: #0f172a; color: white; padding: calc(14px + env(safe-area-inset-top)) 16px 14px; display: flex; justify-content: space-between; align-items: center; }
     .drawer-header h2 { margin: 0; font-size: 18px; font-weight: 800; }
     .btn-close-drawer { background: #334155; color: white; border: none; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .btn-clear-top { background: #dc2626; color: white; border: none; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 800; cursor: pointer; }
     .drawer-body { flex: 1; overflow-y: auto; padding: 14px; padding-bottom: 40px; }
     .drawer-footer { background: white; padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 12px rgba(0,0,0,0.08); display: flex; gap: 10px; }
     .log-item { background: #f8fafc; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; border-left: 4px solid var(--success); border: 1px solid #e2e8f0; border-left-width: 4px; }
@@ -89,10 +100,16 @@
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
     .modal-overlay.open { display: flex; }
     .modal-box { background: white; width: 100%; max-width: 380px; border-radius: 20px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.25); max-height: 88vh; overflow-y: auto; }
-    .modal-title { font-size: 18px; font-weight: 900; margin: 0 0 6px; text-align: center; }
+    .modal-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .btn-modal-back { background: #f1f5f9; color: #0f172a; border: none; border-radius: 10px; width: 36px; height: 36px; font-size: 18px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .modal-title { font-size: 18px; font-weight: 900; margin: 0; text-align: center; flex: 1; }
     .modal-sub { font-size: 14px; color: #64748b; text-align: center; margin-bottom: 14px; font-weight: 600; }
     .addon-choice-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 13px 14px; margin-bottom: 8px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 15px; font-weight: 700; color: #1e293b; cursor: pointer; }
     .addon-choice-btn.selected { background: #eff6ff; border-color: #2563eb; color: #1e40af; }
+    .addon-choice-btn.mix-selected { background: #f3e8ff; border-color: #9333ea; color: #6b21a8; }
+    .qty-stepper-box { display: flex; align-items: center; justify-content: space-between; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 4px 6px; flex: 0.65; }
+    .qty-step-btn { width: 34px; height: 34px; border-radius: 10px; border: none; background: #ffffff; color: #0f172a; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .qty-step-val { font-size: 17px; font-weight: 900; color: #0f172a; min-width: 24px; text-align: center; }
     .edit-field-label { font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; margin: 10px 0 4px; display: block; }
     .edit-text-input { width: 100%; padding: 10px; font-size: 15px; font-weight: 700; border: 1.5px solid #cbd5e1; border-radius: 10px; }
     .visual-picker-box { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px; }
@@ -114,7 +131,7 @@
     .change-display { background: #f0fdf4; border: 1.5px solid #bbf7d0; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .change-label { font-size: 14px; font-weight: 700; color: #166534; }
     .change-amount { font-size: 24px; font-weight: 900; color: #15803d; }
-    .modal-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
   </style>
 </head>
 <body>
@@ -145,11 +162,12 @@
     <div class="menu-grid" id="menuGrid"></div>
     <div class="edit-actions-grid">
       <button class="btn-ed" style="background:#10b981;" onclick="addNewMenuItem()">+ Add Food Item</button>
+      <button class="btn-ed" style="background:#9333ea;" onclick="addNewMixMatchItem()">+ Add Mix & Match</button>
       <button class="btn-ed" style="background:#3b82f6;" onclick="sortActiveCategoryAZ()">Sort Items A–Z</button>
       <button class="btn-ed" style="background:#8b5cf6;" onclick="addNewCategory()">+ New Category</button>
       <button class="btn-ed" style="background:#0284c7;" onclick="exportMenuBackup()">Copy Menu Backup</button>
       <button class="btn-ed" style="background:#0d9488;" onclick="openImportModal()">Import Backup</button>
-      <button class="btn-ed" style="background:#64748b;" onclick="restoreDefaultMenu()">Reset Defaults</button>
+      <button class="btn-ed" style="background:#64748b; grid-column: span 2;" onclick="restoreDefaultMenu()">Reset Defaults</button>
     </div>
     <button class="btn btn-custom" onclick="addCustomItem()">+ One-Time Custom Item / Drink</button>
   </div>
@@ -199,7 +217,7 @@
   <div class="full-screen-drawer" id="cartScreen">
     <div class="drawer-header">
       <h2>🛒 Customer Order</h2>
-      <button class="btn-close-drawer" onclick="closeCartScreen()">+ Add More Items</button>
+      <button class="btn-clear-top" onclick="clearOrder()">Clear All</button>
     </div>
     <div class="drawer-body">
       <div class="card-box">
@@ -209,24 +227,32 @@
       </div>
     </div>
     <div class="drawer-footer">
-      <button class="btn" style="background:#94a3b8; flex:0.45;" onclick="clearOrder()">Clear All</button>
+      <button class="btn" style="background:#64748b; flex:0.45;" onclick="closeCartScreen()">← Back</button>
       <button class="btn" style="background:#16a34a;" onclick="openCheckoutModal()">Payment</button>
     </div>
   </div>
   <div class="modal-overlay" id="addonModal">
     <div class="modal-box">
-      <div class="modal-title" id="addonModalItemName">Item Name</div>
+      <div class="modal-top-row">
+        <button type="button" class="btn-modal-back" onclick="closeAddonModal()">←</button>
+        <div class="modal-title" id="addonModalItemName">Item Name</div>
+        <div style="width:36px;"></div>
+      </div>
       <div class="modal-sub" id="addonModalBasePrice">Base Price: ₱0.00</div>
       <div id="addonChoicesContainer"></div>
       <div class="modal-actions">
-        <button class="btn" style="background:#94a3b8;" onclick="closeAddonModal()">Cancel</button>
-        <button class="btn" style="background:#16a34a;" id="confirmAddonBtn" onclick="confirmAddWithAddons()">Add (₱0.00)</button>
+        <div class="qty-stepper-box">
+          <button type="button" class="qty-step-btn" onclick="changeModalQty(-1)">−</button>
+          <span class="qty-step-val" id="modalQtyValue">1</span>
+          <button type="button" class="qty-step-btn" onclick="changeModalQty(1)">+</button>
+        </div>
+        <button class="btn" style="background:#16a34a;" id="confirmAddonBtn" onclick="confirmAddWithAddons()">Add to Order (₱0.00)</button>
       </div>
     </div>
   </div>
   <div class="modal-overlay" id="itemEditorModal">
     <div class="modal-box">
-      <div class="modal-title">Edit Item, Icon & Photo</div>
+      <div class="modal-title" id="itemEditorModalTitle">Edit Item, Icon & Photo</div>
       <label class="edit-field-label">Item Name</label>
       <input type="text" class="edit-text-input" id="editItemNameInput">
       <label class="edit-field-label">Base Price (₱)</label>
@@ -246,9 +272,9 @@
           <button type="button" class="btn-photo-clear" onclick="clearItemPhoto()">Remove Photo</button>
         </div>
       </div>
-      <label class="edit-field-label" style="margin-top:14px;">Add-ons for This Item Only</label>
+      <label class="edit-field-label" id="itemEditorChoicesLabel" style="margin-top:14px;">Add-ons for This Item Only</label>
       <div id="itemSpecificAddonsList"></div>
-      <button class="btn" style="background:#d97706; width:100%; padding:10px; font-size:13px; margin-top:4px;" onclick="addSpecificAddonToItem()">+ Add Add-on Option</button>
+      <button class="btn" id="itemEditorAddChoiceBtn" style="background:#d97706; width:100%; padding:10px; font-size:13px; margin-top:4px;" onclick="addSpecificAddonToItem()">+ Add Add-on Option</button>
       <div class="modal-actions">
         <button class="btn" style="background:#94a3b8;" onclick="closeItemEditorModal()">Cancel</button>
         <button class="btn" style="background:#16a34a;" onclick="saveItemEditorChanges()">Save Item</button>
@@ -296,42 +322,41 @@
       {
         title: "Snacks & Street Food",
         items: [
-          { name: "Lumpiang Toge (2pcs)", price: 20.00, icon: "🌯", photo: "", addons: [] },
-          { name: "Lumpiang Shanghai (4pcs)", price: 25.00, icon: "🌯", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Steamed Siomai (4pcs)", price: 25.00, icon: "🥟", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Fried Siomai (4pcs)", price: 25.00, icon: "🥟", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Fried Dumplings (4pcs)", price: 25.00, icon: "🥟", photo: "", addons: [] },
-          { name: "Kikiam", price: 20.00, icon: "🌭", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Fish balls", price: 20.00, icon: "🍢", photo: "", addons: [] },
-          { name: "Squid balls", price: 20.00, icon: "🍢", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Hotdog on Stick", price: 20.00, icon: "🌭", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Hungarian Sausage", price: 35.00, icon: "🌭", photo: "", addons: [] },
-          { name: "Cheese Sticks", price: 20.00, icon: "🧀", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Fries (Cheese)", price: 20.00, icon: "🍟", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Fries (Sour Cream)", price: 20.00, icon: "🍟", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Fries (BBQ)", price: 20.00, icon: "🍟", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] }
+          { name: "Lumpiang Toge (2pcs)", price: 20.00, icon: "🌯", photo: "", isMixMatch: false, addons: [] },
+          { name: "Lumpiang Shanghai (4pcs)", price: 25.00, icon: "🌯", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Steamed Siomai (4pcs)", price: 25.00, icon: "🥟", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fried Siomai (4pcs)", price: 25.00, icon: "🥟", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fried Dumplings (4pcs)", price: 25.00, icon: "🥟", photo: "", isMixMatch: false, addons: [] },
+          { name: "Kikiam", price: 20.00, icon: "🌭", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fish balls", price: 20.00, icon: "🍢", photo: "", isMixMatch: false, addons: [] },
+          { name: "Squid balls", price: 20.00, icon: "🍢", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Hotdog on Stick", price: 20.00, icon: "🌭", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Hungarian Sausage", price: 35.00, icon: "🌭", photo: "", isMixMatch: false, addons: [] },
+          { name: "Cheese Sticks", price: 20.00, icon: "🧀", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fries (Cheese)", price: 20.00, icon: "🍟", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fries (Sour Cream)", price: 20.00, icon: "🍟", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fries (BBQ)", price: 20.00, icon: "🍟", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] }
         ]
       },
       {
         title: "Sandwiches",
         items: [
-          { name: "Burger", price: 30.00, icon: "🍔", photo: "", addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
-          { name: "Cheeseburger", price: 35.00, icon: "🍔", photo: "", addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
-          { name: "Egg Sandwich", price: 25.00, icon: "🥪", photo: "", addons: [{ name: "Extra Cheese", price: 10.00 }] },
-          { name: "Ham Sandwich", price: 25.00, icon: "🥪", photo: "", addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
-          { name: "Ham & Cheese Sandwich", price: 30.00, icon: "🥪", photo: "", addons: [{ name: "Extra Egg", price: 15.00 }] },
-          { name: "Ham & Egg Sandwich", price: 35.00, icon: "🥪", photo: "", addons: [{ name: "Extra Cheese", price: 10.00 }] }
+          { name: "Burger", price: 30.00, icon: "🍔", photo: "", isMixMatch: false, addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
+          { name: "Cheeseburger", price: 35.00, icon: "🍔", photo: "", isMixMatch: false, addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
+          { name: "Egg Sandwich", price: 25.00, icon: "🥪", photo: "", isMixMatch: false, addons: [{ name: "Extra Cheese", price: 10.00 }] },
+          { name: "Ham Sandwich", price: 25.00, icon: "🥪", photo: "", isMixMatch: false, addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
+          { name: "Ham & Cheese Sandwich", price: 30.00, icon: "🥪", photo: "", isMixMatch: false, addons: [{ name: "Extra Egg", price: 15.00 }] },
+          { name: "Ham & Egg Sandwich", price: 35.00, icon: "🥪", photo: "", isMixMatch: false, addons: [{ name: "Extra Cheese", price: 10.00 }] }
         ]
       },
       {
         title: "Pancit",
         items: [
-          { name: "Pancit Canton", price: 30.00, icon: "🍜", photo: "", addons: [{ name: "Extra Egg", price: 15.00 }] },
-          { name: "Pancit Canton w/ Egg", price: 45.00, icon: "🍜", photo: "", addons: [] }
+          { name: "Pancit Canton", price: 30.00, icon: "🍜", photo: "", isMixMatch: false, addons: [{ name: "Extra Egg", price: 15.00 }] },
+          { name: "Pancit Canton w/ Egg", price: 45.00, icon: "🍜", photo: "", isMixMatch: false, addons: [] }
         ]
       }
     ];
-
     let menuData = JSON.parse(localStorage.getItem('miniPosMenuPH_v4')) || JSON.parse(JSON.stringify(DEFAULT_MENU));
     let currentOrder = [];
     let salesHistory = JSON.parse(localStorage.getItem('miniPosSalesPH')) || [];
@@ -339,9 +364,11 @@
     let activeCatIndex = 0;
     let pendingItem = null;
     let selectedAddonIndexes = [];
+    let pendingModalQty = 1;
     let editingItemIdx = null;
     let tempItemAddons = [];
     let tempItemPhoto = "";
+    let tempItemIsMixMatch = false;
     let toastTimer = null;
 
     function saveMenuData() {
@@ -360,6 +387,19 @@
         }
       });
       return count;
+    }
+
+    function removeLastMatchingItem(event, itemName) {
+      event.stopPropagation();
+      for (let i = currentOrder.length - 1; i >= 0; i--) {
+        if (currentOrder[i].name === itemName || currentOrder[i].name.startsWith(itemName + ' + ')) {
+          currentOrder.splice(i, 1);
+          renderOrder();
+          renderMenu();
+          showToast('− Removed');
+          return;
+        }
+      }
     }
 
     function renderMenu() {
@@ -383,23 +423,29 @@
       activeCatLabel.innerText = currentCat.title;
 
       currentCat.items.forEach((item, itemIndex) => {
-        const itemAddons = item.addons || [];
+        const isMix = !!item.isMixMatch;
         const qtyInCart = getItemCartQty(item.name);
+        const safeName = item.name.replace(/'/g, "\\'");
         const visualHtml = item.photo
           ? '<img class="food-photo" src="' + item.photo + '" alt="">'
-          : '<div class="food-icon">' + (item.icon || '🍽️') + '</div>';
+          : '<div class="food-icon">' + (item.icon || (isMix ? '🥤' : '🍽️')) + '</div>';
+
+        const actionBtnLabel = isEditMode ? 'Edit' : (isMix ? 'Mix' : 'Options');
 
         const card = document.createElement('div');
         card.className = 'menu-card-item';
         card.innerHTML =
           '<span class="delete-badge" onclick="deleteMenuItem(event, ' + itemIndex + ')">×</span>' +
-          (itemAddons.length > 0 ? '<span class="addon-badge">+ Add-ons</span>' : '') +
-          (qtyInCart > 0 ? '<span class="in-cart-pill">' + qtyInCart + ' in cart</span>' : '') +
-          visualHtml +
+          '<div class="visual-wrap">' +
+            (qtyInCart > 0 ? '<button type="button" class="card-minus-btn" onclick="removeLastMatchingItem(event, \'' + safeName + '\')">−</button>' : '') +
+            (qtyInCart > 0 ? '<span class="in-cart-pill">' + qtyInCart + ' in cart</span>' : '') +
+            visualHtml +
+          '</div>' +
+          (isMix ? '<span class="mix-badge">Mix & Match</span>' : '') +
           '<div class="food-name">' + item.name + '</div>' +
           '<div class="food-bottom">' +
             '<span class="food-price">₱' + item.price.toFixed(2) + '</span>' +
-            '<span class="food-plus">' + (isEditMode ? '✎' : '+') + '</span>' +
+            '<button type="button" class="btn-options-pill" onclick="handleOptionsClick(event, ' + itemIndex + ')">' + actionBtnLabel + '</button>' +
           '</div>' +
           '<div class="reorder-row">' +
             '<button class="move-btn" onclick="moveItem(event, ' + itemIndex + ', -1)">◀</button>' +
@@ -416,36 +462,67 @@
       });
     }
     function handleItemTap(item, cardEl) {
-      const itemAddons = item.addons || [];
-      if (itemAddons.length === 0) {
-        addItem({ name: item.name, price: item.price });
-        if (cardEl) {
-          cardEl.classList.add('just-added');
-          setTimeout(() => renderMenu(), 220);
-        }
+      if (item.isMixMatch) {
+        openOptionsModal(item);
         return;
       }
+      addItem({ name: item.name, price: item.price }, 1);
+      if (cardEl) {
+        cardEl.classList.add('just-added');
+        setTimeout(() => renderMenu(), 220);
+      }
+    }
+
+    function handleOptionsClick(event, itemIndex) {
+      event.stopPropagation();
+      if (isEditMode) {
+        openItemEditorModal(itemIndex);
+        return;
+      }
+      const item = menuData[activeCatIndex].items[itemIndex];
+      openOptionsModal(item);
+    }
+
+    function openOptionsModal(item) {
       pendingItem = item;
       selectedAddonIndexes = [];
+      pendingModalQty = 1;
+      const isMix = !!item.isMixMatch;
       document.getElementById('addonModalItemName').innerText = item.name;
-      document.getElementById('addonModalBasePrice').innerText = 'Base Price: ₱' + item.price.toFixed(2);
+      document.getElementById('addonModalBasePrice').innerText = isMix
+        ? 'Mix & Match Base: ₱' + item.price.toFixed(2) + ' (Pick items to mix)'
+        : 'Base Price: ₱' + item.price.toFixed(2);
+      document.getElementById('modalQtyValue').innerText = '1';
       renderAddonChoices();
       document.getElementById('addonModal').classList.add('open');
+    }
+
+    function changeModalQty(delta) {
+      pendingModalQty = Math.max(1, pendingModalQty + delta);
+      document.getElementById('modalQtyValue').innerText = pendingModalQty;
+      renderAddonChoices();
     }
 
     function renderAddonChoices() {
       const container = document.getElementById('addonChoicesContainer');
       const itemAddons = pendingItem.addons || [];
-      container.innerHTML = itemAddons.map((addon, idx) => {
-        const isSel = selectedAddonIndexes.indexOf(idx) > -1;
-        return '<button class="addon-choice-btn' + (isSel ? ' selected' : '') + '" onclick="toggleAddonChoice(' + idx + ')">' +
-               '<span>' + (isSel ? '✓ ' : '+ ') + addon.name + '</span>' +
-               '<span>+₱' + addon.price.toFixed(2) + '</span></button>';
-      }).join('');
-      let total = pendingItem.price;
-      selectedAddonIndexes.forEach(idx => { total += itemAddons[idx].price; });
-      const btnText = selectedAddonIndexes.length === 0 ? 'No Add-on (₱' + total.toFixed(2) + ')' : 'Add to Order (₱' + total.toFixed(2) + ')';
-      document.getElementById('confirmAddonBtn').innerText = btnText;
+      const isMix = !!pendingItem.isMixMatch;
+      if (itemAddons.length === 0) {
+        container.innerHTML = '<div style="text-align:center; font-size:13px; color:#64748b; margin-bottom:10px;">Select quantity below:</div>';
+      } else {
+        container.innerHTML = itemAddons.map((addon, idx) => {
+          const isSel = selectedAddonIndexes.indexOf(idx) > -1;
+          const selClass = isSel ? (isMix ? ' mix-selected' : ' selected') : '';
+          const priceTag = addon.price === 0 ? 'Included' : '+₱' + addon.price.toFixed(2);
+          return '<button class="addon-choice-btn' + selClass + '" onclick="toggleAddonChoice(' + idx + ')">' +
+                 '<span>' + (isSel ? '✓ ' : '+ ') + addon.name + '</span>' +
+                 '<span>' + priceTag + '</span></button>';
+        }).join('');
+      }
+      let unitTotal = pendingItem.price;
+      selectedAddonIndexes.forEach(idx => { unitTotal += itemAddons[idx].price; });
+      const grandTotal = unitTotal * pendingModalQty;
+      document.getElementById('confirmAddonBtn').innerText = 'Add to Order (₱' + grandTotal.toFixed(2) + ')';
     }
 
     function toggleAddonChoice(idx) {
@@ -466,14 +543,18 @@
         finalName += ' + ' + names.join(' + ');
         selectedAddonIndexes.forEach(idx => { finalPrice += itemAddons[idx].price; });
       }
-      addItem({ name: finalName, price: finalPrice });
+      addItem({ name: finalName, price: finalPrice }, pendingModalQty);
       closeAddonModal();
       renderMenu();
     }
-
     function openItemEditorModal(itemIndex) {
       editingItemIdx = itemIndex;
       const item = menuData[activeCatIndex].items[itemIndex];
+      tempItemIsMixMatch = !!item.isMixMatch;
+      document.getElementById('itemEditorModalTitle').innerText = tempItemIsMixMatch ? 'Edit Mix & Match Item' : 'Edit Item, Icon & Photo';
+      document.getElementById('itemEditorChoicesLabel').innerText = tempItemIsMixMatch ? 'Mix Choices (Pick 1 or More)' : 'Add-ons for This Item Only';
+      document.getElementById('itemEditorAddChoiceBtn').innerText = tempItemIsMixMatch ? '+ Add Mix Choice' : '+ Add Add-on Option';
+
       document.getElementById('editItemNameInput').value = item.name;
       document.getElementById('editItemPriceInput').value = item.price;
       document.getElementById('editItemEmojiInput').value = item.icon || '🍽️';
@@ -542,24 +623,32 @@
     function renderItemSpecificAddonsList() {
       const list = document.getElementById('itemSpecificAddonsList');
       if (tempItemAddons.length === 0) {
-        list.innerHTML = '<div style="font-size:13px; color:#64748b; margin-bottom:8px;">No add-ons (tapping item adds it immediately).</div>';
+        list.innerHTML = tempItemIsMixMatch
+          ? '<div style="font-size:13px; color:#64748b; margin-bottom:8px;">No mix choices yet. Tap + Add Mix Choice below.</div>'
+          : '<div style="font-size:13px; color:#64748b; margin-bottom:8px;">No add-ons yet.</div>';
         return;
       }
-      list.innerHTML = tempItemAddons.map((addon, idx) =>
-        '<div class="item-addon-row">' +
-          '<span>' + addon.name + ' (+₱' + addon.price.toFixed(2) + ')</span>' +
+      list.innerHTML = tempItemAddons.map((addon, idx) => {
+        const priceLabel = addon.price === 0 ? 'Included (₱0)' : '+₱' + addon.price.toFixed(2);
+        return '<div class="item-addon-row">' +
+          '<span>' + addon.name + ' (' + priceLabel + ')</span>' +
           '<div>' +
             '<button class="btn-sm-pill" style="background:#fef3c7; color:#92400e;" onclick="editSpecificAddon(' + idx + ')">Edit</button>' +
             '<button class="btn-sm-pill" style="background:#fee2e2; color:#dc2626;" onclick="deleteSpecificAddon(' + idx + ')">×</button>' +
           '</div>' +
-        '</div>'
-      ).join('');
+        '</div>';
+      }).join('');
     }
 
     function addSpecificAddonToItem() {
-      const name = prompt("Add-on name for this item (e.g., Snack in a Cup, Extra Cheese):");
+      const label = tempItemIsMixMatch ? "Mix item name (e.g., Fries, Siomai, Fish balls):" : "Add-on name for this item (e.g., Snack in a Cup, Extra Cheese):";
+      const name = prompt(label);
       if (!name || name.trim() === '') return;
-      const priceStr = prompt("Extra price for " + name.trim() + " (₱):", "20");
+      const defaultP = tempItemIsMixMatch ? "0" : "20";
+      const pricePrompt = tempItemIsMixMatch
+        ? "Extra price for " + name.trim() + " (enter 0 if included in combo price):"
+        : "Extra price for " + name.trim() + " (₱):";
+      const priceStr = prompt(pricePrompt, defaultP);
       if (priceStr === null) return;
       const price = parseFloat(priceStr);
       if (isNaN(price) || price < 0) return alert("Please enter a valid price.");
@@ -569,9 +658,9 @@
 
     function editSpecificAddon(idx) {
       const addon = tempItemAddons[idx];
-      const newName = prompt("Edit add-on name:", addon.name);
+      const newName = prompt("Edit choice name:", addon.name);
       if (!newName || newName.trim() === '') return;
-      const newPriceStr = prompt("Edit price for " + newName.trim() + " (₱):", addon.price);
+      const newPriceStr = prompt("Edit extra price for " + newName.trim() + " (₱):", addon.price);
       if (newPriceStr === null) return;
       const newPrice = parseFloat(newPriceStr);
       if (isNaN(newPrice) || newPrice < 0) return alert("Please enter a valid price.");
@@ -588,10 +677,43 @@
       if (!newName) return alert("Please enter an item name.");
       if (isNaN(newPrice) || newPrice < 0) return alert("Please enter a valid price.");
       menuData[activeCatIndex].items[editingItemIdx] = {
-        name: newName, price: newPrice, icon: newIcon, photo: tempItemPhoto, addons: tempItemAddons
+        name: newName, price: newPrice, icon: newIcon, photo: tempItemPhoto, isMixMatch: tempItemIsMixMatch, addons: tempItemAddons
       };
       saveMenuData(); closeItemEditorModal(); renderMenu();
     }
+    function addNewMixMatchItem() {
+      const mainName = prompt("Step 1 — Main Mix & Match item name (e.g., Juice Combo):");
+      if (!mainName || mainName.trim() === '') return;
+      const priceStr = prompt("Base price for " + mainName.trim() + " (₱):", "35");
+      if (priceStr === null) return;
+      const basePrice = parseFloat(priceStr);
+      if (isNaN(basePrice) || basePrice < 0) return alert("Please enter a valid price.");
+
+      const choices = [];
+      while (true) {
+        const promptLabel = choices.length === 0
+          ? "Step 2 — Enter first mix item (e.g., Fries):"
+          : "Added: " + choices.map(c => c.name).join(", ") + "\nEnter another mix item (or leave blank & press OK to finish):";
+        const choiceName = prompt(promptLabel);
+        if (!choiceName || choiceName.trim() === '') break;
+        const extraStr = prompt("Extra price for " + choiceName.trim() + " (enter 0 if included in ₱" + basePrice.toFixed(2) + "):", "0");
+        if (extraStr === null) break;
+        const extraPrice = parseFloat(extraStr);
+        choices.push({ name: choiceName.trim(), price: isNaN(extraPrice) || extraPrice < 0 ? 0 : extraPrice });
+      }
+
+      menuData[activeCatIndex].items.push({
+        name: mainName.trim(),
+        price: basePrice,
+        icon: "🥤",
+        photo: "",
+        isMixMatch: true,
+        addons: choices
+      });
+      saveMenuData();
+      renderMenu();
+    }
+
     function exportMenuBackup() {
       const code = JSON.stringify(menuData);
       navigator.clipboard.writeText(code).then(() => {
@@ -700,7 +822,7 @@
       if (priceStr === null) return;
       const price = parseFloat(priceStr);
       if (isNaN(price) || price < 0) return alert("Please enter a valid price.");
-      menuData[activeCatIndex].items.push({ name: name.trim(), price: price, icon: "🍽️", photo: "", addons: [] });
+      menuData[activeCatIndex].items.push({ name: name.trim(), price: price, icon: "🍽️", photo: "", isMixMatch: false, addons: [] });
       saveMenuData(); renderMenu();
     }
 
@@ -735,10 +857,13 @@
     function openCartScreen() { document.getElementById('cartScreen').classList.add('open'); }
     function closeCartScreen() { document.getElementById('cartScreen').classList.remove('open'); }
 
-    function addItem(item) {
-      currentOrder.push({ name: item.name, price: item.price });
+    function addItem(item, qty) {
+      const count = qty || 1;
+      for (let i = 0; i < count; i++) {
+        currentOrder.push({ name: item.name, price: item.price });
+      }
       renderOrder();
-      showToast('✓ Added');
+      showToast(count > 1 ? '✓ Added ' + count + 'x' : '✓ Added');
       const badge = document.getElementById('barCount');
       badge.classList.add('pop');
       setTimeout(() => badge.classList.remove('pop'), 180);
@@ -750,11 +875,34 @@
       const priceStr = prompt("Enter price in Pesos (₱):", "20");
       const price = parseFloat(priceStr);
       if (isNaN(price) || price <= 0) return alert("Please enter a valid price.");
-      addItem({ name: name.trim(), price: price });
+      addItem({ name: name.trim(), price: price }, 1);
     }
 
-    function removeOneItem(index) { currentOrder.splice(index, 1); renderOrder(); renderMenu(); }
-    function clearOrder() { currentOrder = []; renderOrder(); renderMenu(); closeCartScreen(); }
+    function changeGroupedCartQty(targetName, targetPrice, delta) {
+      if (delta > 0) {
+        currentOrder.push({ name: targetName, price: targetPrice });
+      } else {
+        for (let i = currentOrder.length - 1; i >= 0; i--) {
+          if (currentOrder[i].name === targetName && currentOrder[i].price === targetPrice) {
+            currentOrder.splice(i, 1);
+            break;
+          }
+        }
+      }
+      renderOrder();
+      renderMenu();
+    }
+
+    function clearOrder() {
+      if (currentOrder.length === 0) return closeCartScreen();
+      if (confirm("Are you sure you want to clear all items from the cart?")) {
+        currentOrder = [];
+        renderOrder();
+        renderMenu();
+        closeCartScreen();
+      }
+    }
+
     function getOrderSum() { return currentOrder.reduce((sum, item) => sum + item.price, 0); }
 
     function quickInstaPay() {
@@ -766,7 +914,6 @@
         confirmSale();
       }
     }
-
     function renderOrder() {
       const list = document.getElementById('currentOrderList');
       const totalEl = document.getElementById('orderTotal');
@@ -777,11 +924,35 @@
         totalEl.innerText = '₱0.00'; barCount.innerText = '0'; barTotal.innerText = '₱0.00';
         return;
       }
-      let total = getOrderSum(); let html = '';
-      currentOrder.forEach((item, index) => {
-        html += '<div class="order-item"><span>' + item.name + '</span><span>₱' + item.price.toFixed(2) + ' <button class="remove-btn" onclick="removeOneItem(' + index + ')">−</button></span></div>';
+
+      const groupedList = [];
+      const groupMap = {};
+      currentOrder.forEach(item => {
+        const key = item.name + '||' + item.price;
+        if (!groupMap[key]) {
+          groupMap[key] = { name: item.name, price: item.price, qty: 0 };
+          groupedList.push(groupMap[key]);
+        }
+        groupMap[key].qty++;
       });
-      list.innerHTML = html; totalEl.innerText = '₱' + total.toFixed(2);
+
+      let total = getOrderSum();
+      let html = '';
+      groupedList.forEach(entry => {
+        const safeName = entry.name.replace(/'/g, "\\'");
+        const lineTotal = entry.price * entry.qty;
+        html +=
+          '<div class="order-item">' +
+            '<div class="order-item-info"><span class="order-qty-tag">' + entry.qty + 'x</span> ' + entry.name + '</div>' +
+            '<div class="order-item-right">' +
+              '<span>₱' + lineTotal.toFixed(2) + '</span>' +
+              '<button type="button" class="cart-step-btn cart-step-minus" onclick="changeGroupedCartQty(\'' + safeName + '\', ' + entry.price + ', -1)">−</button>' +
+              '<button type="button" class="cart-step-btn cart-step-plus" onclick="changeGroupedCartQty(\'' + safeName + '\', ' + entry.price + ', 1)">+</button>' +
+            '</div>' +
+          '</div>';
+      });
+      list.innerHTML = html;
+      totalEl.innerText = '₱' + total.toFixed(2);
       barCount.innerText = currentOrder.length;
       barTotal.innerText = '₱' + total.toFixed(2);
     }
@@ -813,7 +984,6 @@
         changeEl.style.color = '#15803d';
       }
     }
-
     function confirmSale() {
       if (currentOrder.length === 0) return;
       const total = getOrderSum();
@@ -845,7 +1015,7 @@
           });
         }
       });
-      return Object.entries(counts).sort((a, b) => b - a);
+      return Object.entries(counts).sort((a, b) => b[1] - a[1]);
     }
 
     function renderHistory() {
@@ -876,7 +1046,6 @@
         ).join('');
       }
     }
-
     function copyReport() {
       if (salesHistory.length === 0) return alert("No sales to copy yet!");
       const total = salesHistory.reduce((sum, s) => sum + s.total, 0);
