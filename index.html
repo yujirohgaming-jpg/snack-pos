@@ -7,32 +7,33 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Snack Kiosk POS</title>
   <style>
-    :root { --primary: #da291c; --accent: #ffc72c; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; --card: #ffffff; --text: #111827; }
+    :root { --primary: #da291c; --accent: #ffc72c; --success: #16a34a; --danger: #dc2626; --bg: #e2e8f0; --card: #ffffff; --text: #0f172a; }
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { margin: 0; padding: calc(12px + env(safe-area-inset-top)) 14px calc(105px + env(safe-area-inset-bottom)); background: var(--bg); color: var(--text); }
-    .earnings-banner { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); color: white; padding: 14px 16px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
-    .earnings-left h2 { margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #9ca3af; }
+    .earnings-banner { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 14px 16px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18); gap: 10px; }
+    .earnings-left h2 { margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; }
     .earnings-left .amount { font-size: 28px; font-weight: 900; margin: 2px 0 0; color: #4ade80; letter-spacing: -0.5px; }
-    .offline-pill { font-size: 11px; background: rgba(74, 222, 128, 0.18); color: #86efac; padding: 5px 10px; border-radius: 20px; font-weight: 700; }
+    .btn-reports-open { background: #334155; color: #ffffff; border: 1.5px solid #475569; border-radius: 14px; padding: 10px 13px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; white-space: nowrap; }
+    .btn-reports-open span.sub-cnt { font-size: 10px; color: #93c5fd; font-weight: 700; }
     .kiosk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .kiosk-header h3 { margin: 0; font-size: 16px; font-weight: 800; color: #111827; }
-    .btn-edit-toggle { background: #e2e8f0; color: #334155; border: none; border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 800; cursor: pointer; }
+    .kiosk-header h3 { margin: 0; font-size: 16px; font-weight: 900; color: #0f172a; }
+    .btn-edit-toggle { background: #cbd5e1; color: #1e293b; border: none; border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 800; cursor: pointer; }
     .btn-edit-toggle.active { background: #f59e0b; color: white; }
     .category-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 10px; margin-bottom: 8px; scrollbar-width: none; }
     .category-tabs::-webkit-scrollbar { display: none; }
-    .cat-tab { flex: 0 0 auto; background: #1e293b; border: 2px solid #1e293b; border-radius: 14px; padding: 10px 15px; font-size: 13px; font-weight: 800; color: #f8fafc; cursor: pointer; transition: all 0.15s ease; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15); }
+    .cat-tab { flex: 0 0 auto; background: #1e293b; border: 2px solid #1e293b; border-radius: 14px; padding: 10px 15px; font-size: 13px; font-weight: 800; color: #f8fafc; cursor: pointer; transition: all 0.15s ease; box-shadow: 0 3px 8px rgba(15, 23, 42, 0.16); }
     .cat-tab.active { background: #da291c; border-color: #ffc72c; color: #ffffff; box-shadow: 0 4px 12px rgba(218, 41, 28, 0.35); transform: translateY(-1px); }
     .cat-manage-bar { display: none; justify-content: space-between; align-items: center; background: #fef3c7; border: 1.5px solid #f59e0b; border-radius: 12px; padding: 8px 10px; margin-bottom: 10px; gap: 6px; }
     .edit-mode .cat-manage-bar { display: flex; }
     .cat-manage-title { font-size: 12px; font-weight: 800; color: #92400e; flex: 1; }
     .cat-mini-btn { background: white; border: 1px solid #d97706; color: #92400e; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-weight: 800; cursor: pointer; }
     .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .menu-card-item { position: relative; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 10px 10px 12px; text-align: center; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.04); display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+    .menu-card-item { position: relative; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 18px; padding: 10px 10px 12px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
     .menu-card-item:active { transform: scale(0.96); border-color: var(--primary); }
     .food-icon { font-size: 46px; line-height: 1; margin: 8px 0; height: 64px; display: flex; align-items: center; justify-content: center; }
     .food-photo { width: 100%; height: 105px; object-fit: cover; border-radius: 12px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
-    .food-name { font-weight: 800; font-size: 14px; color: #1e293b; line-height: 1.25; margin-bottom: 6px; }
-    .food-bottom { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: auto; padding-top: 6px; border-top: 1px solid #f8fafc; }
+    .food-name { font-weight: 800; font-size: 14px; color: #0f172a; line-height: 1.25; margin-bottom: 6px; }
+    .food-bottom { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: auto; padding-top: 6px; border-top: 1px solid #f1f5f9; }
     .food-price { font-size: 15px; font-weight: 900; color: var(--primary); }
     .food-plus { background: var(--accent); color: #111827; width: 26px; height: 26px; border-radius: 50%; font-size: 17px; font-weight: 900; line-height: 26px; text-align: center; }
     .addon-badge { position: absolute; top: 14px; left: 14px; font-size: 10px; font-weight: 800; color: #1d4ed8; background: rgba(219, 234, 254, 0.95); padding: 2px 7px; border-radius: 8px; z-index: 2; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
@@ -45,33 +46,38 @@
     .edit-actions-grid { display: none; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
     .edit-mode .edit-actions-grid { display: grid; }
     .btn-ed { padding: 11px 8px; border: none; border-radius: 10px; font-size: 12px; font-weight: 800; color: white; cursor: pointer; }
-    .card-box { background: var(--card); border-radius: 18px; padding: 14px; margin-top: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .card-box { background: var(--card); border-radius: 18px; padding: 14px; margin-bottom: 12px; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06); border: 1px solid #cbd5e1; }
     .card-box h3 { margin: 0 0 10px; font-size: 15px; font-weight: 800; color: #1e293b; }
+    /* Collapsible Accordion Headers inside Reports Screen */
+    .report-accordion-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 14px 16px; font-size: 15px; font-weight: 800; color: #0f172a; cursor: pointer; margin-bottom: 10px; box-shadow: 0 2px 6px rgba(15,23,42,0.05); }
+    .report-accordion-btn.open { border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0; background: #f8fafc; border-color: #94a3b8; }
+    .report-accordion-body { display: none; background: #ffffff; border: 1.5px solid #94a3b8; border-top: none; border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; padding: 12px 14px; margin-bottom: 12px; }
+    .report-accordion-body.open { display: block; }
     .order-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 15px; font-weight: 700; }
     .remove-btn { background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; padding: 5px 10px; font-weight: 800; margin-left: 8px; cursor: pointer; }
     .order-total { display: flex; justify-content: space-between; font-weight: 900; font-size: 20px; margin-top: 12px; padding-top: 10px; border-top: 2px solid #e2e8f0; }
     .restock-item { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed #e2e8f0; font-size: 14px; font-weight: 600; }
     .restock-qty { font-weight: 800; color: #2563eb; background: #eff6ff; padding: 2px 9px; border-radius: 8px; }
     .btn { flex: 1; padding: 14px; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; color: white; cursor: pointer; }
-    .btn-custom { background: #f59e0b; width: 100%; margin-top: 12px; font-size: 14px; padding: 12px; }
-    .btn-reset { background: var(--danger); width: 100%; margin-top: 8px; font-size: 14px; padding: 12px; }
-    .btn-copy { background: #2563eb; width: 100%; margin-top: 10px; font-size: 14px; padding: 12px; }
-    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #111827; color: white; padding: 11px 14px calc(11px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 20; }
+    .btn-custom { background: #f59e0b; width: 100%; margin-top: 12px; font-size: 14px; padding: 12px; box-shadow: 0 3px 8px rgba(245, 158, 11, 0.25); }
+    .btn-reset { background: var(--danger); width: 100%; margin-top: 10px; font-size: 14px; padding: 13px; }
+    .btn-copy { background: #2563eb; width: 100%; margin-top: 6px; font-size: 14px; padding: 13px; }
+    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; color: white; padding: 11px 14px calc(11px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,0.22); display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 20; }
     .bottom-info { display: flex; flex-direction: column; min-width: 85px; }
-    .bottom-count { font-size: 10px; color: #9ca3af; font-weight: 700; text-transform: uppercase; }
+    .bottom-count { font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase; }
     .bottom-total { font-size: 20px; font-weight: 900; color: #4ade80; }
     .bottom-btns { display: flex; gap: 7px; }
     .btn-quick-sale { background: #16a34a; color: white; border: none; border-radius: 12px; padding: 12px 12px; font-weight: 800; font-size: 13px; cursor: pointer; white-space: nowrap; }
     .btn-view-cart { background: #2563eb; color: white; border: none; border-radius: 12px; padding: 12px 13px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer; white-space: nowrap; }
     .cart-badge { background: var(--accent); color: #111827; padding: 2px 7px; border-radius: 20px; font-size: 12px; font-weight: 900; }
-    .cart-screen { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #f8fafc; z-index: 40; flex-direction: column; }
-    .cart-screen.open { display: flex; }
-    .cart-header { background: #111827; color: white; padding: calc(14px + env(safe-area-inset-top)) 16px 14px; display: flex; justify-content: space-between; align-items: center; }
-    .cart-header h2 { margin: 0; font-size: 18px; font-weight: 800; }
-    .btn-back-menu { background: #374151; color: white; border: none; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
-    .cart-body { flex: 1; overflow-y: auto; padding: 14px; }
-    .cart-footer { background: white; padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 12px rgba(0,0,0,0.08); display: flex; gap: 10px; }
-    .log-item { background: #f8fafc; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; border-left: 4px solid var(--success); }
+    .full-screen-drawer { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 40; flex-direction: column; }
+    .full-screen-drawer.open { display: flex; }
+    .drawer-header { background: #0f172a; color: white; padding: calc(14px + env(safe-area-inset-top)) 16px 14px; display: flex; justify-content: space-between; align-items: center; }
+    .drawer-header h2 { margin: 0; font-size: 18px; font-weight: 800; }
+    .btn-close-drawer { background: #334155; color: white; border: none; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .drawer-body { flex: 1; overflow-y: auto; padding: 14px; padding-bottom: 40px; }
+    .drawer-footer { background: white; padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 12px rgba(0,0,0,0.08); display: flex; gap: 10px; }
+    .log-item { background: #f8fafc; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; border-left: 4px solid var(--success); border: 1px solid #e2e8f0; border-left-width: 4px; }
     .log-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; margin-bottom: 4px; }
     .log-details { color: #475569; font-size: 13px; }
     .del-sale-btn { background: #fee2e2; color: #dc2626; border: none; border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 800; margin-left: 8px; cursor: pointer; }
@@ -112,7 +118,10 @@
       <h2>Today's Total Earnings</h2>
       <div class="amount" id="dailyTotal">₱0.00</div>
     </div>
-    <div class="offline-pill">● Offline Ready</div>
+    <button class="btn-reports-open" onclick="openReportsScreen()">
+      <span>📊 Sales & Reports</span>
+      <span class="sub-cnt" id="bannerOrderCount">0 orders today</span>
+    </button>
   </div>
   <div id="kioskSection">
     <div class="kiosk-header">
@@ -138,16 +147,7 @@
     </div>
     <button class="btn btn-custom" onclick="addCustomItem()">+ One-Time Custom Item / Drink</button>
   </div>
-  <div class="card-box">
-    <h3>Sold Today (Restock Summary)</h3>
-    <div id="restockSummary"><div style="color:#9ca3af; font-size:14px;">No items sold yet today</div></div>
-  </div>
-  <div class="card-box">
-    <h3>Today's Sales Log (<span id="orderCount">0</span> orders)</h3>
-    <div id="salesLog"></div>
-    <button class="btn btn-copy" onclick="copyReport()">Copy Daily Summary</button>
-    <button class="btn btn-reset" onclick="resetDay()">Start New Day (Reset Sales)</button>
-  </div>
+  <!-- Bottom Bar -->
   <div class="bottom-bar">
     <div class="bottom-info">
       <span class="bottom-count">Order Total</span>
@@ -161,23 +161,58 @@
       </button>
     </div>
   </div>
-  <div class="cart-screen" id="cartScreen">
-    <div class="cart-header">
-      <h2>🛒 Customer Order</h2>
-      <button class="btn-back-menu" onclick="closeCartScreen()">+ Add More Items</button>
+  <!-- Sales & Reports Full-Screen Drawer -->
+  <div class="full-screen-drawer" id="reportsScreen">
+    <div class="drawer-header">
+      <h2>📊 Sales & Inventory</h2>
+      <button class="btn-close-drawer" onclick="closeReportsScreen()">← Back to Menu</button>
     </div>
-    <div class="cart-body">
-      <div class="card-box" style="margin-top:0;">
+    <div class="drawer-body">
+      <div class="card-box" style="text-align:center; background:#0f172a; color:white;">
+        <div style="font-size:11px; text-transform:uppercase; color:#94a3b8; letter-spacing:1px;">Today's Total Earnings</div>
+        <div style="font-size:32px; font-weight:900; color:#4ade80; margin-top:4px;" id="reportScreenTotal">₱0.00</div>
+      </div>
+      <!-- Collapsible Sold Today Summary -->
+      <button class="report-accordion-btn" id="restockAccBtn" onclick="toggleReportSection('restock')">
+        <span>📦 Sold Today (Restock Summary)</span>
+        <span id="restockArrow">▼</span>
+      </button>
+      <div class="report-accordion-body" id="restockAccBody">
+        <div id="restockSummary"><div style="color:#9ca3af; font-size:14px;">No items sold yet today</div></div>
+      </div>
+      <!-- Collapsible Sales Log -->
+      <button class="report-accordion-btn" id="salesLogAccBtn" onclick="toggleReportSection('salesLog')">
+        <span>🧾 Today's Sales Log (<span id="orderCount">0</span> orders)</span>
+        <span id="salesLogArrow">▼</span>
+      </button>
+      <div class="report-accordion-body" id="salesLogAccBody">
+        <div id="salesLog"></div>
+      </div>
+      <div class="card-box" style="margin-top:14px;">
+        <button class="btn btn-copy" onclick="copyReport()">📋 Copy Daily Summary</button>
+        <button class="btn btn-reset" onclick="resetDay()">Start New Day (Reset Sales)</button>
+      </div>
+    </div>
+  </div>
+  <!-- Customer Cart Full-Screen Drawer -->
+  <div class="full-screen-drawer" id="cartScreen">
+    <div class="drawer-header">
+      <h2>🛒 Customer Order</h2>
+      <button class="btn-close-drawer" onclick="closeCartScreen()">+ Add More Items</button>
+    </div>
+    <div class="drawer-body">
+      <div class="card-box">
         <h3>Items in Cart</h3>
         <div id="currentOrderList"><div style="color:#9ca3af; font-size:14px;">Your cart is empty</div></div>
         <div class="order-total"><span>Total to Pay:</span><span id="orderTotal">₱0.00</span></div>
       </div>
     </div>
-    <div class="cart-footer">
+    <div class="drawer-footer">
       <button class="btn" style="background:#94a3b8; flex:0.45;" onclick="clearOrder()">Clear All</button>
       <button class="btn" style="background:#16a34a;" onclick="openCheckoutModal()">Payment</button>
     </div>
   </div>
+  <!-- Customer Add-on Selection Modal -->
   <div class="modal-overlay" id="addonModal">
     <div class="modal-box">
       <div class="modal-title" id="addonModalItemName">Item Name</div>
@@ -189,6 +224,7 @@
       </div>
     </div>
   </div>
+  <!-- Item, Icon & Photo Editor Modal -->
   <div class="modal-overlay" id="itemEditorModal">
     <div class="modal-box">
       <div class="modal-title">Edit Item, Icon & Photo</div>
@@ -220,6 +256,7 @@
       </div>
     </div>
   </div>
+  <!-- Import Menu Backup Modal -->
   <div class="modal-overlay" id="importModal">
     <div class="modal-box">
       <div class="modal-title">Import Menu Backup</div>
@@ -231,6 +268,7 @@
       </div>
     </div>
   </div>
+  <!-- Cash & Change Modal -->
   <div class="modal-overlay" id="checkoutModal">
     <div class="modal-box">
       <div class="modal-title">Cash & Change Calculator</div>
@@ -653,6 +691,18 @@
         renderMenu();
       }
     }
+    function openReportsScreen() { document.getElementById('reportsScreen').classList.add('open'); }
+    function closeReportsScreen() { document.getElementById('reportsScreen').classList.remove('open'); }
+
+    function toggleReportSection(section) {
+      const btn = document.getElementById(section + 'AccBtn');
+      const body = document.getElementById(section + 'AccBody');
+      const arrow = document.getElementById(section + 'Arrow');
+      const isOpen = body.classList.toggle('open');
+      btn.classList.toggle('open', isOpen);
+      arrow.innerText = isOpen ? '▲' : '▼';
+    }
+
     function openCartScreen() { document.getElementById('cartScreen').classList.add('open'); }
     function closeCartScreen() { document.getElementById('cartScreen').classList.remove('open'); }
 
@@ -765,6 +815,8 @@
     function renderHistory() {
       const logEl = document.getElementById('salesLog');
       const totalEl = document.getElementById('dailyTotal');
+      const reportTotalEl = document.getElementById('reportScreenTotal');
+      const bannerCountEl = document.getElementById('bannerOrderCount');
       const countEl = document.getElementById('orderCount');
       const restockEl = document.getElementById('restockSummary');
 
@@ -773,7 +825,11 @@
         dailySum += sale.total;
         html += '<div class="log-item"><div class="log-header"><span>' + sale.time + '</span><span>₱' + sale.total.toFixed(2) + '<button class="del-sale-btn" onclick="deleteSale(' + index + ')">×</button></span></div><div class="log-details">' + sale.summary + '</div></div>';
       });
-      logEl.innerHTML = html; totalEl.innerText = '₱' + dailySum.toFixed(2); countEl.innerText = salesHistory.length;
+      logEl.innerHTML = html || '<div style="color:#9ca3af; font-size:14px;">No orders recorded yet today</div>';
+      totalEl.innerText = '₱' + dailySum.toFixed(2);
+      reportTotalEl.innerText = '₱' + dailySum.toFixed(2);
+      countEl.innerText = salesHistory.length;
+      bannerCountEl.innerText = salesHistory.length + (salesHistory.length === 1 ? ' order today' : ' orders today');
 
       const sortedItems = getRestockCounts();
       if (sortedItems.length === 0) {
