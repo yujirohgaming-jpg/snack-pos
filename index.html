@@ -159,7 +159,7 @@
       <span class="bottom-total" id="barTotal">₱0.00</span>
     </div>
     <div class="bottom-btns">
-      <button class="btn-quick-sale" onclick="quickInstantSale()">⚡ Quick Sale</button>
+      <button class="btn-quick-sale" onclick="quickExactPay()">⚡ Exact Pay</button>
       <button class="btn-view-cart" onclick="openCartScreen()">
         <span>🛒 View</span>
         <span class="cart-badge" id="barCount">0</span>
@@ -177,7 +177,7 @@
         <div style="font-size:32px; font-weight:900; color:#4ade80; margin-top:4px;" id="reportScreenTotal">₱0.00</div>
       </div>
       <button class="report-accordion-btn" id="restockAccBtn" onclick="toggleReportSection('restock')">
-        <span>📦 Sold Today (Restock Summary)</span>
+        <span>📦 Sold Today (Highest → Lowest)</span>
         <span id="restockArrow">▼</span>
       </button>
       <div class="report-accordion-body" id="restockAccBody">
@@ -757,13 +757,12 @@
     function clearOrder() { currentOrder = []; renderOrder(); renderMenu(); closeCartScreen(); }
     function getOrderSum() { return currentOrder.reduce((sum, item) => sum + item.price, 0); }
 
-    function quickInstantSale() {
+    function quickExactPay() {
       if (currentOrder.length === 0) return alert("Tap at least one item on the menu first!");
       const total = getOrderSum();
-      const grouped = {};
-      currentOrder.forEach(item => grouped[item.name] = (grouped[item.name] || 0) + 1);
-      const summary = Object.entries(grouped).map(([name, qty]) => qty + 'x ' + name).join(', ');
-      if (confirm("Record Quick Sale of ₱" + total.toFixed(2) + "?\n(" + summary + ")")) {
+      const count = currentOrder.length;
+      const label = count === 1 ? "1 item" : count + " items";
+      if (confirm("Confirm Exact Pay for " + label + " (₱" + total.toFixed(2) + ")?")) {
         confirmSale();
       }
     }
@@ -825,7 +824,7 @@
       salesHistory.unshift({ time, summary, total, items: grouped });
       localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
       currentOrder = []; closeCheckoutModal(); closeCartScreen(); renderOrder(); renderMenu(); renderHistory();
-      showToast('✓ Sale Recorded: ₱' + total.toFixed(2));
+      showToast('✓ Paid ₱' + total.toFixed(2));
     }
 
     function deleteSale(index) {
@@ -885,7 +884,7 @@
       let text = "Daily Sales Report (" + date + ")\nTotal Earnings: ₱" + total.toFixed(2) + "\nTotal Orders: " + salesHistory.length + "\n\n";
       const sortedItems = getRestockCounts();
       if (sortedItems.length > 0) {
-        text += "--- ITEMS SOLD TODAY ---\n";
+        text += "--- ITEMS SOLD TODAY (HIGHEST TO LOWEST) ---\n";
         sortedItems.forEach(([name, qty]) => text += qty + "x " + name + "\n");
         text += "\n--- ORDER LOG ---\n";
       }
