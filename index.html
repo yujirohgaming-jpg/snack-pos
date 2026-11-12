@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Snack Kiosk POS</title>
+  <style>
+    :root { --primary: #da291c; --accent: #ffc72c; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; --card: #ffffff; --text: #111827; }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { margin: 0; padding: calc(12px + env(safe-area-inset-top)) 14px calc(105px + env(safe-area-inset-bottom)); background: var(--bg); color: var(--text); }
+    .earnings-banner { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); color: white; padding: 14px 16px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+    .earnings-left h2 { margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #9ca3af; }
+    .earnings-left .amount { font-size: 28px; font-weight: 900; margin: 2px 0 0; color: #4ade80; letter-spacing: -0.5px; }
+    .offline-pill { font-size: 11px; background: rgba(74, 222, 128, 0.18); color: #86efac; padding: 5px 10px; border-radius: 20px; font-weight: 700; }
+    .kiosk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .kiosk-header h3 { margin: 0; font-size: 16px; font-weight: 800; color: #111827; }
+    .btn-edit-toggle { background: #e2e8f0; color: #334155; border: none; border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 800; cursor: pointer; }
+    .btn-edit-toggle.active { background: #f59e0b; color: white; }
+    .category-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px; scrollbar-width: none; }
+    .category-tabs::-webkit-scrollbar { display: none; }
+    .cat-tab { flex: 0 0 auto; background: #ffffff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 10px 14px; font-size: 13px; font-weight: 800; color: #475569; cursor: pointer; transition: all 0.15s ease; }
+    .cat-tab.active { background: var(--primary); border-color: var(--primary); color: #ffffff; box-shadow: 0 4px 10px rgba(218, 41, 28, 0.25); }
+    .cat-manage-bar { display: none; justify-content: space-between; align-items: center; background: #fef3c7; border: 1.5px solid #f59e0b; border-radius: 12px; padding: 8px 10px; margin-bottom: 10px; gap: 6px; }
+    .edit-mode .cat-manage-bar { display: flex; }
+    .cat-manage-title { font-size: 12px; font-weight: 800; color: #92400e; flex: 1; }
+    .cat-mini-btn { background: white; border: 1px solid #d97706; color: #92400e; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-weight: 800; cursor: pointer; }
+    .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .menu-card-item { position: relative; background: #ffffff; border: 1.5px solid #f1f5f9; border-radius: 18px; padding: 14px 10px 12px; text-align: center; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.04); display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+    .menu-card-item:active { transform: scale(0.96); border-color: var(--primary); }
+    .food-icon { font-size: 36px; line-height: 1; margin-bottom: 8px; height: 48px; display: flex; align-items: center; justify-content: center; }
+    .food-photo { width: 54px; height: 54px; object-fit: cover; border-radius: 12px; margin-bottom: 6px; border: 1px solid #e2e8f0; }
+    .food-name { font-weight: 800; font-size: 14px; color: #1e293b; line-height: 1.25; margin-bottom: 6px; }
+    .food-bottom { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: auto; padding-top: 6px; border-top: 1px solid #f8fafc; }
+    .food-price { font-size: 15px; font-weight: 900; color: var(--primary); }
+    .food-plus { background: var(--accent); color: #111827; width: 26px; height: 26px; border-radius: 50%; font-size: 17px; font-weight: 900; line-height: 26px; text-align: center; }
+    .addon-badge { position: absolute; top: 8px; left: 8px; font-size: 10px; font-weight: 800; color: #1d4ed8; background: #dbeafe; padding: 2px 7px; border-radius: 8px; z-index: 2; }
+    .edit-mode .menu-card-item { background: #fffbeb; border-color: #f59e0b; padding-top: 22px; }
+    .delete-badge { display: none; position: absolute; top: -6px; right: -6px; background: #dc2626; color: white; border: 2px solid white; width: 26px; height: 26px; border-radius: 50%; font-size: 15px; font-weight: 800; line-height: 20px; text-align: center; cursor: pointer; z-index: 3; }
+    .edit-mode .delete-badge { display: block; }
+    .reorder-row { display: none; justify-content: center; gap: 8px; margin-top: 8px; width: 100%; }
+    .edit-mode .reorder-row { display: flex; }
+    .move-btn { background: #ffffff; border: 1px solid #d97706; color: #92400e; border-radius: 6px; padding: 3px 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
+    .edit-actions-grid { display: none; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .edit-mode .edit-actions-grid { display: grid; }
+    .btn-ed { padding: 11px 8px; border: none; border-radius: 10px; font-size: 12px; font-weight: 800; color: white; cursor: pointer; }
+    .card-box { background: var(--card); border-radius: 18px; padding: 14px; margin-top: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .card-box h3 { margin: 0 0 10px; font-size: 15px; font-weight: 800; color: #1e293b; }
+    .order-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 15px; font-weight: 700; }
+    .remove-btn { background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; padding: 5px 10px; font-weight: 800; margin-left: 8px; cursor: pointer; }
+    .order-total { display: flex; justify-content: space-between; font-weight: 900; font-size: 20px; margin-top: 12px; padding-top: 10px; border-top: 2px solid #e2e8f0; }
+    .restock-item { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed #e2e8f0; font-size: 14px; font-weight: 600; }
+    .restock-qty { font-weight: 800; color: #2563eb; background: #eff6ff; padding: 2px 9px; border-radius: 8px; }
+    .btn { flex: 1; padding: 14px; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; color: white; cursor: pointer; }
+    .btn-custom { background: #f59e0b; width: 100%; margin-top: 12px; font-size: 14px; padding: 12px; }
+    .btn-reset { background: var(--danger); width: 100%; margin-top: 8px; font-size: 14px; padding: 12px; }
+    .btn-copy { background: #2563eb; width: 100%; margin-top: 10px; font-size: 14px; padding: 12px; }
+    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #111827; color: white; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: space-between; gap: 10px; z-index: 20; }
+    .bottom-info { display: flex; flex-direction: column; }
+    .bottom-count { font-size: 11px; color: #9ca3af; font-weight: 700; text-transform: uppercase; }
+    .bottom-total { font-size: 22px; font-weight: 900; color: #4ade80; }
+    .btn-view-cart { background: var(--primary); color: white; border: none; border-radius: 14px; padding: 13px 18px; font-weight: 800; font-size: 15px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .cart-badge { background: var(--accent); color: #111827; padding: 2px 8px; border-radius: 20px; font-size: 13px; font-weight: 900; }
+    .cart-screen { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #f8fafc; z-index: 40; flex-direction: column; }
+    .cart-screen.open { display: flex; }
+    .cart-header { background: #111827; color: white; padding: calc(14px + env(safe-area-inset-top)) 16px 14px; display: flex; justify-content: space-between; align-items: center; }
+    .cart-header h2 { margin: 0; font-size: 18px; font-weight: 800; }
+    .btn-back-menu { background: #374151; color: white; border: none; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .cart-body { flex: 1; overflow-y: auto; padding: 14px; }
+    .cart-footer { background: white; padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 12px rgba(0,0,0,0.08); display: flex; gap: 10px; }
+    .log-item { background: #f8fafc; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; border-left: 4px solid var(--success); }
+    .log-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; margin-bottom: 4px; }
+    .log-details { color: #475569; font-size: 13px; }
+    .del-sale-btn { background: #fee2e2; color: #dc2626; border: none; border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 800; margin-left: 8px; cursor: pointer; }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: white; width: 100%; max-width: 380px; border-radius: 20px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.25); max-height: 88vh; overflow-y: auto; }
+    .modal-title { font-size: 18px; font-weight: 900; margin: 0 0 6px; text-align: center; }
+    .modal-sub { font-size: 14px; color: #64748b; text-align: center; margin-bottom: 14px; font-weight: 600; }
+    .addon-choice-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 13px 14px; margin-bottom: 8px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 15px; font-weight: 700; color: #1e293b; cursor: pointer; }
+    .addon-choice-btn.selected { background: #eff6ff; border-color: #2563eb; color: #1e40af; }
+    .edit-field-label { font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; margin: 10px 0 4px; display: block; }
+    .edit-text-input { width: 100%; padding: 10px; font-size: 15px; font-weight: 700; border: 1.5px solid #cbd5e1; border-radius: 10px; }
+    /* Icon & Photo Picker Box */
+    .visual-picker-box { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px; }
+    .visual-preview-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .visual-preview-box { width: 52px; height: 52px; background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 30px; overflow: hidden; flex-shrink: 0; }
+    .visual-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+    .emoji-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 6px; }
+    .emoji-pick-btn { background: white; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 18px; padding: 5px 0; cursor: pointer; }
+    .photo-upload-row { display: flex; gap: 6px; margin-top: 8px; }
+    .btn-photo-up { flex: 1; background: #2563eb; color: white; border: none; border-radius: 8px; padding: 8px; font-size: 12px; font-weight: 800; cursor: pointer; text-align: center; }
+    .btn-photo-clear { background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; padding: 8px 10px; font-size: 12px; font-weight: 800; cursor: pointer; }
+    .backup-textarea { width: 100%; height: 110px; padding: 10px; font-size: 12px; font-family: monospace; border: 1.5px solid #cbd5e1; border-radius: 10px; margin-top: 6px; }
+    .item-addon-row { display: flex; justify-content: space-between; align-items: center; background: #fffbeb; border: 1px solid #fde68a; padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; font-size: 14px; font-weight: 600; }
+    .btn-sm-pill { border: none; border-radius: 6px; padding: 4px 8px; font-size: 12px; font-weight: 700; cursor: pointer; margin-left: 4px; }
+    .calc-row { display: flex; justify-content: space-between; font-size: 16px; margin-bottom: 10px; font-weight: 800; }
+    .cash-input { width: 100%; padding: 12px; font-size: 22px; font-weight: 900; text-align: right; border: 2px solid #cbd5e1; border-radius: 12px; margin-bottom: 10px; }
+    .quick-bills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
+    .bill-btn { background: #eff6ff; border: 1.5px solid #bfdbfe; color: #1e40af; padding: 9px 4px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; }
+    .change-display { background: #f0fdf4; border: 1.5px solid #bbf7d0; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .change-label { font-size: 14px; font-weight: 700; color: #166534; }
+    .change-amount { font-size: 24px; font-weight: 900; color: #15803d; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <div class="earnings-banner">
+    <div class="earnings-left">
+      <h2>Today's Total Earnings</h2>
+      <div class="amount" id="dailyTotal">₱0.00</div>
+    </div>
+    <div class="offline-pill">● Offline Ready</div>
+  </div>
+  <div id="kioskSection">
+    <div class="kiosk-header">
+      <h3 id="menuTitle">Order Menu</h3>
+      <button class="btn-edit-toggle" id="editToggleBtn" onclick="toggleEditMode()">Edit Menu</button>
+    </div>
+    <div class="category-tabs" id="categoryTabs"></div>
+    <div class="cat-manage-bar" id="catManageBar">
+      <span class="cat-manage-title" id="activeCatLabel">Category</span>
+      <button class="cat-mini-btn" onclick="moveActiveCategory(-1)">◀</button>
+      <button class="cat-mini-btn" onclick="moveActiveCategory(1)">▶</button>
+      <button class="cat-mini-btn" onclick="renameActiveCategory()">Rename</button>
+      <button class="cat-mini-btn" style="color:#dc2626; border-color:#fca5a5;" onclick="deleteActiveCategory()">Del</button>
+    </div>
+    <div class="menu-grid" id="menuGrid"></div>
+    <div class="edit-actions-grid">
+      <button class="btn-ed" style="background:#10b981;" onclick="addNewMenuItem()">+ Add Food Item</button>
+      <button class="btn-ed" style="background:#3b82f6;" onclick="sortActiveCategoryAZ()">Sort Items A–Z</button>
+      <button class="btn-ed" style="background:#8b5cf6;" onclick="addNewCategory()">+ New Category</button>
+      <button class="btn-ed" style="background:#0284c7;" onclick="exportMenuBackup()">Copy Menu Backup</button>
+      <button class="btn-ed" style="background:#0d9488;" onclick="openImportModal()">Import Backup</button>
+      <button class="btn-ed" style="background:#64748b;" onclick="restoreDefaultMenu()">Reset Defaults</button>
+    </div>
+    <button class="btn btn-custom" onclick="addCustomItem()">+ One-Time Custom Item / Drink</button>
+  </div>
+  <div class="card-box">
+    <h3>Sold Today (Restock Summary)</h3>
+    <div id="restockSummary"><div style="color:#9ca3af; font-size:14px;">No items sold yet today</div></div>
+  </div>
+  <div class="card-box">
+    <h3>Today's Sales Log (<span id="orderCount">0</span> orders)</h3>
+    <div id="salesLog"></div>
+    <button class="btn btn-copy" onclick="copyReport()">Copy Daily Summary</button>
+    <button class="btn btn-reset" onclick="resetDay()">Start New Day (Reset Sales)</button>
+  </div>
+  <div class="bottom-bar">
+    <div class="bottom-info">
+      <span class="bottom-count">Current Order</span>
+      <span class="bottom-total" id="barTotal">₱0.00</span>
+    </div>
+    <button class="btn-view-cart" onclick="openCartScreen()">
+      <span>🛒 View Order</span>
+      <span class="cart-badge" id="barCount">0</span>
+    </button>
+  </div>
+  <div class="cart-screen" id="cartScreen">
+    <div class="cart-header">
+      <h2>🛒 Customer Order</h2>
+      <button class="btn-back-menu" onclick="closeCartScreen()">+ Add More Items</button>
+    </div>
+    <div class="cart-body">
+      <div class="card-box" style="margin-top:0;">
+        <h3>Items in Cart</h3>
+        <div id="currentOrderList"><div style="color:#9ca3af; font-size:14px;">Your cart is empty</div></div>
+        <div class="order-total"><span>Total to Pay:</span><span id="orderTotal">₱0.00</span></div>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <button class="btn" style="background:#94a3b8; flex:0.45;" onclick="clearOrder()">Clear All</button>
+      <button class="btn" style="background:#16a34a;" onclick="openCheckoutModal()">Payment</button>
+    </div>
+  </div>
+  <div class="modal-overlay" id="addonModal">
+    <div class="modal-box">
+      <div class="modal-title" id="addonModalItemName">Item Name</div>
+      <div class="modal-sub" id="addonModalBasePrice">Base Price: ₱0.00</div>
+      <div id="addonChoicesContainer"></div>
+      <div class="modal-actions">
+        <button class="btn" style="background:#94a3b8;" onclick="closeAddonModal()">Cancel</button>
+        <button class="btn" style="background:#16a34a;" id="confirmAddonBtn" onclick="confirmAddWithAddons()">Add (₱0.00)</button>
+      </div>
+    </div>
+  </div>
+  <!-- Item, Icon/Photo & Add-ons Editor Modal -->
+  <div class="modal-overlay" id="itemEditorModal">
+    <div class="modal-box">
+      <div class="modal-title">Edit Item, Icon & Photo</div>
+      <label class="edit-field-label">Item Name</label>
+      <input type="text" class="edit-text-input" id="editItemNameInput">
+      <label class="edit-field-label">Base Price (₱)</label>
+      <input type="number" inputmode="decimal" class="edit-text-input" id="editItemPriceInput">
+      <label class="edit-field-label">Item Icon or Food Photo</label>
+      <div class="visual-picker-box">
+        <div class="visual-preview-row">
+          <div class="visual-preview-box" id="visualPreviewBox">🍽️</div>
+          <input type="text" class="edit-text-input" id="editItemEmojiInput" placeholder="Type emoji" oninput="onEmojiInput()">
+        </div>
+        <div class="emoji-grid" id="emojiQuickGrid"></div>
+        <div class="photo-upload-row">
+          <label class="btn-photo-up">
+            📷 Upload / Take Photo
+            <input type="file" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event)">
+          </label>
+          <button type="button" class="btn-photo-clear" onclick="clearItemPhoto()">Remove Photo</button>
+        </div>
+      </div>
+      <label class="edit-field-label" style="margin-top:14px;">Add-ons for This Item Only</label>
+      <div id="itemSpecificAddonsList"></div>
+      <button class="btn" style="background:#d97706; width:100%; padding:10px; font-size:13px; margin-top:4px;" onclick="addSpecificAddonToItem()">+ Add Add-on Option</button>
+      <div class="modal-actions">
+        <button class="btn" style="background:#94a3b8;" onclick="closeItemEditorModal()">Cancel</button>
+        <button class="btn" style="background:#16a34a;" onclick="saveItemEditorChanges()">Save Item</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-overlay" id="importModal">
+    <div class="modal-box">
+      <div class="modal-title">Import Menu Backup</div>
+      <div class="modal-sub">Paste the menu backup code sent from the other phone below:</div>
+      <textarea class="backup-textarea" id="importTextarea" placeholder="Paste menu backup text here..."></textarea>
+      <div class="modal-actions">
+        <button class="btn" style="background:#94a3b8;" onclick="closeImportModal()">Cancel</button>
+        <button class="btn" style="background:#0d9488;" onclick="confirmImportBackup()">Load Menu</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-box">
+      <div class="modal-title">Cash & Change Calculator</div>
+      <div class="calc-row"><span>Order Total (Earned):</span><span id="modalOrderTotal">₱0.00</span></div>
+      <input type="number" inputmode="decimal" class="cash-input" id="cashInput" placeholder="Cash Received (₱)" oninput="updateChange()">
+      <div class="quick-bills">
+        <button class="bill-btn" onclick="setExactCash()">Exact</button>
+        <button class="bill-btn" onclick="setCash(50)">₱50</button>
+        <button class="bill-btn" onclick="setCash(100)">₱100</button>
+        <button class="bill-btn" onclick="setCash(200)">₱200</button>
+        <button class="bill-btn" onclick="setCash(500)">₱500</button>
+        <button class="bill-btn" onclick="setCash(1000)">₱1,000</button>
+      </div>
+      <div class="change-display">
+        <span class="change-label">Change to Give:</span>
+        <span class="change-amount" id="modalChange">₱0.00</span>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" style="background:#94a3b8;" onclick="closeCheckoutModal()">Cancel</button>
+        <button class="btn" style="background:#16a34a;" onclick="confirmSale()">Confirm Sale</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const QUICK_EMOJIS = ['🍔','🥪','🍟','🌭','🥟','🌯','🍜','🍢','🧀','🍳','🍗','🥤','🧋','🍽️'];
+
+    const DEFAULT_MENU = [
+      {
+        title: "Snacks & Street Food",
+        items: [
+          { name: "Lumpiang Toge (2pcs)", price: 20.00, icon: "🌯", photo: "", addons: [] },
+          { name: "Lumpiang Shanghai (4pcs)", price: 25.00, icon: "🌯", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Steamed Siomai (4pcs)", price: 25.00, icon: "🥟", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fried Siomai (4pcs)", price: 25.00, icon: "🥟", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fried Dumplings (4pcs)", price: 25.00, icon: "🥟", photo: "", addons: [] },
+          { name: "Kikiam", price: 20.00, icon: "🌭", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fish balls", price: 20.00, icon: "🍢", photo: "", addons: [] },
+          { name: "Squid balls", price: 20.00, icon: "🍢", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Hotdog on Stick", price: 20.00, icon: "🌭", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Hungarian Sausage", price: 35.00, icon: "🌭", photo: "", addons: [] },
+          { name: "Cheese Sticks", price: 20.00, icon: "🧀", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fries (Cheese)", price: 20.00, icon: "🍟", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fries (Sour Cream)", price: 20.00, icon: "🍟", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fries (BBQ)", price: 20.00, icon: "🍟", photo: "", addons: [{ name: "Snack in a Cup", price: 20.00 }] }
+        ]
+      },
+      {
+        title: "Sandwiches",
+        items: [
+          { name: "Burger", price: 30.00, icon: "🍔", photo: "", addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
+          { name: "Cheeseburger", price: 35.00, icon: "🍔", photo: "", addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
+          { name: "Egg Sandwich", price: 25.00, icon: "🥪", photo: "", addons: [{ name: "Extra Cheese", price: 10.00 }] },
+          { name: "Ham Sandwich", price: 25.00, icon: "🥪", photo: "", addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
+          { name: "Ham & Cheese Sandwich", price: 30.00, icon: "🥪", photo: "", addons: [{ name: "Extra Egg", price: 15.00 }] },
+          { name: "Ham & Egg Sandwich", price: 35.00, icon: "🥪", photo: "", addons: [{ name: "Extra Cheese", price: 10.00 }] }
+        ]
+      },
+      {
+        title: "Pancit",
+        items: [
+          { name: "Pancit Canton", price: 30.00, icon: "🍜", photo: "", addons: [{ name: "Extra Egg", price: 15.00 }] },
+          { name: "Pancit Canton w/ Egg", price: 45.00, icon: "🍜", photo: "", addons: [] }
+        ]
+      }
+    ];
+
+    let menuData = JSON.parse(localStorage.getItem('miniPosMenuPH_v4')) || JSON.parse(JSON.stringify(DEFAULT_MENU));
+    let currentOrder = [];
+    let salesHistory = JSON.parse(localStorage.getItem('miniPosSalesPH')) || [];
+    let isEditMode = false;
+    let activeCatIndex = 0;
+    let pendingItem = null;
+    let selectedAddonIndexes = [];
+    let editingItemIdx = null;
+    let tempItemAddons = [];
+    let tempItemPhoto = "";
+
+    function saveMenuData() {
+      try {
+        localStorage.setItem('miniPosMenuPH_v4', JSON.stringify(menuData));
+      } catch (e) {
+        alert("Storage is full! Try removing a few custom photos or using emojis instead.");
+      }
+    }
+
+    function renderMenu() {
+      if (activeCatIndex >= menuData.length) activeCatIndex = Math.max(0, menuData.length - 1);
+      const tabsEl = document.getElementById('categoryTabs');
+      const gridEl = document.getElementById('menuGrid');
+      const activeCatLabel = document.getElementById('activeCatLabel');
+      tabsEl.innerHTML = '';
+      gridEl.innerHTML = '';
+
+      menuData.forEach((cat, idx) => {
+        const tab = document.createElement('button');
+        tab.className = 'cat-tab' + (idx === activeCatIndex ? ' active' : '');
+        tab.innerText = cat.title;
+        tab.onclick = () => { activeCatIndex = idx; renderMenu(); };
+        tabsEl.appendChild(tab);
+      });
+
+      const currentCat = menuData[activeCatIndex];
+      if (!currentCat) return;
+      activeCatLabel.innerText = currentCat.title;
+
+      currentCat.items.forEach((item, itemIndex) => {
+        const itemAddons = item.addons || [];
+        const visualHtml = item.photo
+          ? '<img class="food-photo" src="' + item.photo + '" alt="">'
+          : '<div class="food-icon">' + (item.icon || '🍽️') + '</div>';
+
+        const card = document.createElement('div');
+        card.className = 'menu-card-item';
+        card.innerHTML =
+          '<span class="delete-badge" onclick="deleteMenuItem(event, ' + itemIndex + ')">×</span>' +
+          (itemAddons.length > 0 ? '<span class="addon-badge">+ Add-ons</span>' : '') +
+          visualHtml +
+          '<div class="food-name">' + item.name + '</div>' +
+          '<div class="food-bottom">' +
+            '<span class="food-price">₱' + item.price.toFixed(2) + '</span>' +
+            '<span class="food-plus">' + (isEditMode ? '✎' : '+') + '</span>' +
+          '</div>' +
+          '<div class="reorder-row">' +
+            '<button class="move-btn" onclick="moveItem(event, ' + itemIndex + ', -1)">◀</button>' +
+            '<button class="move-btn" onclick="moveItem(event, ' + itemIndex + ', 1)">▶</button>' +
+          '</div>';
+        card.onclick = () => { isEditMode ? openItemEditorModal(itemIndex) : handleItemTap(item); };
+        gridEl.appendChild(card);
+      });
+    }
+    function handleItemTap(item) {
+      const itemAddons = item.addons || [];
+      if (itemAddons.length === 0) {
+        addItem({ name: item.name, price: item.price });
+        return;
+      }
+      pendingItem = item;
+      selectedAddonIndexes = [];
+      document.getElementById('addonModalItemName').innerText = item.name;
+      document.getElementById('addonModalBasePrice').innerText = 'Base Price: ₱' + item.price.toFixed(2);
+      renderAddonChoices();
+      document.getElementById('addonModal').classList.add('open');
+    }
+
+    function renderAddonChoices() {
+      const container = document.getElementById('addonChoicesContainer');
+      const itemAddons = pendingItem.addons || [];
+      container.innerHTML = itemAddons.map((addon, idx) => {
+        const isSel = selectedAddonIndexes.indexOf(idx) > -1;
+        return '<button class="addon-choice-btn' + (isSel ? ' selected' : '') + '" onclick="toggleAddonChoice(' + idx + ')">' +
+               '<span>' + (isSel ? '✓ ' : '+ ') + addon.name + '</span>' +
+               '<span>+₱' + addon.price.toFixed(2) + '</span></button>';
+      }).join('');
+      let total = pendingItem.price;
+      selectedAddonIndexes.forEach(idx => { total += itemAddons[idx].price; });
+      const btnText = selectedAddonIndexes.length === 0 ? 'No Add-on (₱' + total.toFixed(2) + ')' : 'Add to Order (₱' + total.toFixed(2) + ')';
+      document.getElementById('confirmAddonBtn').innerText = btnText;
+    }
+
+    function toggleAddonChoice(idx) {
+      const pos = selectedAddonIndexes.indexOf(idx);
+      if (pos > -1) { selectedAddonIndexes.splice(pos, 1); } else { selectedAddonIndexes.push(idx); }
+      renderAddonChoices();
+    }
+
+    function closeAddonModal() { document.getElementById('addonModal').classList.remove('open'); pendingItem = null; }
+
+    function confirmAddWithAddons() {
+      if (!pendingItem) return;
+      const itemAddons = pendingItem.addons || [];
+      let finalName = pendingItem.name;
+      let finalPrice = pendingItem.price;
+      if (selectedAddonIndexes.length > 0) {
+        const names = selectedAddonIndexes.map(idx => itemAddons[idx].name);
+        finalName += ' + ' + names.join(' + ');
+        selectedAddonIndexes.forEach(idx => { finalPrice += itemAddons[idx].price; });
+      }
+      addItem({ name: finalName, price: finalPrice });
+      closeAddonModal();
+    }
+
+    function openItemEditorModal(itemIndex) {
+      editingItemIdx = itemIndex;
+      const item = menuData[activeCatIndex].items[itemIndex];
+      document.getElementById('editItemNameInput').value = item.name;
+      document.getElementById('editItemPriceInput').value = item.price;
+      document.getElementById('editItemEmojiInput').value = item.icon || '🍽️';
+      tempItemPhoto = item.photo || '';
+      tempItemAddons = JSON.parse(JSON.stringify(item.addons || []));
+
+      const quickGrid = document.getElementById('emojiQuickGrid');
+      quickGrid.innerHTML = QUICK_EMOJIS.map(em =>
+        '<button type="button" class="emoji-pick-btn" onclick="selectQuickEmoji(\'' + em + '\')">' + em + '</button>'
+      ).join('');
+
+      updateVisualPreview();
+      renderItemSpecificAddonsList();
+      document.getElementById('itemEditorModal').classList.add('open');
+    }
+
+    function selectQuickEmoji(em) {
+      tempItemPhoto = '';
+      document.getElementById('editItemEmojiInput').value = em;
+      updateVisualPreview();
+    }
+
+    function onEmojiInput() {
+      tempItemPhoto = '';
+      updateVisualPreview();
+    }
+
+    function clearItemPhoto() {
+      tempItemPhoto = '';
+      updateVisualPreview();
+    }
+
+    function updateVisualPreview() {
+      const box = document.getElementById('visualPreviewBox');
+      if (tempItemPhoto) {
+        box.innerHTML = '<img src="' + tempItemPhoto + '" alt="">';
+      } else {
+        const em = document.getElementById('editItemEmojiInput').value.trim() || '🍽️';
+        box.innerHTML = em;
+      }
+    }
+
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const size = 140;
+          canvas.width = size; canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          const minSide = Math.min(img.width, img.height);
+          const sx = (img.width - minSide) / 2;
+          const sy = (img.height - minSide) / 2;
+          ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+          tempItemPhoto = canvas.toDataURL('image/jpeg', 0.72);
+          updateVisualPreview();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function closeItemEditorModal() { document.getElementById('itemEditorModal').classList.remove('open'); }
+
+    function renderItemSpecificAddonsList() {
+      const list = document.getElementById('itemSpecificAddonsList');
+      if (tempItemAddons.length === 0) {
+        list.innerHTML = '<div style="font-size:13px; color:#64748b; margin-bottom:8px;">No add-ons (tapping item adds it immediately).</div>';
+        return;
+      }
+      list.innerHTML = tempItemAddons.map((addon, idx) =>
+        '<div class="item-addon-row">' +
+          '<span>' + addon.name + ' (+₱' + addon.price.toFixed(2) + ')</span>' +
+          '<div>' +
+            '<button class="btn-sm-pill" style="background:#fef3c7; color:#92400e;" onclick="editSpecificAddon(' + idx + ')">Edit</button>' +
+            '<button class="btn-sm-pill" style="background:#fee2e2; color:#dc2626;" onclick="deleteSpecificAddon(' + idx + ')">×</button>' +
+          '</div>' +
+        '</div>'
+      ).join('');
+    }
+
+    function addSpecificAddonToItem() {
+      const name = prompt("Add-on name for this item (e.g., Snack in a Cup, Extra Cheese):");
+      if (!name || name.trim() === '') return;
+      const priceStr = prompt("Extra price for " + name.trim() + " (₱):", "20");
+      if (priceStr === null) return;
+      const price = parseFloat(priceStr);
+      if (isNaN(price) || price < 0) return alert("Please enter a valid price.");
+      tempItemAddons.push({ name: name.trim(), price: price });
+      renderItemSpecificAddonsList();
+    }
+
+    function editSpecificAddon(idx) {
+      const addon = tempItemAddons[idx];
+      const newName = prompt("Edit add-on name:", addon.name);
+      if (!newName || newName.trim() === '') return;
+      const newPriceStr = prompt("Edit price for " + newName.trim() + " (₱):", addon.price);
+      if (newPriceStr === null) return;
+      const newPrice = parseFloat(newPriceStr);
+      if (isNaN(newPrice) || newPrice < 0) return alert("Please enter a valid price.");
+      tempItemAddons[idx] = { name: newName.trim(), price: newPrice };
+      renderItemSpecificAddonsList();
+    }
+
+    function deleteSpecificAddon(idx) { tempItemAddons.splice(idx, 1); renderItemSpecificAddonsList(); }
+
+    function saveItemEditorChanges() {
+      const newName = document.getElementById('editItemNameInput').value.trim();
+      const newPrice = parseFloat(document.getElementById('editItemPriceInput').value);
+      const newIcon = document.getElementById('editItemEmojiInput').value.trim() || '🍽️';
+      if (!newName) return alert("Please enter an item name.");
+      if (isNaN(newPrice) || newPrice < 0) return alert("Please enter a valid price.");
+      menuData[activeCatIndex].items[editingItemIdx] = {
+        name: newName, price: newPrice, icon: newIcon, photo: tempItemPhoto, addons: tempItemAddons
+      };
+      saveMenuData(); closeItemEditorModal(); renderMenu();
+    }
+    function exportMenuBackup() {
+      const code = JSON.stringify(menuData);
+      navigator.clipboard.writeText(code).then(() => {
+        alert("Menu backup copied! Paste it into Messenger or Notes to transfer to another phone.");
+      }).catch(() => {
+        prompt("Copy this menu backup code:", code);
+      });
+    }
+
+    function openImportModal() {
+      document.getElementById('importTextarea').value = '';
+      document.getElementById('importModal').classList.add('open');
+    }
+
+    function closeImportModal() { document.getElementById('importModal').classList.remove('open'); }
+
+    function confirmImportBackup() {
+      const raw = document.getElementById('importTextarea').value.trim();
+      if (!raw) return alert("Please paste the menu backup code first.");
+      try {
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) throw new Error("Invalid format");
+        menuData = parsed; activeCatIndex = 0;
+        saveMenuData(); closeImportModal(); renderMenu();
+        alert("Menu successfully loaded!");
+      } catch (e) {
+        alert("Invalid menu backup code. Make sure you copied the entire message.");
+      }
+    }
+
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      const kioskSec = document.getElementById('kioskSection');
+      const toggleBtn = document.getElementById('editToggleBtn');
+      const menuTitle = document.getElementById('menuTitle');
+      if (isEditMode) {
+        kioskSec.classList.add('edit-mode'); toggleBtn.classList.add('active');
+        toggleBtn.innerText = 'Done Editing'; menuTitle.innerText = 'Editing Menu';
+      } else {
+        kioskSec.classList.remove('edit-mode'); toggleBtn.classList.remove('active');
+        toggleBtn.innerText = 'Edit Menu'; menuTitle.innerText = 'Order Menu';
+      }
+      renderMenu();
+    }
+
+    function moveActiveCategory(direction) {
+      const newIndex = activeCatIndex + direction;
+      if (newIndex < 0 || newIndex >= menuData.length) return;
+      const tempCat = menuData[activeCatIndex];
+      menuData[activeCatIndex] = menuData[newIndex];
+      menuData[newIndex] = tempCat;
+      activeCatIndex = newIndex;
+      saveMenuData(); renderMenu();
+    }
+
+    function addNewCategory() {
+      const title = prompt("New menu category name (e.g., Drinks & Coolers):");
+      if (!title || title.trim() === '') return;
+      menuData.push({ title: title.trim(), items: [] });
+      activeCatIndex = menuData.length - 1;
+      saveMenuData(); renderMenu();
+    }
+
+    function renameActiveCategory() {
+      const newTitle = prompt("Rename category:", menuData[activeCatIndex].title);
+      if (!newTitle || newTitle.trim() === '') return;
+      menuData[activeCatIndex].title = newTitle.trim();
+      saveMenuData(); renderMenu();
+    }
+
+    function deleteActiveCategory() {
+      if (menuData.length <= 1) return alert("You must keep at least one category.");
+      if (confirm("Delete the entire \"" + menuData[activeCatIndex].title + "\" category?")) {
+        menuData.splice(activeCatIndex, 1);
+        activeCatIndex = 0;
+        saveMenuData(); renderMenu();
+      }
+    }
+
+    function moveItem(event, itemIndex, direction) {
+      event.stopPropagation();
+      const items = menuData[activeCatIndex].items;
+      const newIndex = itemIndex + direction;
+      if (newIndex < 0 || newIndex >= items.length) return;
+      const temp = items[itemIndex]; items[itemIndex] = items[newIndex]; items[newIndex] = temp;
+      saveMenuData(); renderMenu();
+    }
+
+    function sortActiveCategoryAZ() {
+      menuData[activeCatIndex].items.sort((a, b) => a.name.localeCompare(b.name));
+      saveMenuData(); renderMenu();
+    }
+
+    function deleteMenuItem(event, itemIndex) {
+      event.stopPropagation();
+      if (confirm("Delete \"" + menuData[activeCatIndex].items[itemIndex].name + "\" permanently?")) {
+        menuData[activeCatIndex].items.splice(itemIndex, 1);
+        saveMenuData(); renderMenu();
+      }
+    }
+
+    function addNewMenuItem() {
+      const name = prompt("New item name for " + menuData[activeCatIndex].title + ":");
+      if (!name || name.trim() === '') return;
+      const priceStr = prompt("Base price for " + name.trim() + " (₱):", "20");
+      if (priceStr === null) return;
+      const price = parseFloat(priceStr);
+      if (isNaN(price) || price < 0) return alert("Please enter a valid price.");
+      menuData[activeCatIndex].items.push({ name: name.trim(), price: price, icon: "🍽️", photo: "", addons: [] });
+      saveMenuData(); renderMenu();
+    }
+
+    function restoreDefaultMenu() {
+      if (confirm("Reset entire menu back to original items, prices, icons, and add-ons?")) {
+        menuData = JSON.parse(JSON.stringify(DEFAULT_MENU));
+        activeCatIndex = 0;
+        localStorage.removeItem('miniPosMenuPH_v4');
+        renderMenu();
+      }
+    }
+    function openCartScreen() { document.getElementById('cartScreen').classList.add('open'); }
+    function closeCartScreen() { document.getElementById('cartScreen').classList.remove('open'); }
+
+    function addItem(item) { currentOrder.push({ name: item.name, price: item.price }); renderOrder(); }
+
+    function addCustomItem() {
+      const name = prompt("One-time item name (e.g., Softdrinks / Water):", "Drink");
+      if (!name) return;
+      const priceStr = prompt("Enter price in Pesos (₱):", "20");
+      const price = parseFloat(priceStr);
+      if (isNaN(price) || price <= 0) return alert("Please enter a valid price.");
+      addItem({ name: name.trim(), price: price });
+    }
+
+    function removeOneItem(index) { currentOrder.splice(index, 1); renderOrder(); }
+    function clearOrder() { currentOrder = []; renderOrder(); closeCartScreen(); }
+    function getOrderSum() { return currentOrder.reduce((sum, item) => sum + item.price, 0); }
+
+    function renderOrder() {
+      const list = document.getElementById('currentOrderList');
+      const totalEl = document.getElementById('orderTotal');
+      const barCount = document.getElementById('barCount');
+      const barTotal = document.getElementById('barTotal');
+      if (currentOrder.length === 0) {
+        list.innerHTML = '<div style="color:#9ca3af; font-size:14px;">Your cart is empty</div>';
+        totalEl.innerText = '₱0.00'; barCount.innerText = '0'; barTotal.innerText = '₱0.00';
+        return;
+      }
+      let total = getOrderSum(); let html = '';
+      currentOrder.forEach((item, index) => {
+        html += '<div class="order-item"><span>' + item.name + '</span><span>₱' + item.price.toFixed(2) + ' <button class="remove-btn" onclick="removeOneItem(' + index + ')">−</button></span></div>';
+      });
+      list.innerHTML = html; totalEl.innerText = '₱' + total.toFixed(2);
+      barCount.innerText = currentOrder.length;
+      barTotal.innerText = '₱' + total.toFixed(2);
+    }
+
+    function openCheckoutModal() {
+      if (currentOrder.length === 0) return alert("Cart is empty! Tap items on the menu first.");
+      const total = getOrderSum();
+      document.getElementById('modalOrderTotal').innerText = '₱' + total.toFixed(2);
+      document.getElementById('cashInput').value = '';
+      document.getElementById('modalChange').innerText = '₱0.00';
+      document.getElementById('checkoutModal').classList.add('open');
+    }
+
+    function closeCheckoutModal() { document.getElementById('checkoutModal').classList.remove('open'); }
+    function setExactCash() { document.getElementById('cashInput').value = getOrderSum(); updateChange(); }
+    function setCash(amount) { document.getElementById('cashInput').value = amount; updateChange(); }
+
+    function updateChange() {
+      const total = getOrderSum();
+      const cash = parseFloat(document.getElementById('cashInput').value) || 0;
+      const changeEl = document.getElementById('modalChange');
+      if (cash === 0) { changeEl.innerText = '₱0.00'; changeEl.style.color = '#15803d'; return; }
+      const diff = cash - total;
+      if (diff < 0) {
+        changeEl.innerText = 'Short ₱' + Math.abs(diff).toFixed(2);
+        changeEl.style.color = '#dc2626';
+      } else {
+        changeEl.innerText = '₱' + diff.toFixed(2);
+        changeEl.style.color = '#15803d';
+      }
+    }
+
+    function confirmSale() {
+      if (currentOrder.length === 0) return;
+      const total = getOrderSum();
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const grouped = {};
+      currentOrder.forEach(item => grouped[item.name] = (grouped[item.name] || 0) + 1);
+      const summary = Object.entries(grouped).map(([name, qty]) => qty + 'x ' + name).join(', ');
+      salesHistory.unshift({ time, summary, total, items: grouped });
+      localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
+      currentOrder = []; closeCheckoutModal(); closeCartScreen(); renderOrder(); renderHistory();
+    }
+
+    function deleteSale(index) {
+      const sale = salesHistory[index];
+      if (confirm("Delete this mistaken sale (₱" + sale.total.toFixed(2) + " - " + sale.summary + ")?")) {
+        salesHistory.splice(index, 1);
+        localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
+        renderHistory();
+      }
+    }
+
+    function getRestockCounts() {
+      const counts = {};
+      salesHistory.forEach(sale => {
+        if (sale.items) {
+          Object.entries(sale.items).forEach(([name, qty]) => {
+            counts[name] = (counts[name] || 0) + qty;
+          });
+        }
+      });
+      return Object.entries(counts).sort((a, b) => b - a);
+    }
+
+    function renderHistory() {
+      const logEl = document.getElementById('salesLog');
+      const totalEl = document.getElementById('dailyTotal');
+      const countEl = document.getElementById('orderCount');
+      const restockEl = document.getElementById('restockSummary');
+
+      let dailySum = 0; let html = '';
+      salesHistory.forEach((sale, index) => {
+        dailySum += sale.total;
+        html += '<div class="log-item"><div class="log-header"><span>' + sale.time + '</span><span>₱' + sale.total.toFixed(2) + '<button class="del-sale-btn" onclick="deleteSale(' + index + ')">×</button></span></div><div class="log-details">' + sale.summary + '</div></div>';
+      });
+      logEl.innerHTML = html; totalEl.innerText = '₱' + dailySum.toFixed(2); countEl.innerText = salesHistory.length;
+
+      const sortedItems = getRestockCounts();
+      if (sortedItems.length === 0) {
+        restockEl.innerHTML = '<div style="color:#9ca3af; font-size:14px;">No items sold yet today</div>';
+      } else {
+        restockEl.innerHTML = sortedItems.map(([name, qty]) =>
+          '<div class="restock-item"><span>' + name + '</span><span class="restock-qty">' + qty + ' sold</span></div>'
+        ).join('');
+      }
+    }
+
+    function copyReport() {
+      if (salesHistory.length === 0) return alert("No sales to copy yet!");
+      const total = salesHistory.reduce((sum, s) => sum + s.total, 0);
+      const date = new Date().toLocaleDateString();
+      let text = "Daily Sales Report (" + date + ")\nTotal Earnings: ₱" + total.toFixed(2) + "\nTotal Orders: " + salesHistory.length + "\n\n";
+      const sortedItems = getRestockCounts();
+      if (sortedItems.length > 0) {
+        text += "--- ITEMS SOLD TODAY ---\n";
+        sortedItems.forEach(([name, qty]) => text += qty + "x " + name + "\n");
+        text += "\n--- ORDER LOG ---\n";
+      }
+      salesHistory.forEach(s => text += "[" + s.time + "] ₱" + s.total.toFixed(2) + " - " + s.summary + "\n");
+      navigator.clipboard.writeText(text).then(() => alert("Daily report & item summary copied!"));
+    }
+
+    function resetDay() {
+      if (confirm("Clear today's sales and start at ₱0.00? (Your custom menu & add-ons will stay saved)")) {
+        salesHistory = []; localStorage.removeItem('miniPosSalesPH'); renderHistory();
+      }
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+
+    renderMenu();
+    renderHistory();
+  </script>
+</body>
+</html>
