@@ -27,15 +27,15 @@
     .cat-manage-title { font-size: 12px; font-weight: 800; color: #92400e; flex: 1; }
     .cat-mini-btn { background: white; border: 1px solid #d97706; color: #92400e; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-weight: 800; cursor: pointer; }
     .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .menu-card-item { position: relative; background: #ffffff; border: 1.5px solid #f1f5f9; border-radius: 18px; padding: 14px 10px 12px; text-align: center; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.04); display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+    .menu-card-item { position: relative; background: #ffffff; border: 1.5px solid #f1f5f9; border-radius: 18px; padding: 10px 10px 12px; text-align: center; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.04); display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
     .menu-card-item:active { transform: scale(0.96); border-color: var(--primary); }
-    .food-icon { font-size: 36px; line-height: 1; margin-bottom: 8px; height: 48px; display: flex; align-items: center; justify-content: center; }
-    .food-photo { width: 54px; height: 54px; object-fit: cover; border-radius: 12px; margin-bottom: 6px; border: 1px solid #e2e8f0; }
+    .food-icon { font-size: 46px; line-height: 1; margin: 8px 0; height: 64px; display: flex; align-items: center; justify-content: center; }
+    .food-photo { width: 100%; height: 105px; object-fit: cover; border-radius: 12px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
     .food-name { font-weight: 800; font-size: 14px; color: #1e293b; line-height: 1.25; margin-bottom: 6px; }
     .food-bottom { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: auto; padding-top: 6px; border-top: 1px solid #f8fafc; }
     .food-price { font-size: 15px; font-weight: 900; color: var(--primary); }
     .food-plus { background: var(--accent); color: #111827; width: 26px; height: 26px; border-radius: 50%; font-size: 17px; font-weight: 900; line-height: 26px; text-align: center; }
-    .addon-badge { position: absolute; top: 8px; left: 8px; font-size: 10px; font-weight: 800; color: #1d4ed8; background: #dbeafe; padding: 2px 7px; border-radius: 8px; z-index: 2; }
+    .addon-badge { position: absolute; top: 14px; left: 14px; font-size: 10px; font-weight: 800; color: #1d4ed8; background: rgba(219, 234, 254, 0.95); padding: 2px 7px; border-radius: 8px; z-index: 2; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
     .edit-mode .menu-card-item { background: #fffbeb; border-color: #f59e0b; padding-top: 22px; }
     .delete-badge { display: none; position: absolute; top: -6px; right: -6px; background: #dc2626; color: white; border: 2px solid white; width: 26px; height: 26px; border-radius: 50%; font-size: 15px; font-weight: 800; line-height: 20px; text-align: center; cursor: pointer; z-index: 3; }
     .edit-mode .delete-badge { display: block; }
@@ -56,12 +56,15 @@
     .btn-custom { background: #f59e0b; width: 100%; margin-top: 12px; font-size: 14px; padding: 12px; }
     .btn-reset { background: var(--danger); width: 100%; margin-top: 8px; font-size: 14px; padding: 12px; }
     .btn-copy { background: #2563eb; width: 100%; margin-top: 10px; font-size: 14px; padding: 12px; }
-    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #111827; color: white; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: space-between; gap: 10px; z-index: 20; }
-    .bottom-info { display: flex; flex-direction: column; }
-    .bottom-count { font-size: 11px; color: #9ca3af; font-weight: 700; text-transform: uppercase; }
-    .bottom-total { font-size: 22px; font-weight: 900; color: #4ade80; }
-    .btn-view-cart { background: var(--primary); color: white; border: none; border-radius: 14px; padding: 13px 18px; font-weight: 800; font-size: 15px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
-    .cart-badge { background: var(--accent); color: #111827; padding: 2px 8px; border-radius: 20px; font-size: 13px; font-weight: 900; }
+    /* Kiosk Bottom Bar with Quick Sale & View Order */
+    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #111827; color: white; padding: 11px 14px calc(11px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 20; }
+    .bottom-info { display: flex; flex-direction: column; min-width: 85px; }
+    .bottom-count { font-size: 10px; color: #9ca3af; font-weight: 700; text-transform: uppercase; }
+    .bottom-total { font-size: 20px; font-weight: 900; color: #4ade80; }
+    .bottom-btns { display: flex; gap: 7px; }
+    .btn-quick-sale { background: #16a34a; color: white; border: none; border-radius: 12px; padding: 12px 12px; font-weight: 800; font-size: 13px; cursor: pointer; white-space: nowrap; }
+    .btn-view-cart { background: #2563eb; color: white; border: none; border-radius: 12px; padding: 12px 13px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer; white-space: nowrap; }
+    .cart-badge { background: var(--accent); color: #111827; padding: 2px 7px; border-radius: 20px; font-size: 12px; font-weight: 900; }
     .cart-screen { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #f8fafc; z-index: 40; flex-direction: column; }
     .cart-screen.open { display: flex; }
     .cart-header { background: #111827; color: white; padding: calc(14px + env(safe-area-inset-top)) 16px 14px; display: flex; justify-content: space-between; align-items: center; }
@@ -82,10 +85,9 @@
     .addon-choice-btn.selected { background: #eff6ff; border-color: #2563eb; color: #1e40af; }
     .edit-field-label { font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; margin: 10px 0 4px; display: block; }
     .edit-text-input { width: 100%; padding: 10px; font-size: 15px; font-weight: 700; border: 1.5px solid #cbd5e1; border-radius: 10px; }
-    /* Icon & Photo Picker Box */
     .visual-picker-box { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px; }
     .visual-preview-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-    .visual-preview-box { width: 52px; height: 52px; background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 30px; overflow: hidden; flex-shrink: 0; }
+    .visual-preview-box { width: 64px; height: 64px; background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 34px; overflow: hidden; flex-shrink: 0; }
     .visual-preview-box img { width: 100%; height: 100%; object-fit: cover; }
     .emoji-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 6px; }
     .emoji-pick-btn { background: white; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 18px; padding: 5px 0; cursor: pointer; }
@@ -147,15 +149,19 @@
     <button class="btn btn-copy" onclick="copyReport()">Copy Daily Summary</button>
     <button class="btn btn-reset" onclick="resetDay()">Start New Day (Reset Sales)</button>
   </div>
+  <!-- Bottom Bar with Instant Quick Sale & View Order -->
   <div class="bottom-bar">
     <div class="bottom-info">
-      <span class="bottom-count">Current Order</span>
+      <span class="bottom-count">Order Total</span>
       <span class="bottom-total" id="barTotal">₱0.00</span>
     </div>
-    <button class="btn-view-cart" onclick="openCartScreen()">
-      <span>🛒 View Order</span>
-      <span class="cart-badge" id="barCount">0</span>
-    </button>
+    <div class="bottom-btns">
+      <button class="btn-quick-sale" onclick="quickInstantSale()">⚡ Quick Sale</button>
+      <button class="btn-view-cart" onclick="openCartScreen()">
+        <span>🛒 View</span>
+        <span class="cart-badge" id="barCount">0</span>
+      </button>
+    </div>
   </div>
   <div class="cart-screen" id="cartScreen">
     <div class="cart-header">
@@ -185,7 +191,6 @@
       </div>
     </div>
   </div>
-  <!-- Item, Icon/Photo & Add-ons Editor Modal -->
   <div class="modal-overlay" id="itemEditorModal">
     <div class="modal-box">
       <div class="modal-title">Edit Item, Icon & Photo</div>
@@ -455,21 +460,20 @@
     }
 
     function handlePhotoUpload(event) {
-      const file = event.target.files[0];
+      const file = event.target.files;
       if (!file) return;
       const reader = new FileReader();
       reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
           const canvas = document.createElement('canvas');
-          const size = 140;
-          canvas.width = size; canvas.height = size;
+          canvas.width = 240; canvas.height = 180;
           const ctx = canvas.getContext('2d');
-          const minSide = Math.min(img.width, img.height);
-          const sx = (img.width - minSide) / 2;
-          const sy = (img.height - minSide) / 2;
-          ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
-          tempItemPhoto = canvas.toDataURL('image/jpeg', 0.72);
+          const ratio = Math.max(canvas.width / img.width, canvas.height / img.height);
+          const w = img.width * ratio;
+          const h = img.height * ratio;
+          ctx.drawImage(img, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
+          tempItemPhoto = canvas.toDataURL('image/jpeg', 0.78);
           updateVisualPreview();
         };
         img.src = e.target.result;
@@ -669,6 +673,17 @@
     function removeOneItem(index) { currentOrder.splice(index, 1); renderOrder(); }
     function clearOrder() { currentOrder = []; renderOrder(); closeCartScreen(); }
     function getOrderSum() { return currentOrder.reduce((sum, item) => sum + item.price, 0); }
+
+    function quickInstantSale() {
+      if (currentOrder.length === 0) return alert("Tap at least one item on the menu first!");
+      const total = getOrderSum();
+      const grouped = {};
+      currentOrder.forEach(item => grouped[item.name] = (grouped[item.name] || 0) + 1);
+      const summary = Object.entries(grouped).map(([name, qty]) => qty + 'x ' + name).join(', ');
+      if (confirm("Record Quick Sale of ₱" + total.toFixed(2) + "?\n(" + summary + ")")) {
+        confirmSale();
+      }
+    }
 
     function renderOrder() {
       const list = document.getElementById('currentOrderList');
