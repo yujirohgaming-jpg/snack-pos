@@ -10,6 +10,8 @@
     :root { --primary: #da291c; --accent: #ffc72c; --success: #16a34a; --danger: #dc2626; --bg: #e2e8f0; --card: #ffffff; --text: #0f172a; }
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { margin: 0; padding: calc(12px + env(safe-area-inset-top)) 14px calc(105px + env(safe-area-inset-bottom)); background: var(--bg); color: var(--text); }
+    .toast-banner { position: fixed; top: calc(14px + env(safe-area-inset-top)); left: 50%; transform: translate(-50%, -130%); background: #0f172a; color: #ffffff; border: 2px solid #4ade80; padding: 10px 18px; border-radius: 30px; font-size: 14px; font-weight: 800; z-index: 90; box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: transform 0.22s ease; white-space: nowrap; pointer-events: none; }
+    .toast-banner.show { transform: translate(-50%, 0); }
     .earnings-banner { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 14px 16px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18); gap: 10px; }
     .earnings-left h2 { margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; }
     .earnings-left .amount { font-size: 28px; font-weight: 900; margin: 2px 0 0; color: #4ade80; letter-spacing: -0.5px; }
@@ -28,17 +30,20 @@
     .cat-manage-title { font-size: 12px; font-weight: 800; color: #92400e; flex: 1; }
     .cat-mini-btn { background: white; border: 1px solid #d97706; color: #92400e; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-weight: 800; cursor: pointer; }
     .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .menu-card-item { position: relative; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 18px; padding: 10px 10px 12px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
-    .menu-card-item:active { transform: scale(0.96); border-color: var(--primary); }
+    .menu-card-item { position: relative; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 18px; padding: 10px 10px 12px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); display: flex; flex-direction: column; align-items: center; justify-content: space-between; transition: transform 0.12s ease, border-color 0.2s ease, background-color 0.2s ease; }
+    .menu-card-item:active { transform: scale(0.95); }
+    .menu-card-item.just-added { border-color: #16a34a; background: #dcfce7; }
+    .in-cart-pill { position: absolute; top: 10px; right: 10px; font-size: 11px; font-weight: 900; color: #ffffff; background: #16a34a; padding: 3px 8px; border-radius: 10px; z-index: 3; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.35); }
+    .edit-mode .in-cart-pill { display: none; }
     .food-icon { font-size: 46px; line-height: 1; margin: 8px 0; height: 64px; display: flex; align-items: center; justify-content: center; }
     .food-photo { width: 100%; height: 105px; object-fit: cover; border-radius: 12px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
     .food-name { font-weight: 800; font-size: 14px; color: #0f172a; line-height: 1.25; margin-bottom: 6px; }
     .food-bottom { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: auto; padding-top: 6px; border-top: 1px solid #f1f5f9; }
     .food-price { font-size: 15px; font-weight: 900; color: var(--primary); }
     .food-plus { background: var(--accent); color: #111827; width: 26px; height: 26px; border-radius: 50%; font-size: 17px; font-weight: 900; line-height: 26px; text-align: center; }
-    .addon-badge { position: absolute; top: 14px; left: 14px; font-size: 10px; font-weight: 800; color: #1d4ed8; background: rgba(219, 234, 254, 0.95); padding: 2px 7px; border-radius: 8px; z-index: 2; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .addon-badge { position: absolute; top: 10px; left: 10px; font-size: 10px; font-weight: 800; color: #1d4ed8; background: rgba(219, 234, 254, 0.95); padding: 3px 7px; border-radius: 8px; z-index: 2; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
     .edit-mode .menu-card-item { background: #fffbeb; border-color: #f59e0b; padding-top: 22px; }
-    .delete-badge { display: none; position: absolute; top: -6px; right: -6px; background: #dc2626; color: white; border: 2px solid white; width: 26px; height: 26px; border-radius: 50%; font-size: 15px; font-weight: 800; line-height: 20px; text-align: center; cursor: pointer; z-index: 3; }
+    .delete-badge { display: none; position: absolute; top: -6px; right: -6px; background: #dc2626; color: white; border: 2px solid white; width: 26px; height: 26px; border-radius: 50%; font-size: 15px; font-weight: 800; line-height: 20px; text-align: center; cursor: pointer; z-index: 4; }
     .edit-mode .delete-badge { display: block; }
     .reorder-row { display: none; justify-content: center; gap: 8px; margin-top: 8px; width: 100%; }
     .edit-mode .reorder-row { display: flex; }
@@ -48,7 +53,6 @@
     .btn-ed { padding: 11px 8px; border: none; border-radius: 10px; font-size: 12px; font-weight: 800; color: white; cursor: pointer; }
     .card-box { background: var(--card); border-radius: 18px; padding: 14px; margin-bottom: 12px; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06); border: 1px solid #cbd5e1; }
     .card-box h3 { margin: 0 0 10px; font-size: 15px; font-weight: 800; color: #1e293b; }
-    /* Collapsible Accordion Headers inside Reports Screen */
     .report-accordion-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 14px 16px; font-size: 15px; font-weight: 800; color: #0f172a; cursor: pointer; margin-bottom: 10px; box-shadow: 0 2px 6px rgba(15,23,42,0.05); }
     .report-accordion-btn.open { border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0; background: #f8fafc; border-color: #94a3b8; }
     .report-accordion-body { display: none; background: #ffffff; border: 1.5px solid #94a3b8; border-top: none; border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; padding: 12px 14px; margin-bottom: 12px; }
@@ -69,7 +73,8 @@
     .bottom-btns { display: flex; gap: 7px; }
     .btn-quick-sale { background: #16a34a; color: white; border: none; border-radius: 12px; padding: 12px 12px; font-weight: 800; font-size: 13px; cursor: pointer; white-space: nowrap; }
     .btn-view-cart { background: #2563eb; color: white; border: none; border-radius: 12px; padding: 12px 13px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer; white-space: nowrap; }
-    .cart-badge { background: var(--accent); color: #111827; padding: 2px 7px; border-radius: 20px; font-size: 12px; font-weight: 900; }
+    .cart-badge { background: var(--accent); color: #111827; padding: 2px 7px; border-radius: 20px; font-size: 12px; font-weight: 900; transition: transform 0.15s ease; }
+    .cart-badge.pop { transform: scale(1.35); }
     .full-screen-drawer { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 40; flex-direction: column; }
     .full-screen-drawer.open { display: flex; }
     .drawer-header { background: #0f172a; color: white; padding: calc(14px + env(safe-area-inset-top)) 16px 14px; display: flex; justify-content: space-between; align-items: center; }
@@ -113,6 +118,7 @@
   </style>
 </head>
 <body>
+  <div class="toast-banner" id="toastBanner">✓ Added to Order</div>
   <div class="earnings-banner">
     <div class="earnings-left">
       <h2>Today's Total Earnings</h2>
@@ -147,7 +153,6 @@
     </div>
     <button class="btn btn-custom" onclick="addCustomItem()">+ One-Time Custom Item / Drink</button>
   </div>
-  <!-- Bottom Bar -->
   <div class="bottom-bar">
     <div class="bottom-info">
       <span class="bottom-count">Order Total</span>
@@ -161,7 +166,6 @@
       </button>
     </div>
   </div>
-  <!-- Sales & Reports Full-Screen Drawer -->
   <div class="full-screen-drawer" id="reportsScreen">
     <div class="drawer-header">
       <h2>📊 Sales & Inventory</h2>
@@ -172,7 +176,6 @@
         <div style="font-size:11px; text-transform:uppercase; color:#94a3b8; letter-spacing:1px;">Today's Total Earnings</div>
         <div style="font-size:32px; font-weight:900; color:#4ade80; margin-top:4px;" id="reportScreenTotal">₱0.00</div>
       </div>
-      <!-- Collapsible Sold Today Summary -->
       <button class="report-accordion-btn" id="restockAccBtn" onclick="toggleReportSection('restock')">
         <span>📦 Sold Today (Restock Summary)</span>
         <span id="restockArrow">▼</span>
@@ -180,7 +183,6 @@
       <div class="report-accordion-body" id="restockAccBody">
         <div id="restockSummary"><div style="color:#9ca3af; font-size:14px;">No items sold yet today</div></div>
       </div>
-      <!-- Collapsible Sales Log -->
       <button class="report-accordion-btn" id="salesLogAccBtn" onclick="toggleReportSection('salesLog')">
         <span>🧾 Today's Sales Log (<span id="orderCount">0</span> orders)</span>
         <span id="salesLogArrow">▼</span>
@@ -194,7 +196,6 @@
       </div>
     </div>
   </div>
-  <!-- Customer Cart Full-Screen Drawer -->
   <div class="full-screen-drawer" id="cartScreen">
     <div class="drawer-header">
       <h2>🛒 Customer Order</h2>
@@ -212,7 +213,6 @@
       <button class="btn" style="background:#16a34a;" onclick="openCheckoutModal()">Payment</button>
     </div>
   </div>
-  <!-- Customer Add-on Selection Modal -->
   <div class="modal-overlay" id="addonModal">
     <div class="modal-box">
       <div class="modal-title" id="addonModalItemName">Item Name</div>
@@ -224,7 +224,6 @@
       </div>
     </div>
   </div>
-  <!-- Item, Icon & Photo Editor Modal -->
   <div class="modal-overlay" id="itemEditorModal">
     <div class="modal-box">
       <div class="modal-title">Edit Item, Icon & Photo</div>
@@ -256,7 +255,6 @@
       </div>
     </div>
   </div>
-  <!-- Import Menu Backup Modal -->
   <div class="modal-overlay" id="importModal">
     <div class="modal-box">
       <div class="modal-title">Import Menu Backup</div>
@@ -268,7 +266,6 @@
       </div>
     </div>
   </div>
-  <!-- Cash & Change Modal -->
   <div class="modal-overlay" id="checkoutModal">
     <div class="modal-box">
       <div class="modal-title">Cash & Change Calculator</div>
@@ -345,6 +342,7 @@
     let editingItemIdx = null;
     let tempItemAddons = [];
     let tempItemPhoto = "";
+    let toastTimer = null;
 
     function saveMenuData() {
       try {
@@ -352,6 +350,16 @@
       } catch (e) {
         alert("Storage is full! Try removing a few custom photos or using emojis instead.");
       }
+    }
+
+    function getItemCartQty(itemName) {
+      let count = 0;
+      currentOrder.forEach(orderItem => {
+        if (orderItem.name === itemName || orderItem.name.startsWith(itemName + ' + ')) {
+          count++;
+        }
+      });
+      return count;
     }
 
     function renderMenu() {
@@ -376,6 +384,7 @@
 
       currentCat.items.forEach((item, itemIndex) => {
         const itemAddons = item.addons || [];
+        const qtyInCart = getItemCartQty(item.name);
         const visualHtml = item.photo
           ? '<img class="food-photo" src="' + item.photo + '" alt="">'
           : '<div class="food-icon">' + (item.icon || '🍽️') + '</div>';
@@ -385,6 +394,7 @@
         card.innerHTML =
           '<span class="delete-badge" onclick="deleteMenuItem(event, ' + itemIndex + ')">×</span>' +
           (itemAddons.length > 0 ? '<span class="addon-badge">+ Add-ons</span>' : '') +
+          (qtyInCart > 0 ? '<span class="in-cart-pill">' + qtyInCart + ' in cart</span>' : '') +
           visualHtml +
           '<div class="food-name">' + item.name + '</div>' +
           '<div class="food-bottom">' +
@@ -395,14 +405,24 @@
             '<button class="move-btn" onclick="moveItem(event, ' + itemIndex + ', -1)">◀</button>' +
             '<button class="move-btn" onclick="moveItem(event, ' + itemIndex + ', 1)">▶</button>' +
           '</div>';
-        card.onclick = () => { isEditMode ? openItemEditorModal(itemIndex) : handleItemTap(item); };
+        card.onclick = () => {
+          if (isEditMode) {
+            openItemEditorModal(itemIndex);
+          } else {
+            handleItemTap(item, card);
+          }
+        };
         gridEl.appendChild(card);
       });
     }
-    function handleItemTap(item) {
+    function handleItemTap(item, cardEl) {
       const itemAddons = item.addons || [];
       if (itemAddons.length === 0) {
         addItem({ name: item.name, price: item.price });
+        if (cardEl) {
+          cardEl.classList.add('just-added');
+          setTimeout(() => renderMenu(), 220);
+        }
         return;
       }
       pendingItem = item;
@@ -448,6 +468,7 @@
       }
       addItem({ name: finalName, price: finalPrice });
       closeAddonModal();
+      renderMenu();
     }
 
     function openItemEditorModal(itemIndex) {
@@ -691,6 +712,14 @@
         renderMenu();
       }
     }
+    function showToast(msg) {
+      const banner = document.getElementById('toastBanner');
+      banner.innerText = msg;
+      banner.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => banner.classList.remove('show'), 1400);
+    }
+
     function openReportsScreen() { document.getElementById('reportsScreen').classList.add('open'); }
     function closeReportsScreen() { document.getElementById('reportsScreen').classList.remove('open'); }
 
@@ -706,7 +735,14 @@
     function openCartScreen() { document.getElementById('cartScreen').classList.add('open'); }
     function closeCartScreen() { document.getElementById('cartScreen').classList.remove('open'); }
 
-    function addItem(item) { currentOrder.push({ name: item.name, price: item.price }); renderOrder(); }
+    function addItem(item) {
+      currentOrder.push({ name: item.name, price: item.price });
+      renderOrder();
+      showToast('✓ Added: ' + item.name + ' (₱' + item.price.toFixed(2) + ')');
+      const badge = document.getElementById('barCount');
+      badge.classList.add('pop');
+      setTimeout(() => badge.classList.remove('pop'), 180);
+    }
 
     function addCustomItem() {
       const name = prompt("One-time item name (e.g., Softdrinks / Water):", "Drink");
@@ -717,8 +753,8 @@
       addItem({ name: name.trim(), price: price });
     }
 
-    function removeOneItem(index) { currentOrder.splice(index, 1); renderOrder(); }
-    function clearOrder() { currentOrder = []; renderOrder(); closeCartScreen(); }
+    function removeOneItem(index) { currentOrder.splice(index, 1); renderOrder(); renderMenu(); }
+    function clearOrder() { currentOrder = []; renderOrder(); renderMenu(); closeCartScreen(); }
     function getOrderSum() { return currentOrder.reduce((sum, item) => sum + item.price, 0); }
 
     function quickInstantSale() {
@@ -788,7 +824,8 @@
       const summary = Object.entries(grouped).map(([name, qty]) => qty + 'x ' + name).join(', ');
       salesHistory.unshift({ time, summary, total, items: grouped });
       localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
-      currentOrder = []; closeCheckoutModal(); closeCartScreen(); renderOrder(); renderHistory();
+      currentOrder = []; closeCheckoutModal(); closeCartScreen(); renderOrder(); renderMenu(); renderHistory();
+      showToast('✓ Sale Recorded: ₱' + total.toFixed(2));
     }
 
     function deleteSale(index) {
