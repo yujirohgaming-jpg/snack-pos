@@ -463,6 +463,7 @@
       <label class="edit-field-label" id="itemEditorChoicesLabel" style="margin-top:14px;">Add-ons for This Item Only</label>
       <div id="itemSpecificAddonsList"></div>
       <button class="btn" id="itemEditorAddChoiceBtn" style="background:#d97706; width:100%; padding:10px; font-size:13px; margin-top:4px;" onclick="addSpecificAddonToItem()">+ Add Add-on Option</button>
+      <input type="file" id="addonChoicePhotoInput" accept="image/*" style="display:none;" onchange="handleAddonChoicePhotoUpload(event)">
       <div class="modal-actions">
         <button class="btn" style="background:#94a3b8;" onclick="closeItemEditorModal()">Cancel</button>
         <button class="btn" style="background:#16a34a;" onclick="saveItemEditorChanges()">Save Item</button>
@@ -883,13 +884,18 @@
       renderMenu();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    function findVisualForChoice(choiceName) {
+        function findVisualForChoice(choiceObj) {
+      const choiceName = typeof choiceObj === 'string' ? choiceObj : choiceObj.name;
+      if (choiceObj && choiceObj.photo) {
+        return { photo: choiceObj.photo, icon: choiceObj.icon || '🍽️' };
+      }
       for (let c = 0; c < menuData.length; c++) {
-        const items = menuData[c].items || [];
+        const items = menuData.at(c).items || new Array();
         for (let i = 0; i < items.length; i++) {
-          if (items[i].name.toLowerCase().includes(choiceName.toLowerCase()) ||
-              choiceName.toLowerCase().includes(items[i].name.toLowerCase())) {
-            return { photo: items[i].photo || '', icon: items[i].icon || '🍽️' };
+          const it = items.at(i);
+          if (it.name.toLowerCase().includes(choiceName.toLowerCase()) ||
+              choiceName.toLowerCase().includes(it.name.toLowerCase())) {
+            return { photo: it.photo || '', icon: it.icon || '🍽️' };
           }
         }
       }
@@ -980,7 +986,7 @@
         } else if (usePhotoGrid) {
           container.innerHTML = '<div class="popup-cards-grid">' + itemAddons.map((choice, idx) => {
             const q = comboQtyMap[idx] || 0;
-            const vis = findVisualForChoice(choice.name);
+            const vis = findVisualForChoice(choice);
             const visHtml = vis.photo
               ? '<img class="popup-choice-img" src="' + vis.photo + '" alt="">'
               : '<div class="popup-choice-icon">' + vis.icon + '</div>';
@@ -1028,7 +1034,7 @@
       } else if (usePhotoGrid) {
         container.innerHTML = '<div class="popup-cards-grid">' + itemAddons.map((addon, idx) => {
           const isSel = selectedAddonIndexes.indexOf(idx) > -1;
-          const vis = findVisualForChoice(addon.name);
+          const vis = findVisualForChoice(addon);
           const visHtml = vis.photo
             ? '<img class="popup-choice-img" src="' + vis.photo + '" alt="">'
             : '<div class="popup-choice-icon">' + vis.icon + '</div>';
@@ -1215,6 +1221,39 @@
     }
 
     function closeItemEditorModal() { document.getElementById('itemEditorModal').classList.remove('open'); }
+        let editingAddonPhotoIdx = null;
+
+    function triggerAddonChoicePhoto(idx) {
+      editingAddonPhotoIdx = idx;
+      document.getElementById('addonChoicePhotoInput').click();
+    }
+
+    function handleAddonChoicePhotoUpload(event) {
+      const file = event.target.files.item(0);
+      if (!file || editingAddonPhotoIdx === null) return;
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 240; canvas.height = 180;
+        const ctx = canvas.getContext('2d');
+        const ratio = Math.max(canvas.width / img.width, canvas.height / img.height);
+        const w = img.width * ratio;
+        const h = img.height * ratio;
+        ctx.drawImage(img, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
+        tempItemAddons.at(editingAddonPhotoIdx).photo = canvas.toDataURL('image/jpeg', 0.78);
+        URL.revokeObjectURL(objectUrl);
+        renderItemSpecificAddonsList();
+      };
+      img.src = objectUrl;
+      event.target.value = '';
+    }
+
+    function clearAddonChoicePhoto(idx) {
+      tempItemAddons.at(idx).photo = '';
+      renderItemSpecificAddonsList();
+    }
+
     function renderItemSpecificAddonsList() {
       const list = document.getElementById('itemSpecificAddonsList');
       if (tempItemAddons.length === 0) {
@@ -1225,28 +1264,34 @@
       }
       list.innerHTML = tempItemAddons.map((addon, idx) => {
         const priceLabel = tempItemIsCombo ? '₱' + addon.price.toFixed(2) : '+₱' + addon.price.toFixed(2);
+        const thumbHtml = addon.photo
+          ? '<img src="' + addon.photo + '" style="width:28px; height:28px; border-radius:6px; object-fit:cover; vertical-align:middle; margin-right:6px;">'
+          : '';
+        const clearBtn = addon.photo
+          ? '<button type="button" class="btn-sm-pill" style="background:#e2e8f0; color:#334155;" onclick="clearAddonChoicePhoto(' + idx + ')">No Pic</button>'
+          : '';
         return '<div class="item-addon-row">' +
-          '<span>' + addon.name + ' (' + priceLabel + ')</span>' +
-          '<div>' +
-            '<button class="btn-sm-pill" style="background:#fef3c7; color:#92400e;" onclick="editSpecificAddon(' + idx + ')">Edit</button>' +
-            '<button class="btn-sm-pill" style="background:#fee2e2; color:#dc2626;" onclick="deleteSpecificAddon(' + idx + ')">×</button>' +
+          '<span style="display:flex; align-items:center;">' + thumbHtml + addon.name + ' (' + priceLabel + ')</span>' +
+          '<div style="display:flex; align-items:center; flex-wrap:wrap; gap:2px;">' +
+            '<button type="button" class="btn-sm-pill" style="background:#dbeafe; color:#1d4ed8;" onclick="triggerAddonChoicePhoto(' + idx + ')">📷</button>' +
+            clearBtn +
+            '<button type="button" class="btn-sm-pill" style="background:#fef3c7; color:#92400e;" onclick="editSpecificAddon(' + idx + ')">Edit</button>' +
+            '<button type="button" class="btn-sm-pill" style="background:#fee2e2; color:#dc2626;" onclick="deleteSpecificAddon(' + idx + ')">×</button>' +
           '</div>' +
         '</div>';
       }).join('');
     }
 
-    function addSpecificAddonToItem() {
-      const label = tempItemIsCombo ? "Paired item name (e.g., Fries, Siomai):" : "Add-on name (e.g., Extra Cheese, Snack in a Cup):";
-      const name = prompt(label, "");
-      if (!name || name.trim() === '') return;
-      const pricePrompt = tempItemIsCombo
-        ? "Full combo price for " + document.getElementById('editItemNameInput').value.trim() + " + " + name.trim() + " (₱):"
-        : "Extra price for " + name.trim() + " (₱):";
-      const priceStr = prompt(pricePrompt, "");
-      if (priceStr === null) return;
-      const price = parseFloat(priceStr);
-      if (isNaN(price) || price < 0) return alert("Please enter a valid price.");
-      tempItemAddons.push({ name: name.trim(), price: price, soldOut: false });
+    function editSpecificAddon(idx) {
+      const addon = tempItemAddons.at(idx);
+      const newName = prompt("Edit name:", addon.name);
+      if (!newName || newName.trim() === '') return;
+      const newPriceStr = prompt("Edit price for " + newName.trim() + " (₱):", addon.price);
+      if (newPriceStr === null) return;
+      const newPrice = parseFloat(newPriceStr);
+      if (isNaN(newPrice) || newPrice < 0) return alert("Please enter a valid price.");
+      tempItemAddons.at(idx).name = newName.trim();
+      tempItemAddons.at(idx).price = newPrice;
       renderItemSpecificAddonsList();
     }
 
