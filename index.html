@@ -7,84 +7,96 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Snack Kiosk POS</title>
   <style>
-    :root { --primary: #da291c; --accent: #ffc72c; --success: #16a34a; --danger: #dc2626; --bg: #e2e8f0; --card: #ffffff; --text: #0f172a; }
+    :root { --primary: #da291c; --accent: #ffc72c; --success: #16a34a; --danger: #dc2626; --bg: #e2e8f0; --card: #ffffff; --text: #0f172a; --muted: #64748b; --border: #cbd5e1; }
+    body.theme-dark { --bg: #0b1120; --card: #1e293b; --text: #f8fafc; --muted: #94a3b8; --border: #334155; }
+    body.theme-cream { --bg: #fef3c7; --card: #fffbeb; --text: #451a03; --muted: #92400e; --border: #fcd34d; }
+    body.theme-mint { --bg: #d1fae5; --card: #ffffff; --text: #064e3b; --muted: #047857; --border: #6ee7b7; }
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { margin: 0; padding: calc(12px + env(safe-area-inset-top)) 14px calc(105px + env(safe-area-inset-bottom)); background: var(--bg); color: var(--text); }
-    .toast-banner { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.85); opacity: 0; background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #ffffff; border: 1.5px solid rgba(74, 222, 128, 0.75); padding: 10px 20px; border-radius: 30px; font-size: 15px; font-weight: 800; z-index: 90; box-shadow: 0 6px 20px rgba(0,0,0,0.18); transition: all 0.16s ease; white-space: nowrap; pointer-events: none; }
+    body { margin: 0; padding: 0 14px calc(105px + env(safe-area-inset-bottom)); background: var(--bg); color: var(--text); transition: background-color 0.2s ease; }
+    .sticky-top-zone { position: sticky; top: 0; z-index: 15; background: var(--bg); padding-top: calc(10px + env(safe-area-inset-top)); padding-bottom: 6px; margin: 0 -14px 8px; padding-left: 14px; padding-right: 14px; box-shadow: 0 4px 10px rgba(15, 23, 42, 0.1); }
+    .toast-banner { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.85); opacity: 0; background: rgba(15, 23, 42, 0.78); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #ffffff; border: 1.5px solid rgba(74, 222, 128, 0.75); padding: 10px 20px; border-radius: 30px; font-size: 15px; font-weight: 800; z-index: 90; box-shadow: 0 6px 20px rgba(0,0,0,0.18); transition: all 0.16s ease; white-space: nowrap; pointer-events: none; }
     .toast-banner.show { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    .earnings-banner { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 14px 16px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18); gap: 10px; }
-    .earnings-left h2 { margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; }
-    .earnings-left .amount { font-size: 28px; font-weight: 900; margin: 2px 0 0; color: #4ade80; letter-spacing: -0.5px; }
-    .btn-reports-open { background: #334155; color: #ffffff; border: 1.5px solid #475569; border-radius: 14px; padding: 10px 13px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; white-space: nowrap; }
-    .btn-reports-open span.sub-cnt { font-size: 10px; color: #93c5fd; font-weight: 700; }
-    .kiosk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .kiosk-header h3 { margin: 0; font-size: 16px; font-weight: 900; color: #0f172a; }
-    .btn-edit-toggle { background: #cbd5e1; color: #1e293b; border: none; border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 800; cursor: pointer; }
-    .btn-edit-toggle.active { background: #f59e0b; color: white; }
-    .category-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 10px; margin-bottom: 8px; scrollbar-width: none; }
+    .earnings-banner { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 11px 14px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; box-shadow: 0 6px 16px rgba(15, 23, 42, 0.2); gap: 8px; }
+    .earnings-left h2 { margin: 0; font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; }
+    .earnings-left .amount { font-size: 24px; font-weight: 900; margin: 2px 0 0; color: #4ade80; letter-spacing: -0.5px; }
+    .banner-right-btns { display: flex; gap: 6px; }
+    .btn-top-pill { background: #334155; color: #ffffff; border: 1.5px solid #475569; border-radius: 13px; padding: 8px 10px; font-size: 11px; font-weight: 800; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 1px; white-space: nowrap; }
+    .btn-top-pill.has-pending { background: #b45309; border-color: #fbbf24; }
+    .btn-top-pill span.sub-cnt { font-size: 9px; color: #cbd5e1; font-weight: 700; }
+    .kiosk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 6px; }
+    .kiosk-header h3 { margin: 0; font-size: 15px; font-weight: 900; color: var(--text); }
+    .header-action-group { display: flex; align-items: center; gap: 6px; }
+    .btn-custom-pill { background: #f59e0b; color: #ffffff; border: none; border-radius: 20px; padding: 6px 11px; font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+    .btn-edit-toggle { background: #cbd5e1; color: #1e293b; border: none; border-radius: 20px; padding: 6px 12px; font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+    .btn-edit-toggle.active { background: #d97706; color: white; }
+    .btn-settings-icon { background: #334155; color: #ffffff; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .category-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 4px; scrollbar-width: none; }
     .category-tabs::-webkit-scrollbar { display: none; }
-    .cat-tab { flex: 0 0 auto; background: #1e293b; border: 2px solid #1e293b; border-radius: 14px; padding: 10px 15px; font-size: 13px; font-weight: 800; color: #f8fafc; cursor: pointer; transition: all 0.15s ease; box-shadow: 0 3px 8px rgba(15, 23, 42, 0.16); }
-    .cat-tab.active { background: #da291c; border-color: #ffc72c; color: #ffffff; box-shadow: 0 4px 12px rgba(218, 41, 28, 0.35); transform: translateY(-1px); }
-    .cat-manage-bar { display: none; justify-content: space-between; align-items: center; background: #fef3c7; border: 1.5px solid #f59e0b; border-radius: 12px; padding: 8px 10px; margin-bottom: 10px; gap: 6px; }
+    .cat-tab { flex: 0 0 auto; background: #1e293b; border: 2px solid #1e293b; border-radius: 13px; padding: 8px 13px; font-size: 12px; font-weight: 800; color: #f8fafc; cursor: pointer; transition: all 0.15s ease; }
+    .cat-tab.active { background: #da291c; border-color: #ffc72c; color: #ffffff; box-shadow: 0 3px 10px rgba(218, 41, 28, 0.35); }
+    .cat-manage-bar { display: none; justify-content: space-between; align-items: center; background: #fef3c7; border: 1.5px solid #f59e0b; border-radius: 12px; padding: 7px 10px; margin-top: 6px; gap: 6px; }
     .edit-mode .cat-manage-bar { display: flex; }
     .cat-manage-title { font-size: 12px; font-weight: 800; color: #92400e; flex: 1; }
     .cat-mini-btn { background: white; border: 1px solid #d97706; color: #92400e; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-weight: 800; cursor: pointer; }
     .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .menu-card-item { position: relative; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 18px; padding: 10px 10px 12px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); display: flex; flex-direction: column; align-items: center; justify-content: space-between; transition: transform 0.12s ease, border-color 0.2s ease, background-color 0.2s ease; }
+    .menu-card-item { position: relative; background: var(--card); border: 2px solid var(--border); border-radius: 18px; overflow: hidden; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.12s ease, border-color 0.2s ease; }
     .menu-card-item:active { transform: scale(0.96); }
-    .menu-card-item.just-added { border-color: #16a34a; background: #dcfce7; }
+    .menu-card-item.just-added { border-color: #16a34a; }
+    .card-top-body { padding: 10px 10px 8px; display: flex; flex-direction: column; align-items: center; flex: 1; width: 100%; }
     .visual-wrap { position: relative; width: 100%; margin-bottom: 6px; }
     .card-minus-btn { position: absolute; top: 6px; left: 6px; width: 28px; height: 28px; border-radius: 50%; background: #dc2626; color: #ffffff; border: 2px solid #ffffff; font-size: 18px; font-weight: 900; line-height: 22px; text-align: center; cursor: pointer; z-index: 4; box-shadow: 0 2px 6px rgba(220, 38, 38, 0.45); padding: 0; }
-    .card-minus-btn:active { transform: scale(0.9); }
     .edit-mode .card-minus-btn { display: none; }
-    .in-cart-pill { position: absolute; top: 6px; right: 6px; font-size: 11px; font-weight: 900; color: #ffffff; background: #16a34a; padding: 3px 8px; border-radius: 10px; z-index: 3; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.35); }
+    .in-cart-pill { position: absolute; top: 6px; right: 6px; font-size: 11px; font-weight: 900; color: #ffffff; background: #16a34a; padding: 3px 8px; border-radius: 10px; z-index: 3; }
     .edit-mode .in-cart-pill { display: none; }
-    .food-icon { font-size: 46px; line-height: 1; margin: 4px 0; height: 68px; display: flex; align-items: center; justify-content: center; }
-    .food-photo { width: 100%; height: 105px; object-fit: cover; border-radius: 12px; display: block; border: 1px solid #e2e8f0; }
-    .mix-badge { display: inline-block; font-size: 10px; font-weight: 800; color: #6b21a8; background: #f3e8ff; border: 1px solid #d8b4fe; padding: 2px 8px; border-radius: 8px; margin-bottom: 4px; }
-    .food-name { font-weight: 800; font-size: 14px; color: #0f172a; line-height: 1.25; margin-bottom: 6px; }
-    .food-bottom { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: auto; padding-top: 6px; border-top: 1px solid #f1f5f9; gap: 4px; }
+    .food-icon { font-size: 44px; line-height: 1; margin: 4px 0; height: 66px; display: flex; align-items: center; justify-content: center; }
+    .food-photo { width: 100%; height: 100px; object-fit: cover; border-radius: 12px; display: block; border: 1px solid #e2e8f0; }
+    .combo-badge { display: inline-block; font-size: 10px; font-weight: 800; color: #6b21a8; background: #f3e8ff; border: 1px solid #d8b4fe; padding: 2px 8px; border-radius: 8px; margin-bottom: 4px; }
+    .food-name { font-weight: 800; font-size: 14px; color: var(--text); line-height: 1.25; }
+    .food-footer-bar { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 10px; background: #f1f5f9; border-top: 1px solid #e2e8f0; gap: 4px; }
+    body.theme-dark .food-footer-bar { background: #0f172a; border-top-color: #334155; }
+    .food-footer-bar.combo-footer { background: #f3e8ff; border-top-color: #e9d5ff; }
     .food-price { font-size: 14px; font-weight: 900; color: var(--primary); }
-    .btn-options-pill { background: var(--accent); color: #111827; border: 1.5px solid #eab308; border-radius: 10px; padding: 6px 10px; font-size: 11px; font-weight: 900; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); white-space: nowrap; }
-    .btn-options-pill:active { transform: scale(0.93); }
-    .edit-mode .menu-card-item { background: #fffbeb; border-color: #f59e0b; padding-top: 22px; }
-    .delete-badge { display: none; position: absolute; top: -6px; right: -6px; background: #dc2626; color: white; border: 2px solid white; width: 26px; height: 26px; border-radius: 50%; font-size: 15px; font-weight: 800; line-height: 20px; text-align: center; cursor: pointer; z-index: 5; }
+    .food-tap-hint { font-size: 11px; font-weight: 800; color: #6b21a8; }
+    .btn-options-pill { background: var(--accent); color: #111827; border: 1.5px solid #eab308; border-radius: 9px; padding: 5px 8px; font-size: 10px; font-weight: 900; white-space: nowrap; }
+    .btn-options-pill.combo-pill { background: #9333ea; color: #ffffff; border-color: #7e22ce; }
+    .edit-mode .menu-card-item { border-color: #f59e0b; padding-top: 16px; }
+    .delete-badge { display: none; position: absolute; top: 4px; right: 4px; background: #dc2626; color: white; border: 2px solid white; width: 26px; height: 26px; border-radius: 50%; font-size: 15px; font-weight: 800; line-height: 20px; text-align: center; cursor: pointer; z-index: 5; }
     .edit-mode .delete-badge { display: block; }
-    .reorder-row { display: none; justify-content: center; gap: 8px; margin-top: 8px; width: 100%; }
+    .reorder-row { display: none; justify-content: center; gap: 8px; padding: 6px; background: #fef3c7; width: 100%; }
     .edit-mode .reorder-row { display: flex; }
     .move-btn { background: #ffffff; border: 1px solid #d97706; color: #92400e; border-radius: 6px; padding: 3px 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
     .edit-actions-grid { display: none; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
     .edit-mode .edit-actions-grid { display: grid; }
     .btn-ed { padding: 11px 8px; border: none; border-radius: 10px; font-size: 12px; font-weight: 800; color: white; cursor: pointer; }
-    .card-box { background: var(--card); border-radius: 18px; padding: 14px; margin-bottom: 12px; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06); border: 1px solid #cbd5e1; }
-    .card-box h3 { margin: 0 0 10px; font-size: 15px; font-weight: 800; color: #1e293b; }
-    .report-accordion-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 14px 16px; font-size: 15px; font-weight: 800; color: #0f172a; cursor: pointer; margin-bottom: 10px; box-shadow: 0 2px 6px rgba(15,23,42,0.05); }
-    .report-accordion-btn.open { border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0; background: #f8fafc; border-color: #94a3b8; }
-    .report-accordion-body { display: none; background: #ffffff; border: 1.5px solid #94a3b8; border-top: none; border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; padding: 12px 14px; margin-bottom: 12px; }
+    .card-box { background: var(--card); border-radius: 18px; padding: 14px; margin-bottom: 12px; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06); border: 1px solid var(--border); color: var(--text); }
+    .card-box h3 { margin: 0 0 10px; font-size: 15px; font-weight: 800; }
+    .report-accordion-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; background: var(--card); border: 1.5px solid var(--border); border-radius: 14px; padding: 14px 16px; font-size: 15px; font-weight: 800; color: var(--text); cursor: pointer; margin-bottom: 10px; }
+    .report-accordion-btn.open { border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0; }
+    .report-accordion-body { display: none; background: var(--card); border: 1.5px solid var(--border); border-top: none; border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; padding: 12px 14px; margin-bottom: 12px; }
     .report-accordion-body.open { display: block; }
-    .order-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; font-weight: 700; gap: 8px; }
+    .order-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 700; gap: 8px; }
     .order-item-info { flex: 1; line-height: 1.3; }
     .order-qty-tag { color: #2563eb; font-weight: 900; margin-right: 4px; }
     .order-item-right { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
     .cart-step-btn { width: 28px; height: 28px; border-radius: 8px; border: none; font-size: 16px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .cart-step-minus { background: #fee2e2; color: #dc2626; }
     .cart-step-plus { background: #dcfce7; color: #16a34a; }
-    .order-total { display: flex; justify-content: space-between; font-weight: 900; font-size: 20px; margin-top: 12px; padding-top: 10px; border-top: 2px solid #e2e8f0; }
-    .restock-item { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed #e2e8f0; font-size: 14px; font-weight: 600; }
+    .order-total { display: flex; justify-content: space-between; font-weight: 900; font-size: 20px; margin-top: 12px; padding-top: 10px; border-top: 2px solid var(--border); }
+    .restock-item { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed var(--border); font-size: 14px; font-weight: 600; }
     .restock-qty { font-weight: 800; color: #2563eb; background: #eff6ff; padding: 2px 9px; border-radius: 8px; }
-    .btn { flex: 1; padding: 14px; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; color: white; cursor: pointer; }
-    .btn-custom { background: #f59e0b; width: 100%; margin-top: 12px; font-size: 14px; padding: 12px; box-shadow: 0 3px 8px rgba(245, 158, 11, 0.25); }
+    .btn { flex: 1; padding: 14px; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; color: white; cursor: pointer; transition: all 0.15s ease; }
+    .btn:disabled, button:disabled { background: #94a3b8 !important; color: #e2e8f0 !important; opacity: 0.65; cursor: not-allowed; box-shadow: none !important; }
+    .btn-log-standout { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35); font-size: 16px; font-weight: 900; }
     .btn-reset { background: var(--danger); width: 100%; margin-top: 10px; font-size: 14px; padding: 13px; }
     .btn-copy { background: #2563eb; width: 100%; margin-top: 6px; font-size: 14px; padding: 13px; }
     .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; color: white; padding: 11px 14px calc(11px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,0.22); display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 20; }
-    .bottom-info { display: flex; flex-direction: column; min-width: 85px; }
+    .bottom-info { display: flex; flex-direction: column; min-width: 82px; }
     .bottom-count { font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase; }
     .bottom-total { font-size: 20px; font-weight: 900; color: #4ade80; }
     .bottom-btns { display: flex; gap: 7px; }
-    .btn-quick-sale { background: #16a34a; color: white; border: none; border-radius: 12px; padding: 12px 12px; font-weight: 800; font-size: 13px; cursor: pointer; white-space: nowrap; }
+    .btn-quick-sale { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; border: none; border-radius: 12px; padding: 12px 13px; font-weight: 900; font-size: 13px; cursor: pointer; white-space: nowrap; box-shadow: 0 3px 10px rgba(22, 163, 74, 0.35); }
     .btn-view-cart { background: #2563eb; color: white; border: none; border-radius: 12px; padding: 12px 13px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer; white-space: nowrap; }
-    .cart-badge { background: var(--accent); color: #111827; padding: 2px 7px; border-radius: 20px; font-size: 12px; font-weight: 900; transition: transform 0.15s ease; }
-    .cart-badge.pop { transform: scale(1.35); }
+    .cart-badge { background: var(--accent); color: #111827; padding: 2px 7px; border-radius: 20px; font-size: 12px; font-weight: 900; }
     .full-screen-drawer { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 40; flex-direction: column; }
     .full-screen-drawer.open { display: flex; }
     .drawer-header { background: #0f172a; color: white; padding: calc(14px + env(safe-area-inset-top)) 16px 14px; display: flex; justify-content: space-between; align-items: center; }
@@ -92,21 +104,37 @@
     .btn-close-drawer { background: #334155; color: white; border: none; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
     .btn-clear-top { background: #dc2626; color: white; border: none; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 800; cursor: pointer; }
     .drawer-body { flex: 1; overflow-y: auto; padding: 14px; padding-bottom: 40px; }
-    .drawer-footer { background: white; padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 12px rgba(0,0,0,0.08); display: flex; gap: 10px; }
-    .log-item { background: #f8fafc; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; border-left: 4px solid var(--success); border: 1px solid #e2e8f0; border-left-width: 4px; }
+    .drawer-footer { background: var(--card); padding: 12px 14px calc(12px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 12px rgba(0,0,0,0.08); display: flex; gap: 8px; }
+    .queue-card { background: #ffffff; border: 2px solid #f59e0b; border-radius: 14px; padding: 12px; margin-bottom: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.06); color: #0f172a; }
+    .queue-card.completed { background: #e2e8f0; border-color: #cbd5e1; opacity: 0.65; }
+    .queue-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-weight: 900; font-size: 14px; }
+    .queue-items { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 10px; line-height: 1.35; }
+    .btn-mark-done { width: 100%; background: #16a34a; color: white; border: none; border-radius: 10px; padding: 10px; font-size: 14px; font-weight: 800; cursor: pointer; }
+    .history-card { background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; color: #0f172a; }
+    .history-head { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 14px; }
+    .history-details { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #cbd5e1; font-size: 13px; }
+    .history-details.open { display: block; }
+    .theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .theme-btn { padding: 12px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 13px; font-weight: 800; cursor: pointer; }
+    .log-item { background: #f8fafc; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; border: 1px solid #e2e8f0; border-left: 4px solid var(--success); color: #0f172a; }
     .log-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; margin-bottom: 4px; }
     .log-details { color: #475569; font-size: 13px; }
     .del-sale-btn { background: #fee2e2; color: #dc2626; border: none; border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 800; margin-left: 8px; cursor: pointer; }
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
     .modal-overlay.open { display: flex; }
-    .modal-box { background: white; width: 100%; max-width: 380px; border-radius: 20px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.25); max-height: 88vh; overflow-y: auto; }
+    .modal-box { background: white; color: #0f172a; width: 100%; max-width: 380px; border-radius: 20px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.25); max-height: 88vh; overflow-y: auto; }
     .modal-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
     .btn-modal-back { background: #f1f5f9; color: #0f172a; border: none; border-radius: 10px; width: 36px; height: 36px; font-size: 18px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .modal-title { font-size: 18px; font-weight: 900; margin: 0; text-align: center; flex: 1; }
     .modal-sub { font-size: 14px; color: #64748b; text-align: center; margin-bottom: 14px; font-weight: 600; }
     .addon-choice-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 13px 14px; margin-bottom: 8px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 15px; font-weight: 700; color: #1e293b; cursor: pointer; }
     .addon-choice-btn.selected { background: #eff6ff; border-color: #2563eb; color: #1e40af; }
-    .addon-choice-btn.mix-selected { background: #f3e8ff; border-color: #9333ea; color: #6b21a8; }
+    .combo-choice-row { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 11px 12px; margin-bottom: 8px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; gap: 8px; }
+    .combo-choice-row.has-qty { background: #f3e8ff; border-color: #9333ea; }
+    .combo-row-left { display: flex; align-items: center; gap: 8px; flex: 1; font-size: 15px; font-weight: 800; color: #1e293b; }
+    .combo-qty-badge { background: #9333ea; color: white; font-size: 12px; font-weight: 900; padding: 2px 8px; border-radius: 8px; }
+    .combo-row-right { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; color: #6b21a8; }
+    .combo-minus-btn { width: 28px; height: 28px; border-radius: 50%; background: #dc2626; color: white; border: none; font-size: 17px; font-weight: 900; line-height: 26px; text-align: center; cursor: pointer; padding: 0; }
     .qty-stepper-box { display: flex; align-items: center; justify-content: space-between; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 4px 6px; flex: 0.65; }
     .qty-step-btn { width: 34px; height: 34px; border-radius: 10px; border: none; background: #ffffff; color: #0f172a; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
     .qty-step-val { font-size: 17px; font-weight: 900; color: #0f172a; min-width: 24px; text-align: center; }
@@ -136,40 +164,48 @@
 </head>
 <body>
   <div class="toast-banner" id="toastBanner">✓ Added</div>
-  <div class="earnings-banner">
-    <div class="earnings-left">
-      <h2>Today's Total Earnings</h2>
-      <div class="amount" id="dailyTotal">₱0.00</div>
-    </div>
-    <button class="btn-reports-open" onclick="openReportsScreen()">
-      <span>📊 Sales & Reports</span>
-      <span class="sub-cnt" id="bannerOrderCount">0 orders today</span>
-    </button>
-  </div>
   <div id="kioskSection">
-    <div class="kiosk-header">
-      <h3 id="menuTitle">Order Menu</h3>
-      <button class="btn-edit-toggle" id="editToggleBtn" onclick="toggleEditMode()">Edit Menu</button>
-    </div>
-    <div class="category-tabs" id="categoryTabs"></div>
-    <div class="cat-manage-bar" id="catManageBar">
-      <span class="cat-manage-title" id="activeCatLabel">Category</span>
-      <button class="cat-mini-btn" onclick="moveActiveCategory(-1)">◀</button>
-      <button class="cat-mini-btn" onclick="moveActiveCategory(1)">▶</button>
-      <button class="cat-mini-btn" onclick="renameActiveCategory()">Rename</button>
-      <button class="cat-mini-btn" style="color:#dc2626; border-color:#fca5a5;" onclick="deleteActiveCategory()">Del</button>
+    <div class="sticky-top-zone">
+      <div class="earnings-banner">
+        <div class="earnings-left">
+          <h2>Today's Total Earnings</h2>
+          <div class="amount" id="dailyTotal">₱0.00</div>
+        </div>
+        <div class="banner-right-btns">
+          <button class="btn-top-pill" id="queueBannerBtn" onclick="openQueueScreen()">
+            <span>🍳 Queue</span>
+            <span class="sub-cnt" id="queuePendingCount">0 waiting</span>
+          </button>
+          <button class="btn-top-pill" onclick="openReportsScreen()">
+            <span>📊 Summary</span>
+            <span class="sub-cnt" id="bannerOrderCount">0 orders</span>
+          </button>
+        </div>
+      </div>
+      <div class="kiosk-header">
+        <h3 id="menuTitle">Order Menu</h3>
+        <div class="header-action-group">
+          <button class="btn-custom-pill" onclick="addCustomItem()">+ Custom</button>
+          <button class="btn-edit-toggle" id="editToggleBtn" onclick="toggleEditMode()">Edit Menu</button>
+          <button class="btn-settings-icon" onclick="openSettingsScreen()" title="Settings">⚙️</button>
+        </div>
+      </div>
+      <div class="category-tabs" id="categoryTabs"></div>
+      <div class="cat-manage-bar" id="catManageBar">
+        <span class="cat-manage-title" id="activeCatLabel">Category</span>
+        <button class="cat-mini-btn" onclick="moveActiveCategory(-1)">◀</button>
+        <button class="cat-mini-btn" onclick="moveActiveCategory(1)">▶</button>
+        <button class="cat-mini-btn" onclick="renameActiveCategory()">Rename</button>
+        <button class="cat-mini-btn" style="color:#dc2626; border-color:#fca5a5;" onclick="deleteActiveCategory()">Del</button>
+      </div>
     </div>
     <div class="menu-grid" id="menuGrid"></div>
     <div class="edit-actions-grid">
       <button class="btn-ed" style="background:#10b981;" onclick="addNewMenuItem()">+ Add Food Item</button>
-      <button class="btn-ed" style="background:#9333ea;" onclick="addNewMixMatchItem()">+ Add Mix & Match</button>
+      <button class="btn-ed" style="background:#9333ea;" onclick="addNewComboItem()">+ Add Combo Item</button>
       <button class="btn-ed" style="background:#3b82f6;" onclick="sortActiveCategoryAZ()">Sort Items A–Z</button>
       <button class="btn-ed" style="background:#8b5cf6;" onclick="addNewCategory()">+ New Category</button>
-      <button class="btn-ed" style="background:#0284c7;" onclick="exportMenuBackup()">Copy Menu Backup</button>
-      <button class="btn-ed" style="background:#0d9488;" onclick="openImportModal()">Import Backup</button>
-      <button class="btn-ed" style="background:#64748b; grid-column: span 2;" onclick="restoreDefaultMenu()">Reset Defaults</button>
     </div>
-    <button class="btn btn-custom" onclick="addCustomItem()">+ One-Time Custom Item / Drink</button>
   </div>
   <div class="bottom-bar">
     <div class="bottom-info">
@@ -177,17 +213,27 @@
       <span class="bottom-total" id="barTotal">₱0.00</span>
     </div>
     <div class="bottom-btns">
-      <button class="btn-quick-sale" onclick="quickInstaPay()">⚡ Insta Pay</button>
-      <button class="btn-view-cart" onclick="openCartScreen()">
-        <span>🛒 View</span>
+      <button class="btn-quick-sale" id="barLogSaleBtn" onclick="quickLogSale()" disabled>⚡ Log Sale</button>
+      <button class="btn-view-cart" id="barCartBtn" onclick="openCartScreen()" disabled>
+        <span>🛒 Cart</span>
         <span class="cart-badge" id="barCount">0</span>
       </button>
     </div>
   </div>
+  <div class="full-screen-drawer" id="queueScreen">
+    <div class="drawer-header">
+      <h2>🍳 Active Order Queue</h2>
+      <button class="btn-close-drawer" onclick="closeQueueScreen()">← Back</button>
+    </div>
+    <div class="drawer-body">
+      <div style="font-size:12px; color:var(--muted); margin-bottom:10px; font-weight:700;">Orders auto-complete after 30 mins, or tap Done when served.</div>
+      <div id="queueListContainer"></div>
+    </div>
+  </div>
   <div class="full-screen-drawer" id="reportsScreen">
     <div class="drawer-header">
-      <h2>📊 Sales & Inventory</h2>
-      <button class="btn-close-drawer" onclick="closeReportsScreen()">← Back to Menu</button>
+      <h2>📊 Daily Summary</h2>
+      <button class="btn-close-drawer" onclick="closeReportsScreen()">← Back</button>
     </div>
     <div class="drawer-body">
       <div class="card-box" style="text-align:center; background:#0f172a; color:white;">
@@ -208,9 +254,44 @@
       <div class="report-accordion-body" id="salesLogAccBody">
         <div id="salesLog"></div>
       </div>
+      <button class="report-accordion-btn" id="historyAccBtn" onclick="toggleReportSection('history')">
+        <span>📅 Past 7 Days History (<span id="historyCount">0</span>)</span>
+        <span id="historyArrow">▼</span>
+      </button>
+      <div class="report-accordion-body" id="historyAccBody">
+        <div id="pastHistoryContainer"></div>
+        <button class="btn btn-reset" style="margin-top:8px;" onclick="clearAllPastHistory()">Clear All History</button>
+      </div>
       <div class="card-box" style="margin-top:14px;">
-        <button class="btn btn-copy" onclick="copyReport()">📋 Copy Daily Summary</button>
-        <button class="btn btn-reset" onclick="resetDay()">Start New Day (Reset Sales)</button>
+        <button class="btn btn-copy" onclick="copyReport()">📋 Copy Today's Summary</button>
+        <button class="btn btn-reset" onclick="resetDay()">Save & Start New Shift (Reset Today)</button>
+      </div>
+    </div>
+  </div>
+  <div class="full-screen-drawer" id="settingsScreen">
+    <div class="drawer-header">
+      <h2>⚙️ App Settings</h2>
+      <button class="btn-close-drawer" onclick="closeSettingsScreen()">← Back</button>
+    </div>
+    <div class="drawer-body">
+      <div class="card-box">
+        <h3>🎨 App Background Theme</h3>
+        <div class="theme-grid">
+          <button class="theme-btn" style="background:#e2e8f0; color:#0f172a;" onclick="setAppTheme('light')">☀️ Classic Light</button>
+          <button class="theme-btn" style="background:#0f172a; color:#f8fafc;" onclick="setAppTheme('dark')">🌙 Dark Mode</button>
+          <button class="theme-btn" style="background:#fef3c7; color:#451a03;" onclick="setAppTheme('cream')">🍦 Warm Cream</button>
+          <button class="theme-btn" style="background:#d1fae5; color:#064e3b;" onclick="setAppTheme('mint')">🌿 Fresh Mint</button>
+        </div>
+      </div>
+      <div class="card-box">
+        <h3>💾 Menu Backup & Transfer</h3>
+        <button class="btn btn-copy" onclick="exportMenuBackup()">Copy Menu Backup Code</button>
+        <button class="btn" style="background:#0d9488; width:100%; margin-top:8px; padding:13px; font-size:14px;" onclick="openImportModal()">Import Menu Backup</button>
+      </div>
+      <div class="card-box">
+        <h3>🔄 Reset & Practice Cleanup</h3>
+        <button class="btn" style="background:#64748b; width:100%; padding:13px; font-size:14px;" onclick="restoreDefaultMenu()">Reset Menu to Defaults</button>
+        <button class="btn btn-reset" onclick="clearAllPastHistory()">Clear All 7-Day History</button>
       </div>
     </div>
   </div>
@@ -227,8 +308,9 @@
       </div>
     </div>
     <div class="drawer-footer">
-      <button class="btn" style="background:#64748b; flex:0.45;" onclick="closeCartScreen()">← Back</button>
-      <button class="btn" style="background:#16a34a;" onclick="openCheckoutModal()">Payment</button>
+      <button class="btn" style="background:#64748b; flex:0.65;" onclick="closeCartScreen()">← Back</button>
+      <button class="btn" style="background:#2563eb; flex:0.95;" id="cartCalcBtn" onclick="openCheckoutModal()">🧮 Calculator</button>
+      <button class="btn btn-log-standout" style="flex:1.4;" id="cartLogSaleBtn" onclick="quickLogSale()">⚡ Log Sale</button>
     </div>
   </div>
   <div class="modal-overlay" id="addonModal">
@@ -240,8 +322,8 @@
       </div>
       <div class="modal-sub" id="addonModalBasePrice">Base Price: ₱0.00</div>
       <div id="addonChoicesContainer"></div>
-      <div class="modal-actions">
-        <div class="qty-stepper-box">
+      <div class="modal-actions" id="addonModalFooter">
+        <div class="qty-stepper-box" id="regularQtyStepper">
           <button type="button" class="qty-step-btn" onclick="changeModalQty(-1)">−</button>
           <span class="qty-step-val" id="modalQtyValue">1</span>
           <button type="button" class="qty-step-btn" onclick="changeModalQty(1)">+</button>
@@ -255,8 +337,10 @@
       <div class="modal-title" id="itemEditorModalTitle">Edit Item, Icon & Photo</div>
       <label class="edit-field-label">Item Name</label>
       <input type="text" class="edit-text-input" id="editItemNameInput">
-      <label class="edit-field-label">Base Price (₱)</label>
-      <input type="number" inputmode="decimal" class="edit-text-input" id="editItemPriceInput">
+      <div id="editBasePriceWrap">
+        <label class="edit-field-label">Base Price (₱)</label>
+        <input type="number" inputmode="decimal" class="edit-text-input" id="editItemPriceInput">
+      </div>
       <label class="edit-field-label">Item Icon or Food Photo</label>
       <div class="visual-picker-box">
         <div class="visual-preview-row">
@@ -295,7 +379,7 @@
   <div class="modal-overlay" id="checkoutModal">
     <div class="modal-box">
       <div class="modal-title">Cash & Change Calculator</div>
-      <div class="calc-row"><span>Order Total (Earned):</span><span id="modalOrderTotal">₱0.00</span></div>
+      <div class="calc-row"><span>Order Total:</span><span id="modalOrderTotal">₱0.00</span></div>
       <input type="number" inputmode="decimal" class="cash-input" id="cashInput" placeholder="Cash Received (₱)" oninput="updateChange()">
       <div class="quick-bills">
         <button class="bill-btn" onclick="setExactCash()">Exact</button>
@@ -311,7 +395,7 @@
       </div>
       <div class="modal-actions">
         <button class="btn" style="background:#94a3b8;" onclick="closeCheckoutModal()">Cancel</button>
-        <button class="btn" style="background:#16a34a;" onclick="confirmSale()">Confirm Sale</button>
+        <button class="btn btn-log-standout" onclick="confirmSale()">⚡ Log Sale</button>
       </div>
     </div>
   </div>
@@ -322,54 +406,125 @@
       {
         title: "Snacks & Street Food",
         items: [
-          { name: "Lumpiang Toge (2pcs)", price: 20.00, icon: "🌯", photo: "", isMixMatch: false, addons: [] },
-          { name: "Lumpiang Shanghai (4pcs)", price: 25.00, icon: "🌯", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Steamed Siomai (4pcs)", price: 25.00, icon: "🥟", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Fried Siomai (4pcs)", price: 25.00, icon: "🥟", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Fried Dumplings (4pcs)", price: 25.00, icon: "🥟", photo: "", isMixMatch: false, addons: [] },
-          { name: "Kikiam", price: 20.00, icon: "🌭", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Fish balls", price: 20.00, icon: "🍢", photo: "", isMixMatch: false, addons: [] },
-          { name: "Squid balls", price: 20.00, icon: "🍢", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Hotdog on Stick", price: 20.00, icon: "🌭", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Hungarian Sausage", price: 35.00, icon: "🌭", photo: "", isMixMatch: false, addons: [] },
-          { name: "Cheese Sticks", price: 20.00, icon: "🧀", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Fries (Cheese)", price: 20.00, icon: "🍟", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Fries (Sour Cream)", price: 20.00, icon: "🍟", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
-          { name: "Fries (BBQ)", price: 20.00, icon: "🍟", photo: "", isMixMatch: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] }
+          { name: "Lumpiang Toge (2pcs)", price: 20.00, icon: "🌯", photo: "", isCombo: false, addons: [] },
+          { name: "Lumpiang Shanghai (4pcs)", price: 25.00, icon: "🌯", photo: "", isCombo: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Steamed Siomai (4pcs)", price: 25.00, icon: "🥟", photo: "", isCombo: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fried Siomai (4pcs)", price: 25.00, icon: "🥟", photo: "", isCombo: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fried Dumplings (4pcs)", price: 25.00, icon: "🥟", photo: "", isCombo: false, addons: [] },
+          { name: "Kikiam", price: 20.00, icon: "🌭", photo: "", isCombo: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fish balls", price: 20.00, icon: "🍢", photo: "", isCombo: false, addons: [] },
+          { name: "Squid balls", price: 20.00, icon: "🍢", photo: "", isCombo: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Hotdog on Stick", price: 20.00, icon: "🌭", photo: "", isCombo: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Hungarian Sausage", price: 35.00, icon: "🌭", photo: "", isCombo: false, addons: [] },
+          { name: "Cheese Sticks", price: 20.00, icon: "🧀", photo: "", isCombo: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fries (Cheese)", price: 20.00, icon: "🍟", photo: "", isCombo: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fries (Sour Cream)", price: 20.00, icon: "🍟", photo: "", isCombo: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] },
+          { name: "Fries (BBQ)", price: 20.00, icon: "🍟", photo: "", isCombo: false, addons: [{ name: "Snack in a Cup", price: 20.00 }] }
         ]
       },
       {
         title: "Sandwiches",
         items: [
-          { name: "Burger", price: 30.00, icon: "🍔", photo: "", isMixMatch: false, addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
-          { name: "Cheeseburger", price: 35.00, icon: "🍔", photo: "", isMixMatch: false, addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
-          { name: "Egg Sandwich", price: 25.00, icon: "🥪", photo: "", isMixMatch: false, addons: [{ name: "Extra Cheese", price: 10.00 }] },
-          { name: "Ham Sandwich", price: 25.00, icon: "🥪", photo: "", isMixMatch: false, addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
-          { name: "Ham & Cheese Sandwich", price: 30.00, icon: "🥪", photo: "", isMixMatch: false, addons: [{ name: "Extra Egg", price: 15.00 }] },
-          { name: "Ham & Egg Sandwich", price: 35.00, icon: "🥪", photo: "", isMixMatch: false, addons: [{ name: "Extra Cheese", price: 10.00 }] }
+          { name: "Burger", price: 30.00, icon: "🍔", photo: "", isCombo: false, addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
+          { name: "Cheeseburger", price: 35.00, icon: "🍔", photo: "", isCombo: false, addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
+          { name: "Egg Sandwich", price: 25.00, icon: "🥪", photo: "", isCombo: false, addons: [{ name: "Extra Cheese", price: 10.00 }] },
+          { name: "Ham Sandwich", price: 25.00, icon: "🥪", photo: "", isCombo: false, addons: [{ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }] },
+          { name: "Ham & Cheese Sandwich", price: 30.00, icon: "🥪", photo: "", isCombo: false, addons: [{ name: "Extra Egg", price: 15.00 }] },
+          { name: "Ham & Egg Sandwich", price: 35.00, icon: "🥪", photo: "", isCombo: false, addons: [{ name: "Extra Cheese", price: 10.00 }] }
         ]
       },
       {
         title: "Pancit",
         items: [
-          { name: "Pancit Canton", price: 30.00, icon: "🍜", photo: "", isMixMatch: false, addons: [{ name: "Extra Egg", price: 15.00 }] },
-          { name: "Pancit Canton w/ Egg", price: 45.00, icon: "🍜", photo: "", isMixMatch: false, addons: [] }
+          { name: "Pancit Canton", price: 30.00, icon: "🍜", photo: "", isCombo: false, addons: [{ name: "Extra Egg", price: 15.00 }] },
+          { name: "Pancit Canton w/ Egg", price: 45.00, icon: "🍜", photo: "", isCombo: false, addons: [] }
         ]
       }
     ];
+
     let menuData = JSON.parse(localStorage.getItem('miniPosMenuPH_v4')) || JSON.parse(JSON.stringify(DEFAULT_MENU));
     let currentOrder = [];
     let salesHistory = JSON.parse(localStorage.getItem('miniPosSalesPH')) || [];
+    let pastHistory = JSON.parse(localStorage.getItem('miniPosPastHistoryPH')) || [];
+    let orderQueue = JSON.parse(localStorage.getItem('miniPosQueuePH')) || [];
+    let savedDayKey = localStorage.getItem('miniPosCurrentDatePH') || getTodayDateKey();
     let isEditMode = false;
     let activeCatIndex = 0;
     let pendingItem = null;
     let selectedAddonIndexes = [];
+    let comboQtyMap = {};
     let pendingModalQty = 1;
     let editingItemIdx = null;
     let tempItemAddons = [];
     let tempItemPhoto = "";
-    let tempItemIsMixMatch = false;
+    let tempItemIsCombo = false;
     let toastTimer = null;
+
+    function getTodayDateKey() {
+      const d = new Date();
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+
+    function formatDisplayDate(dateKey) {
+      const parts = dateKey.split('-');
+      const dt = new Date(parts, parts - 1, parts);
+      return dt.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+    }
+    function setAppTheme(themeName) {
+      document.body.classList.remove('theme-dark', 'theme-cream', 'theme-mint');
+      if (themeName && themeName !== 'light') {
+        document.body.classList.add('theme-' + themeName);
+      }
+      localStorage.setItem('miniPosThemePH', themeName || 'light');
+    }
+
+    function archiveSalesToPastHistory(salesList, dateKey, shiftLabel) {
+      if (!salesList || salesList.length === 0) return;
+      const total = salesList.reduce((sum, s) => sum + s.total, 0);
+      const counts = {};
+      salesList.forEach(s => {
+        if (s.items) {
+          Object.entries(s.items).forEach(([n, q]) => counts[n] = (counts[n] || 0) + q);
+        }
+      });
+      const sortedItems = Object.entries(counts).sort((a, b) => b - a);
+      pastHistory.unshift({
+        id: Date.now() + Math.random(),
+        dateKey: dateKey,
+        label: formatDisplayDate(dateKey) + (shiftLabel ? ' • ' + shiftLabel : ''),
+        total: total,
+        orderCount: salesList.length,
+        sortedItems: sortedItems,
+        sales: salesList
+      });
+      pruneOldHistory();
+    }
+
+    function pruneOldHistory() {
+      const cutoff = Date.now() - (7 * 24 * 60 * 60 * 1000);
+      pastHistory = pastHistory.filter(entry => {
+        const parts = entry.dateKey.split('-');
+        const entryTime = new Date(parts, parts - 1, parts).getTime();
+        return entryTime >= cutoff;
+      });
+      localStorage.setItem('miniPosPastHistoryPH', JSON.stringify(pastHistory));
+    }
+
+    function checkAutoMidnightRollover() {
+      const todayKey = getTodayDateKey();
+      if (savedDayKey !== todayKey) {
+        if (salesHistory.length > 0) {
+          archiveSalesToPastHistory(salesHistory, savedDayKey, 'Auto-Saved');
+          salesHistory = [];
+          localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
+        }
+        orderQueue = [];
+        localStorage.setItem('miniPosQueuePH', JSON.stringify(orderQueue));
+        savedDayKey = todayKey;
+        localStorage.setItem('miniPosCurrentDatePH', todayKey);
+      }
+      pruneOldHistory();
+    }
 
     function saveMenuData() {
       try {
@@ -414,7 +569,7 @@
         const tab = document.createElement('button');
         tab.className = 'cat-tab' + (idx === activeCatIndex ? ' active' : '');
         tab.innerText = cat.title;
-        tab.onclick = () => { activeCatIndex = idx; renderMenu(); };
+        tab.onclick = () => { activeCatIndex = idx; renderMenu(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
         tabsEl.appendChild(tab);
       });
 
@@ -423,29 +578,34 @@
       activeCatLabel.innerText = currentCat.title;
 
       currentCat.items.forEach((item, itemIndex) => {
-        const isMix = !!item.isMixMatch;
+        const isCombo = !!(item.isCombo || item.isMixMatch);
         const qtyInCart = getItemCartQty(item.name);
         const safeName = item.name.replace(/'/g, "\\'");
         const visualHtml = item.photo
           ? '<img class="food-photo" src="' + item.photo + '" alt="">'
-          : '<div class="food-icon">' + (item.icon || (isMix ? '🥤' : '🍽️')) + '</div>';
+          : '<div class="food-icon">' + (item.icon || (isCombo ? '🥤' : '🍽️')) + '</div>';
 
-        const actionBtnLabel = isEditMode ? 'Edit' : (isMix ? 'Mix' : 'Options');
+        const leftFooterHtml = isCombo
+          ? '<span class="food-tap-hint">Tap to Choose</span>'
+          : '<span class="food-price">₱' + item.price.toFixed(2) + '</span>';
+        const pillLabel = isEditMode ? 'Edit' : (isCombo ? 'Choose' : '+ Qty / Add-on');
 
         const card = document.createElement('div');
         card.className = 'menu-card-item';
         card.innerHTML =
           '<span class="delete-badge" onclick="deleteMenuItem(event, ' + itemIndex + ')">×</span>' +
-          '<div class="visual-wrap">' +
-            (qtyInCart > 0 ? '<button type="button" class="card-minus-btn" onclick="removeLastMatchingItem(event, \'' + safeName + '\')">−</button>' : '') +
-            (qtyInCart > 0 ? '<span class="in-cart-pill">' + qtyInCart + ' in cart</span>' : '') +
-            visualHtml +
+          '<div class="card-top-body">' +
+            '<div class="visual-wrap">' +
+              (qtyInCart > 0 ? '<button type="button" class="card-minus-btn" onclick="removeLastMatchingItem(event, \'' + safeName + '\')">−</button>' : '') +
+              (qtyInCart > 0 ? '<span class="in-cart-pill">' + qtyInCart + ' in cart</span>' : '') +
+              visualHtml +
+            '</div>' +
+            (isCombo ? '<span class="combo-badge">Combo</span>' : '') +
+            '<div class="food-name">' + item.name + '</div>' +
           '</div>' +
-          (isMix ? '<span class="mix-badge">Mix & Match</span>' : '') +
-          '<div class="food-name">' + item.name + '</div>' +
-          '<div class="food-bottom">' +
-            '<span class="food-price">₱' + item.price.toFixed(2) + '</span>' +
-            '<button type="button" class="btn-options-pill" onclick="handleOptionsClick(event, ' + itemIndex + ')">' + actionBtnLabel + '</button>' +
+          '<div class="food-footer-bar' + (isCombo ? ' combo-footer' : '') + '" onclick="handleFooterTap(event, ' + itemIndex + ')">' +
+            leftFooterHtml +
+            '<span class="btn-options-pill' + (isCombo ? ' combo-pill' : '') + '">' + pillLabel + '</span>' +
           '</div>' +
           '<div class="reorder-row">' +
             '<button class="move-btn" onclick="moveItem(event, ' + itemIndex + ', -1)">◀</button>' +
@@ -462,7 +622,7 @@
       });
     }
     function handleItemTap(item, cardEl) {
-      if (item.isMixMatch) {
+      if (item.isCombo || item.isMixMatch) {
         openOptionsModal(item);
         return;
       }
@@ -473,7 +633,7 @@
       }
     }
 
-    function handleOptionsClick(event, itemIndex) {
+    function handleFooterTap(event, itemIndex) {
       event.stopPropagation();
       if (isEditMode) {
         openItemEditorModal(itemIndex);
@@ -486,12 +646,14 @@
     function openOptionsModal(item) {
       pendingItem = item;
       selectedAddonIndexes = [];
+      comboQtyMap = {};
       pendingModalQty = 1;
-      const isMix = !!item.isMixMatch;
+      const isCombo = !!(item.isCombo || item.isMixMatch);
       document.getElementById('addonModalItemName').innerText = item.name;
-      document.getElementById('addonModalBasePrice').innerText = isMix
-        ? 'Mix & Match Base: ₱' + item.price.toFixed(2) + ' (Pick items to mix)'
+      document.getElementById('addonModalBasePrice').innerText = isCombo
+        ? 'Tap item(s) below to pair with ' + item.name
         : 'Base Price: ₱' + item.price.toFixed(2);
+      document.getElementById('regularQtyStepper').style.display = isCombo ? 'none' : 'flex';
       document.getElementById('modalQtyValue').innerText = '1';
       renderAddonChoices();
       document.getElementById('addonModal').classList.add('open');
@@ -503,26 +665,71 @@
       renderAddonChoices();
     }
 
+    function changeComboChoiceQty(idx, delta, event) {
+      if (event) event.stopPropagation();
+      const nextVal = (comboQtyMap[idx] || 0) + delta;
+      if (nextVal <= 0) {
+        delete comboQtyMap[idx];
+      } else {
+        comboQtyMap[idx] = nextVal;
+      }
+      renderAddonChoices();
+    }
+
     function renderAddonChoices() {
       const container = document.getElementById('addonChoicesContainer');
+      const confirmBtn = document.getElementById('confirmAddonBtn');
       const itemAddons = pendingItem.addons || [];
-      const isMix = !!pendingItem.isMixMatch;
+      const isCombo = !!(pendingItem.isCombo || pendingItem.isMixMatch);
+
+      if (isCombo) {
+        if (itemAddons.length === 0) {
+          container.innerHTML = '<div style="text-align:center; font-size:13px; color:#64748b; margin-bottom:10px;">No combo choices added yet. Add them in Edit Menu.</div>';
+        } else {
+          container.innerHTML = itemAddons.map((choice, idx) => {
+            const q = comboQtyMap[idx] || 0;
+            return '<div class="combo-choice-row' + (q > 0 ? ' has-qty' : '') + '" onclick="changeComboChoiceQty(' + idx + ', 1)">' +
+                   '<div class="combo-row-left">' +
+                     (q > 0 ? '<span class="combo-qty-badge">' + q + 'x</span>' : '') +
+                     '<span>' + choice.name + '</span>' +
+                   '</div>' +
+                   '<div class="combo-row-right">' +
+                     '<span>₱' + choice.price.toFixed(2) + '</span>' +
+                     (q > 0 ? '<button type="button" class="combo-minus-btn" onclick="changeComboChoiceQty(' + idx + ', -1, event)">−</button>' : '') +
+                   '</div></div>';
+          }).join('');
+        }
+        let comboTotal = 0;
+        let comboCount = 0;
+        Object.entries(comboQtyMap).forEach(([idx, q]) => {
+          comboTotal += itemAddons[idx].price * q;
+          comboCount += q;
+        });
+        if (comboCount === 0) {
+          confirmBtn.disabled = true;
+          confirmBtn.innerText = 'Select item(s) to add';
+        } else {
+          confirmBtn.disabled = false;
+          confirmBtn.innerText = 'Add to Order (₱' + comboTotal.toFixed(2) + ')';
+        }
+        return;
+      }
+
+      confirmBtn.disabled = false;
       if (itemAddons.length === 0) {
         container.innerHTML = '<div style="text-align:center; font-size:13px; color:#64748b; margin-bottom:10px;">Select quantity below:</div>';
       } else {
         container.innerHTML = itemAddons.map((addon, idx) => {
           const isSel = selectedAddonIndexes.indexOf(idx) > -1;
-          const selClass = isSel ? (isMix ? ' mix-selected' : ' selected') : '';
-          const priceTag = addon.price === 0 ? 'Included' : '+₱' + addon.price.toFixed(2);
-          return '<button class="addon-choice-btn' + selClass + '" onclick="toggleAddonChoice(' + idx + ')">' +
+          return '<button class="addon-choice-btn' + (isSel ? ' selected' : '') + '" onclick="toggleAddonChoice(' + idx + ')">' +
                  '<span>' + (isSel ? '✓ ' : '+ ') + addon.name + '</span>' +
-                 '<span>' + priceTag + '</span></button>';
+                 '<span>+₱' + addon.price.toFixed(2) + '</span></button>';
         }).join('');
       }
       let unitTotal = pendingItem.price;
       selectedAddonIndexes.forEach(idx => { unitTotal += itemAddons[idx].price; });
       const grandTotal = unitTotal * pendingModalQty;
-      document.getElementById('confirmAddonBtn').innerText = 'Add to Order (₱' + grandTotal.toFixed(2) + ')';
+      confirmBtn.innerText = 'Add to Order (₱' + grandTotal.toFixed(2) + ')';
     }
 
     function toggleAddonChoice(idx) {
@@ -536,6 +743,27 @@
     function confirmAddWithAddons() {
       if (!pendingItem) return;
       const itemAddons = pendingItem.addons || [];
+      const isCombo = !!(pendingItem.isCombo || pendingItem.isMixMatch);
+
+      if (isCombo) {
+        let addedAny = 0;
+        Object.entries(comboQtyMap).forEach(([idx, q]) => {
+          const choice = itemAddons[idx];
+          if (choice && q > 0) {
+            for (let i = 0; i < q; i++) {
+              currentOrder.push({ name: pendingItem.name + ' + ' + choice.name, price: choice.price });
+              addedAny++;
+            }
+          }
+        });
+        if (addedAny === 0) return;
+        renderOrder();
+        showToast('✓ Added ' + addedAny + 'x Combo');
+        closeAddonModal();
+        renderMenu();
+        return;
+      }
+
       let finalName = pendingItem.name;
       let finalPrice = pendingItem.price;
       if (selectedAddonIndexes.length > 0) {
@@ -550,13 +778,14 @@
     function openItemEditorModal(itemIndex) {
       editingItemIdx = itemIndex;
       const item = menuData[activeCatIndex].items[itemIndex];
-      tempItemIsMixMatch = !!item.isMixMatch;
-      document.getElementById('itemEditorModalTitle').innerText = tempItemIsMixMatch ? 'Edit Mix & Match Item' : 'Edit Item, Icon & Photo';
-      document.getElementById('itemEditorChoicesLabel').innerText = tempItemIsMixMatch ? 'Mix Choices (Pick 1 or More)' : 'Add-ons for This Item Only';
-      document.getElementById('itemEditorAddChoiceBtn').innerText = tempItemIsMixMatch ? '+ Add Mix Choice' : '+ Add Add-on Option';
+      tempItemIsCombo = !!(item.isCombo || item.isMixMatch);
+      document.getElementById('itemEditorModalTitle').innerText = tempItemIsCombo ? 'Edit Combo Item' : 'Edit Item, Icon & Photo';
+      document.getElementById('editBasePriceWrap').style.display = tempItemIsCombo ? 'none' : 'block';
+      document.getElementById('itemEditorChoicesLabel').innerText = tempItemIsCombo ? 'Combo Pairings & Full Combo Prices' : 'Add-ons for This Item Only';
+      document.getElementById('itemEditorAddChoiceBtn').innerText = tempItemIsCombo ? '+ Add Combo Pairing' : '+ Add Add-on Option';
 
       document.getElementById('editItemNameInput').value = item.name;
-      document.getElementById('editItemPriceInput').value = item.price;
+      document.getElementById('editItemPriceInput').value = item.price || 0;
       document.getElementById('editItemEmojiInput').value = item.icon || '🍽️';
       tempItemPhoto = item.photo || '';
       tempItemAddons = JSON.parse(JSON.stringify(item.addons || []));
@@ -623,13 +852,13 @@
     function renderItemSpecificAddonsList() {
       const list = document.getElementById('itemSpecificAddonsList');
       if (tempItemAddons.length === 0) {
-        list.innerHTML = tempItemIsMixMatch
-          ? '<div style="font-size:13px; color:#64748b; margin-bottom:8px;">No mix choices yet. Tap + Add Mix Choice below.</div>'
+        list.innerHTML = tempItemIsCombo
+          ? '<div style="font-size:13px; color:#64748b; margin-bottom:8px;">No combo pairings yet. Tap + Add Combo Pairing below.</div>'
           : '<div style="font-size:13px; color:#64748b; margin-bottom:8px;">No add-ons yet.</div>';
         return;
       }
       list.innerHTML = tempItemAddons.map((addon, idx) => {
-        const priceLabel = addon.price === 0 ? 'Included (₱0)' : '+₱' + addon.price.toFixed(2);
+        const priceLabel = tempItemIsCombo ? '₱' + addon.price.toFixed(2) : '+₱' + addon.price.toFixed(2);
         return '<div class="item-addon-row">' +
           '<span>' + addon.name + ' (' + priceLabel + ')</span>' +
           '<div>' +
@@ -641,12 +870,12 @@
     }
 
     function addSpecificAddonToItem() {
-      const label = tempItemIsMixMatch ? "Mix item name (e.g., Fries, Siomai, Fish balls):" : "Add-on name for this item (e.g., Snack in a Cup, Extra Cheese):";
+      const label = tempItemIsCombo ? "Paired item name (e.g., Fries, Siomai):" : "Add-on name for this item (e.g., Snack in a Cup, Extra Cheese):";
       const name = prompt(label);
       if (!name || name.trim() === '') return;
-      const defaultP = tempItemIsMixMatch ? "0" : "20";
-      const pricePrompt = tempItemIsMixMatch
-        ? "Extra price for " + name.trim() + " (enter 0 if included in combo price):"
+      const defaultP = tempItemIsCombo ? "35" : "20";
+      const pricePrompt = tempItemIsCombo
+        ? "Full combo price for " + document.getElementById('editItemNameInput').value.trim() + " + " + name.trim() + " (₱):"
         : "Extra price for " + name.trim() + " (₱):";
       const priceStr = prompt(pricePrompt, defaultP);
       if (priceStr === null) return;
@@ -658,9 +887,9 @@
 
     function editSpecificAddon(idx) {
       const addon = tempItemAddons[idx];
-      const newName = prompt("Edit choice name:", addon.name);
+      const newName = prompt("Edit name:", addon.name);
       if (!newName || newName.trim() === '') return;
-      const newPriceStr = prompt("Edit extra price for " + newName.trim() + " (₱):", addon.price);
+      const newPriceStr = prompt("Edit price for " + newName.trim() + " (₱):", addon.price);
       if (newPriceStr === null) return;
       const newPrice = parseFloat(newPriceStr);
       if (isNaN(newPrice) || newPrice < 0) return alert("Please enter a valid price.");
@@ -672,42 +901,42 @@
 
     function saveItemEditorChanges() {
       const newName = document.getElementById('editItemNameInput').value.trim();
-      const newPrice = parseFloat(document.getElementById('editItemPriceInput').value);
+      const newPrice = tempItemIsCombo ? 0 : parseFloat(document.getElementById('editItemPriceInput').value);
       const newIcon = document.getElementById('editItemEmojiInput').value.trim() || '🍽️';
       if (!newName) return alert("Please enter an item name.");
-      if (isNaN(newPrice) || newPrice < 0) return alert("Please enter a valid price.");
+      if (!tempItemIsCombo && (isNaN(newPrice) || newPrice < 0)) return alert("Please enter a valid price.");
       menuData[activeCatIndex].items[editingItemIdx] = {
-        name: newName, price: newPrice, icon: newIcon, photo: tempItemPhoto, isMixMatch: tempItemIsMixMatch, addons: tempItemAddons
+        name: newName, price: newPrice, icon: newIcon, photo: tempItemPhoto, isCombo: tempItemIsCombo, addons: tempItemAddons
       };
       saveMenuData(); closeItemEditorModal(); renderMenu();
     }
-    function addNewMixMatchItem() {
-      const mainName = prompt("Step 1 — Main Mix & Match item name (e.g., Juice Combo):");
+    function addNewComboItem() {
+      const mainName = prompt("Step 1 — Main Combo item name (e.g., Juice):");
       if (!mainName || mainName.trim() === '') return;
-      const priceStr = prompt("Base price for " + mainName.trim() + " (₱):", "35");
-      if (priceStr === null) return;
-      const basePrice = parseFloat(priceStr);
-      if (isNaN(basePrice) || basePrice < 0) return alert("Please enter a valid price.");
 
       const choices = [];
       while (true) {
         const promptLabel = choices.length === 0
-          ? "Step 2 — Enter first mix item (e.g., Fries):"
-          : "Added: " + choices.map(c => c.name).join(", ") + "\nEnter another mix item (or leave blank & press OK to finish):";
+          ? "Step 2 — Enter first paired item (e.g., Fries):"
+          : "Added: " + choices.map(c => c.name + " (₱" + c.price + ")").join(", ") + "\nEnter another paired item (or leave blank & press OK to finish):";
         const choiceName = prompt(promptLabel);
         if (!choiceName || choiceName.trim() === '') break;
-        const extraStr = prompt("Extra price for " + choiceName.trim() + " (enter 0 if included in ₱" + basePrice.toFixed(2) + "):", "0");
-        if (extraStr === null) break;
-        const extraPrice = parseFloat(extraStr);
-        choices.push({ name: choiceName.trim(), price: isNaN(extraPrice) || extraPrice < 0 ? 0 : extraPrice });
+        const priceStr = prompt("Full combo price for " + mainName.trim() + " + " + choiceName.trim() + " (₱):", "35");
+        if (priceStr === null) break;
+        const fullPrice = parseFloat(priceStr);
+        if (isNaN(fullPrice) || fullPrice < 0) {
+          alert("Invalid price, skipping " + choiceName.trim());
+          continue;
+        }
+        choices.push({ name: choiceName.trim(), price: fullPrice });
       }
 
       menuData[activeCatIndex].items.push({
         name: mainName.trim(),
-        price: basePrice,
+        price: 0,
         icon: "🥤",
         photo: "",
-        isMixMatch: true,
+        isCombo: true,
         addons: choices
       });
       saveMenuData();
@@ -822,7 +1051,7 @@
       if (priceStr === null) return;
       const price = parseFloat(priceStr);
       if (isNaN(price) || price < 0) return alert("Please enter a valid price.");
-      menuData[activeCatIndex].items.push({ name: name.trim(), price: price, icon: "🍽️", photo: "", isMixMatch: false, addons: [] });
+      menuData[activeCatIndex].items.push({ name: name.trim(), price: price, icon: "🍽️", photo: "", isCombo: false, addons: [] });
       saveMenuData(); renderMenu();
     }
 
@@ -832,6 +1061,7 @@
         activeCatIndex = 0;
         localStorage.removeItem('miniPosMenuPH_v4');
         renderMenu();
+        alert("Menu restored to defaults!");
       }
     }
     function showToast(msg) {
@@ -842,8 +1072,12 @@
       toastTimer = setTimeout(() => banner.classList.remove('show'), 1100);
     }
 
-    function openReportsScreen() { document.getElementById('reportsScreen').classList.add('open'); }
+    function openQueueScreen() { renderQueue(); document.getElementById('queueScreen').classList.add('open'); }
+    function closeQueueScreen() { document.getElementById('queueScreen').classList.remove('open'); }
+    function openReportsScreen() { renderHistory(); document.getElementById('reportsScreen').classList.add('open'); }
     function closeReportsScreen() { document.getElementById('reportsScreen').classList.remove('open'); }
+    function openSettingsScreen() { document.getElementById('settingsScreen').classList.add('open'); }
+    function closeSettingsScreen() { document.getElementById('settingsScreen').classList.remove('open'); }
 
     function toggleReportSection(section) {
       const btn = document.getElementById(section + 'AccBtn');
@@ -854,7 +1088,10 @@
       arrow.innerText = isOpen ? '▲' : '▼';
     }
 
-    function openCartScreen() { document.getElementById('cartScreen').classList.add('open'); }
+    function openCartScreen() {
+      if (currentOrder.length === 0) return;
+      document.getElementById('cartScreen').classList.add('open');
+    }
     function closeCartScreen() { document.getElementById('cartScreen').classList.remove('open'); }
 
     function addItem(item, qty) {
@@ -864,9 +1101,6 @@
       }
       renderOrder();
       showToast(count > 1 ? '✓ Added ' + count + 'x' : '✓ Added');
-      const badge = document.getElementById('barCount');
-      badge.classList.add('pop');
-      setTimeout(() => badge.classList.remove('pop'), 180);
     }
 
     function addCustomItem() {
@@ -891,6 +1125,7 @@
       }
       renderOrder();
       renderMenu();
+      if (currentOrder.length === 0) closeCartScreen();
     }
 
     function clearOrder() {
@@ -905,12 +1140,12 @@
 
     function getOrderSum() { return currentOrder.reduce((sum, item) => sum + item.price, 0); }
 
-    function quickInstaPay() {
-      if (currentOrder.length === 0) return alert("Tap at least one item on the menu first!");
+    function quickLogSale() {
+      if (currentOrder.length === 0) return;
       const total = getOrderSum();
       const count = currentOrder.length;
       const label = count === 1 ? "1 item" : count + " items";
-      if (confirm("Confirm payment for " + label + " for a total amount of ₱" + total.toFixed(2) + "?")) {
+      if (confirm("Log sale for " + label + " (Total: ₱" + total.toFixed(2) + ")?")) {
         confirmSale();
       }
     }
@@ -919,7 +1154,18 @@
       const totalEl = document.getElementById('orderTotal');
       const barCount = document.getElementById('barCount');
       const barTotal = document.getElementById('barTotal');
-      if (currentOrder.length === 0) {
+      const barLogBtn = document.getElementById('barLogSaleBtn');
+      const barCartBtn = document.getElementById('barCartBtn');
+      const cartCalcBtn = document.getElementById('cartCalcBtn');
+      const cartLogBtn = document.getElementById('cartLogSaleBtn');
+
+      const isEmpty = currentOrder.length === 0;
+      barLogBtn.disabled = isEmpty;
+      barCartBtn.disabled = isEmpty;
+      if (cartCalcBtn) cartCalcBtn.disabled = isEmpty;
+      if (cartLogBtn) cartLogBtn.disabled = isEmpty;
+
+      if (isEmpty) {
         list.innerHTML = '<div style="color:#9ca3af; font-size:14px;">Your cart is empty</div>';
         totalEl.innerText = '₱0.00'; barCount.innerText = '0'; barTotal.innerText = '₱0.00';
         return;
@@ -958,7 +1204,7 @@
     }
 
     function openCheckoutModal() {
-      if (currentOrder.length === 0) return alert("Cart is empty! Tap items on the menu first.");
+      if (currentOrder.length === 0) return;
       const total = getOrderSum();
       document.getElementById('modalOrderTotal').innerText = '₱' + total.toFixed(2);
       document.getElementById('cashInput').value = '';
@@ -986,17 +1232,73 @@
     }
     function confirmSale() {
       if (currentOrder.length === 0) return;
+      checkAutoMidnightRollover();
       const total = getOrderSum();
-      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const now = Date.now();
+      const time = new Date(now).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const grouped = {};
       currentOrder.forEach(item => grouped[item.name] = (grouped[item.name] || 0) + 1);
       const summary = Object.entries(grouped).map(([name, qty]) => qty + 'x ' + name).join(', ');
+
       salesHistory.unshift({ time, summary, total, items: grouped });
       localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
-      currentOrder = []; closeCheckoutModal(); closeCartScreen(); renderOrder(); renderMenu(); renderHistory();
-      showToast('✓ Paid ₱' + total.toFixed(2));
+
+      orderQueue.unshift({ id: now + Math.random(), time: time, createdAt: now, summary: summary, total: total, done: false });
+      localStorage.setItem('miniPosQueuePH', JSON.stringify(orderQueue));
+
+      currentOrder = []; closeCheckoutModal(); closeCartScreen(); renderOrder(); renderMenu(); renderQueue(); renderHistory();
+      showToast('✓ Logged ₱' + total.toFixed(2));
     }
 
+    function markQueueOrderDone(idx) {
+      if (orderQueue[idx]) {
+        orderQueue[idx].done = true;
+        localStorage.setItem('miniPosQueuePH', JSON.stringify(orderQueue));
+        renderQueue();
+      }
+    }
+
+    function renderQueue() {
+      const thirtyMins = 30 * 60 * 1000;
+      const now = Date.now();
+      let changed = false;
+      orderQueue.forEach(q => {
+        if (!q.done && (now - q.createdAt) >= thirtyMins) {
+          q.done = true;
+          changed = true;
+        }
+      });
+      if (changed) localStorage.setItem('miniPosQueuePH', JSON.stringify(orderQueue));
+
+      const activeList = orderQueue.filter(q => !q.done);
+      const doneList = orderQueue.filter(q => q.done);
+      const sortedQueue = activeList.concat(doneList);
+
+      const pendingCountEl = document.getElementById('queuePendingCount');
+      const queueBannerBtn = document.getElementById('queueBannerBtn');
+      pendingCountEl.innerText = activeList.length + ' waiting';
+      if (activeList.length > 0) {
+        queueBannerBtn.classList.add('has-pending');
+      } else {
+        queueBannerBtn.classList.remove('has-pending');
+      }
+
+      const container = document.getElementById('queueListContainer');
+      if (!container) return;
+      if (sortedQueue.length === 0) {
+        container.innerHTML = '<div style="color:#9ca3af; font-size:14px; text-align:center; padding:20px;">No orders in queue yet today.</div>';
+        return;
+      }
+
+      container.innerHTML = sortedQueue.map(q => {
+        const realIdx = orderQueue.indexOf(q);
+        return '<div class="queue-card' + (q.done ? ' completed' : '') + '">' +
+          '<div class="queue-top"><span>🕒 ' + q.time + (q.done ? ' • Completed' : ' • Preparing') + '</span><span>₱' + q.total.toFixed(2) + '</span></div>' +
+          '<div class="queue-items">' + q.summary + '</div>' +
+          (q.done ? '' : '<button type="button" class="btn-mark-done" onclick="markQueueOrderDone(' + realIdx + ')">✓ Mark Complete</button>') +
+        '</div>';
+      }).join('');
+    }
     function deleteSale(index) {
       const sale = salesHistory[index];
       if (confirm("Delete this mistaken sale (₱" + sale.total.toFixed(2) + " - " + sale.summary + ")?")) {
@@ -1015,7 +1317,43 @@
           });
         }
       });
-      return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      return Object.entries(counts).sort((a, b) => b - a);
+    }
+
+    function toggleHistoryDetails(idx) {
+      const el = document.getElementById('histDet_' + idx);
+      if (el) el.classList.toggle('open');
+    }
+
+    function copyPastHistoryEntry(idx) {
+      const h = pastHistory[idx];
+      if (!h) return;
+      let text = "Sales Report (" + h.label + ")\nTotal Earnings: ₱" + h.total.toFixed(2) + "\nTotal Orders: " + h.orderCount + "\n\n";
+      if (h.sortedItems && h.sortedItems.length > 0) {
+        text += "--- ITEMS SOLD (HIGHEST TO LOWEST) ---\n";
+        h.sortedItems.forEach(([n, q]) => text += q + "x " + n + "\n");
+        text += "\n--- ORDER LOG ---\n";
+      }
+      (h.sales || []).forEach(s => text += "[" + s.time + "] ₱" + s.total.toFixed(2) + " - " + s.summary + "\n");
+      navigator.clipboard.writeText(text).then(() => alert("Copied report for " + h.label + "!"));
+    }
+
+    function deletePastHistoryEntry(idx) {
+      if (confirm("Delete this saved report (" + pastHistory[idx].label + ")?")) {
+        pastHistory.splice(idx, 1);
+        localStorage.setItem('miniPosPastHistoryPH', JSON.stringify(pastHistory));
+        renderHistory();
+      }
+    }
+
+    function clearAllPastHistory() {
+      if (pastHistory.length === 0) return alert("History is already empty.");
+      if (confirm("Delete all saved 7-day history reports?")) {
+        pastHistory = [];
+        localStorage.removeItem('miniPosPastHistoryPH');
+        renderHistory();
+        alert("All past history cleared!");
+      }
     }
 
     function renderHistory() {
@@ -1025,6 +1363,8 @@
       const bannerCountEl = document.getElementById('bannerOrderCount');
       const countEl = document.getElementById('orderCount');
       const restockEl = document.getElementById('restockSummary');
+      const histCountEl = document.getElementById('historyCount');
+      const histContainer = document.getElementById('pastHistoryContainer');
 
       let dailySum = 0; let html = '';
       salesHistory.forEach((sale, index) => {
@@ -1035,7 +1375,7 @@
       totalEl.innerText = '₱' + dailySum.toFixed(2);
       reportTotalEl.innerText = '₱' + dailySum.toFixed(2);
       countEl.innerText = salesHistory.length;
-      bannerCountEl.innerText = salesHistory.length + (salesHistory.length === 1 ? ' order today' : ' orders today');
+      bannerCountEl.innerText = salesHistory.length + (salesHistory.length === 1 ? ' order' : ' orders');
 
       const sortedItems = getRestockCounts();
       if (sortedItems.length === 0) {
@@ -1045,7 +1385,28 @@
           '<div class="restock-item"><span>' + name + '</span><span class="restock-qty">' + qty + ' sold</span></div>'
         ).join('');
       }
+
+      histCountEl.innerText = pastHistory.length;
+      if (pastHistory.length === 0) {
+        histContainer.innerHTML = '<div style="color:#9ca3af; font-size:13px;">No past reports saved yet.</div>';
+      } else {
+        histContainer.innerHTML = pastHistory.map((h, idx) => {
+          const itemsList = (h.sortedItems || []).map(([n, q]) => q + 'x ' + n).join(', ') || 'None';
+          return '<div class="history-card">' +
+            '<div class="history-head" onclick="toggleHistoryDetails(' + idx + ')">' +
+              '<span>' + h.label + '</span>' +
+              '<span>₱' + h.total.toFixed(2) + ' <button class="del-sale-btn" onclick="event.stopPropagation(); deletePastHistoryEntry(' + idx + ')">×</button></span>' +
+            '</div>' +
+            '<div class="history-details" id="histDet_' + idx + '">' +
+              '<div style="margin-bottom:6px;"><strong>Orders:</strong> ' + h.orderCount + '</div>' +
+              '<div style="margin-bottom:8px;"><strong>Sold:</strong> ' + itemsList + '</div>' +
+              '<button class="btn btn-copy" style="padding:9px; font-size:12px;" onclick="copyPastHistoryEntry(' + idx + ')">📋 Copy This Report</button>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+      }
     }
+
     function copyReport() {
       if (salesHistory.length === 0) return alert("No sales to copy yet!");
       const total = salesHistory.reduce((sum, s) => sum + s.total, 0);
@@ -1058,12 +1419,18 @@
         text += "\n--- ORDER LOG ---\n";
       }
       salesHistory.forEach(s => text += "[" + s.time + "] ₱" + s.total.toFixed(2) + " - " + s.summary + "\n");
-      navigator.clipboard.writeText(text).then(() => alert("Daily report & item summary copied!"));
+      navigator.clipboard.writeText(text).then(() => alert("Today's report & item summary copied!"));
     }
 
     function resetDay() {
-      if (confirm("Clear today's sales and start at ₱0.00? (Your custom menu & add-ons will stay saved)")) {
-        salesHistory = []; localStorage.removeItem('miniPosSalesPH'); renderHistory();
+      if (salesHistory.length === 0) return alert("Today's sales are already at ₱0.00.");
+      if (confirm("Save today's current sales into 7-Day History and reset today back to ₱0.00?")) {
+        const shiftTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        archiveSalesToPastHistory(salesHistory, savedDayKey, 'Saved at ' + shiftTime);
+        salesHistory = [];
+        localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
+        renderHistory();
+        alert("Saved to 7-Day History! Today is reset to ₱0.00.");
       }
     }
 
@@ -1071,8 +1438,13 @@
       navigator.serviceWorker.register('./sw.js').catch(() => {});
     }
 
+    setAppTheme(localStorage.getItem('miniPosThemePH') || 'light');
+    checkAutoMidnightRollover();
     renderMenu();
+    renderOrder();
+    renderQueue();
     renderHistory();
+    setInterval(renderQueue, 60000);
   </script>
 </body>
 </html>
