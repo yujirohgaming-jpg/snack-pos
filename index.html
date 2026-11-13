@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="apple-touch-icon" href="./icon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Snack Kiosk POS</title>
+  <title>Gonzales Snack Bar</title>
+  <meta name="apple-mobile-web-app-title" content="Snack Bar">
   <style>
     :root { --primary: #da291c; --accent: #ffc72c; --success: #16a34a; --danger: #dc2626; --bg: #e2e8f0; --card: #ffffff; --text: #0f172a; --muted: #64748b; --border: #cbd5e1; --topbg: #1e293b; }
     body.theme-dark { --bg: #0b1120; --card: #1e293b; --text: #f8fafc; --muted: #94a3b8; --border: #334155; --topbg: #020617; }
@@ -246,9 +248,12 @@
     </div>
   </div>
   <div class="full-screen-drawer" id="queueScreen">
-    <div class="drawer-header">
+        <div class="drawer-header">
       <h2>🍳 Active Order Queue</h2>
-      <button class="btn-close-drawer" onclick="closeQueueScreen()">← Back</button>
+      <div style="display:flex; gap:6px;">
+        <button class="btn-clear-top" onclick="clearQueueList()">Clear</button>
+        <button class="btn-close-drawer" onclick="closeQueueScreen()">← Back</button>
+      </div>
     </div>
     <div class="drawer-body">
       <div style="font-size:12px; color:var(--muted); margin-bottom:10px; font-weight:700;" id="queueTimerHint">Tap items to check off as cooked. Auto-completes after 30 mins.</div>
@@ -1638,6 +1643,20 @@
         orderQueue[idx].done = true;
         localStorage.setItem('miniPosQueuePH', JSON.stringify(orderQueue));
         renderQueue();
+      }
+    }
+
+    function clearQueueList() {
+      const doneCount = orderQueue.filter(q => q.done).length;
+      if (doneCount === 0) {
+        alert("No completed orders to clear yet! Active waiting orders will stay safe.");
+        return;
+      }
+      if (confirm("Clear " + doneCount + " completed order(s)? Active waiting orders will stay.")) {
+        orderQueue = orderQueue.filter(q => !q.done);
+        localStorage.setItem('miniPosQueuePH', JSON.stringify(orderQueue));
+        renderQueue();
+        showToast('✓ Cleared Completed');
       }
     }
 
