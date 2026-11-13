@@ -265,7 +265,7 @@
       <h2>📊 Daily Summary</h2>
       <button class="btn-close-drawer" onclick="closeReportsScreen()">← Back</button>
     </div>
-    <div class="drawer-body">
+        <div class="drawer-body">
       <div class="card-box" style="text-align:center; background:#0f172a; color:white;">
         <div style="font-size:11px; text-transform:uppercase; color:#94a3b8; letter-spacing:1px;">Today's Total Earnings</div>
         <div style="font-size:32px; font-weight:900; color:#4ade80; margin-top:4px;" id="reportScreenTotal">₱0.00</div>
@@ -278,19 +278,15 @@
       <div class="report-accordion-body" id="restockAccBody">
         <div id="restockSummary"><div style="color:#9ca3af; font-size:14px;">No items sold yet today</div></div>
       </div>
-      <button class="report-accordion-btn" id="salesLogAccBtn" onclick="toggleReportSection('salesLog')">
+      <button class="report-accordion-btn" onclick="openTodaysLogScreen()">
         <span>🧾 Today's Sales Log (<span id="orderCount">0</span> orders)</span>
-        <span id="salesLogArrow">▼</span>
+        <span>▶</span>
       </button>
-      <div class="report-accordion-body" id="salesLogAccBody">
-        <div id="salesLog"></div>
-      </div>
       <button class="report-accordion-btn" id="historyAccBtn" onclick="toggleReportSection('history')">
         <span id="historyBtnLabel">📅 Past 7 Days History (0 • ₱0.00)</span>
         <span id="historyArrow">▼</span>
       </button>
       <div class="report-accordion-body" id="historyAccBody">
-        <div id="weeklyCompareBanner"></div>
         <div id="pastHistoryContainer"></div>
         <button class="btn btn-reset" style="margin-top:8px;" onclick="clearAllPastHistory()">Clear All History</button>
       </div>
@@ -298,6 +294,25 @@
         <button class="btn btn-copy" onclick="copyReport()">📋 Copy Today's Summary</button>
         <button class="btn btn-reset" onclick="resetDay()">Save & Start New Shift (Reset Today)</button>
       </div>
+    </div>
+  </div>
+  <div class="full-screen-drawer" id="todaysLogScreen">
+    <div class="drawer-header">
+      <h2>🧾 Today's Sales Log</h2>
+      <button class="btn-close-drawer" onclick="closeTodaysLogScreen()">← Back</button>
+    </div>
+    <div class="drawer-body">
+      <div id="salesLog"></div>
+    </div>
+  </div>
+  <div class="full-screen-drawer" id="pastDetailScreen">
+    <div class="drawer-header">
+      <h2 id="pastDetailHeaderTitle">📅 Saved Report</h2>
+      <button class="btn-close-drawer" onclick="closePastDetailScreen()">← Back</button>
+    </div>
+    <div class="drawer-body" id="pastDetailBody"></div>
+    <div class="drawer-footer">
+      <button class="btn btn-copy" style="margin-top:0;" id="pastDetailCopyBtn">📋 Copy This Report</button>
     </div>
   </div>
   <div class="full-screen-drawer" id="settingsScreen">
@@ -1444,6 +1459,9 @@
     function closeQueueScreen() { document.getElementById('queueScreen').classList.remove('open'); }
     function openReportsScreen() { renderHistory(); document.getElementById('reportsScreen').classList.add('open'); }
     function closeReportsScreen() { document.getElementById('reportsScreen').classList.remove('open'); }
+    function openTodaysLogScreen() { document.getElementById('todaysLogScreen').classList.add('open'); }
+    function closeTodaysLogScreen() { document.getElementById('todaysLogScreen').classList.remove('open'); }
+    function closePastDetailScreen() { document.getElementById('pastDetailScreen').classList.remove('open'); }
     function openSettingsScreen() { applyAllSettingsUI(); document.getElementById('settingsScreen').classList.add('open'); }
     function closeSettingsScreen() { document.getElementById('settingsScreen').classList.remove('open'); }
 
@@ -1730,41 +1748,29 @@
       return Object.entries(counts).sort((a, b) => b[1] - a[1]);
     }
 
-    function toggleHistoryDetails(idx) {
-      const el = document.getElementById('histDet_' + idx);
-      if (el) el.classList.toggle('open');
-    }
-
-    function copyPastHistoryEntry(idx) {
-      const h = pastHistory[idx];
+        function openPastDetailScreen(idx) {
+      const h = pastHistory.at(idx);
       if (!h) return;
-      const headerTitle = appSettings.stallName ? appSettings.stallName + " — " : "";
-      let text = headerTitle + "Sales Report (" + h.label + ")\nTotal Earnings: ₱" + h.total.toFixed(2) + "\nTotal Orders: " + h.orderCount + "\n\n";
-      if (h.sortedItems && h.sortedItems.length > 0) {
-        text += "--- ITEMS SOLD (HIGHEST TO LOWEST) ---\n";
-        h.sortedItems.forEach(([n, q]) => text += q + "x " + n + "\n");
-        text += "\n--- ORDER LOG ---\n";
-      }
-      (h.sales || []).forEach(s => text += "[" + s.time + "] ₱" + s.total.toFixed(2) + " - " + s.summary + "\n");
-      navigator.clipboard.writeText(text).then(() => alert("Copied report for " + h.label + "!"));
-    }
+      document.getElementById('pastDetailHeaderTitle').innerText = h.label;
+      document.getElementById('pastDetailCopyBtn').onclick = function() { copyPastHistoryEntry(idx); };
 
-    function deletePastHistoryEntry(idx) {
-      if (confirm("Delete this saved report (" + pastHistory[idx].label + ")?")) {
-        pastHistory.splice(idx, 1);
-        localStorage.setItem('miniPosPastHistoryPH', JSON.stringify(pastHistory));
-        renderHistory();
-      }
-    }
+      const itemsHtml = (h.sortedItems && h.sortedItems.length > 0)
+        ? h.sortedItems.map(pair => '<div class="restock-item"><span>' + pair.at(0) + '</span><span class="restock-qty">' + pair.at(1) + ' sold</span></div>').join('')
+        : '<div style="color:#9ca3af; font-size:13px;">No items recorded</div>';
 
-    function clearAllPastHistory() {
-      if (pastHistory.length === 0) return alert("History is already empty.");
-      if (confirm("Delete all saved 7-day history reports?")) {
-        pastHistory = [];
-        localStorage.removeItem('miniPosPastHistoryPH');
-        renderHistory();
-        alert("All past history cleared!");
-      }
+      const salesHtml = (h.sales && h.sales.length > 0)
+        ? h.sales.map(s => '<div class="log-item"><div class="log-header"><span>' + s.time + '</span><span>₱' + s.total.toFixed(2) + '</span></div><div class="log-details">' + s.summary + '</div></div>').join('')
+        : '<div style="color:#9ca3af; font-size:13px;">No order logs saved</div>';
+
+      document.getElementById('pastDetailBody').innerHTML =
+        '<div class="card-box" style="text-align:center; background:#0f172a; color:white;">' +
+          '<div style="font-size:11px; text-transform:uppercase; color:#94a3b8; letter-spacing:1px;">Total Shift Earnings (' + h.orderCount + ' orders)</div>' +
+          '<div style="font-size:30px; font-weight:900; color:#4ade80; margin-top:4px;">₱' + h.total.toFixed(2) + '</div>' +
+        '</div>' +
+        '<div class="card-box"><h3>📦 Items Sold (Highest → Lowest)</h3>' + itemsHtml + '</div>' +
+        '<div class="card-box"><h3>🧾 Complete Order Log</h3>' + salesHtml + '</div>';
+
+      document.getElementById('pastDetailScreen').classList.add('open');
     }
 
     function renderHistory() {
@@ -1776,7 +1782,6 @@
       const countEl = document.getElementById('orderCount');
       const restockEl = document.getElementById('restockSummary');
       const histBtnLabel = document.getElementById('historyBtnLabel');
-      const weeklyBanner = document.getElementById('weeklyCompareBanner');
       const histContainer = document.getElementById('pastHistoryContainer');
 
       let dailySum = 0; let html = '';
@@ -1800,8 +1805,8 @@
       if (sortedItems.length === 0) {
         restockEl.innerHTML = '<div style="color:#9ca3af; font-size:14px;">No items sold yet today</div>';
       } else {
-        restockEl.innerHTML = sortedItems.map(([name, qty]) =>
-          '<div class="restock-item"><span>' + name + '</span><span class="restock-qty">' + qty + ' sold</span></div>'
+        restockEl.innerHTML = sortedItems.map(pair =>
+          '<div class="restock-item"><span>' + pair.at(0) + '</span><span class="restock-qty">' + pair.at(1) + ' sold</span></div>'
         ).join('');
       }
 
@@ -1809,30 +1814,16 @@
       histBtnLabel.innerText = '📅 Past 7 Days History (' + pastHistory.length + ' • ₱' + sevenDayTotal.toFixed(2) + ')';
 
       if (pastHistory.length === 0) {
-        weeklyBanner.innerHTML = '';
         histContainer.innerHTML = '<div style="color:#9ca3af; font-size:13px;">No past reports saved yet.</div>';
       } else {
-        const avgPerEntry = sevenDayTotal / pastHistory.length;
-        weeklyBanner.innerHTML =
-          '<div class="weekly-compare-box">' +
-            '<div><div style="font-size:10px; text-transform:uppercase; font-weight:800;">7-Day Combined Total</div><div style="font-size:18px; font-weight:900;">₱' + sevenDayTotal.toFixed(2) + '</div></div>' +
-            '<div style="text-align:right;"><div style="font-size:10px; text-transform:uppercase; font-weight:800;">Avg per Shift</div><div style="font-size:15px; font-weight:800;">₱' + avgPerEntry.toFixed(2) + '</div></div>' +
-          '</div>';
-
-        histContainer.innerHTML = pastHistory.map((h, idx) => {
-          const itemsList = (h.sortedItems || []).map(([n, q]) => q + 'x ' + n).join(', ') || 'None';
-          return '<div class="history-card">' +
-            '<div class="history-head" onclick="toggleHistoryDetails(' + idx + ')">' +
+        histContainer.innerHTML = pastHistory.map((h, idx) =>
+          '<div class="history-card" onclick="openPastDetailScreen(' + idx + ')">' +
+            '<div class="history-head">' +
               '<span>' + h.label + '</span>' +
               '<span>₱' + h.total.toFixed(2) + ' <button class="del-sale-btn" onclick="event.stopPropagation(); deletePastHistoryEntry(' + idx + ')">×</button></span>' +
             '</div>' +
-            '<div class="history-details" id="histDet_' + idx + '">' +
-              '<div style="margin-bottom:6px;"><strong>Orders:</strong> ' + h.orderCount + '</div>' +
-              '<div style="margin-bottom:8px;"><strong>Sold:</strong> ' + itemsList + '</div>' +
-              '<button class="btn btn-copy" style="padding:9px; font-size:12px;" onclick="copyPastHistoryEntry(' + idx + ')">📋 Copy This Report</button>' +
-            '</div>' +
-          '</div>';
-        }).join('');
+          '</div>'
+        ).join('');
       }
     }
 
