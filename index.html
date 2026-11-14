@@ -169,15 +169,16 @@
     .btn-copy { background: #2563eb; width: 100%; margin-top: 6px; font-size: 14px; padding: 13px; }
     .full-screen-drawer { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 45; flex-direction: column; overscroll-behavior: contain; }
     .full-screen-drawer.open { display: flex; }
+    #todaysLogScreen, #soldTodayScreen, #pastDetailScreen { z-index: 48; }
     .full-screen-drawer.hub-theme { background: #cbd5e1; }
     body.theme-dark .full-screen-drawer.hub-theme { background: #020617; }
     .hub-theme .drawer-header { background: #1e1b4b; border-bottom: 2px solid #4338ca; }
     .hub-section-divider { font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #312e81; margin: 18px 4px 10px; display: flex; align-items: center; gap: 6px; }
     body.theme-dark .hub-section-divider { color: #a5b4fc; }
-    .earnings-hero-card { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; border-radius: 18px; padding: 16px; margin-bottom: 12px; box-shadow: 0 6px 16px rgba(15, 23, 42, 0.22); border: 1.5px solid #4338ca; cursor: pointer; }
-    .earnings-hero-top { display: flex; justify-content: space-between; align-items: center; font-size: 11px; text-transform: uppercase; color: #a5b4fc; letter-spacing: 0.8px; font-weight: 800; }
-    .earnings-hero-amt { font-size: 34px; font-weight: 900; color: #4ade80; margin: 6px 0 4px; }
-    .earnings-hero-sub { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #e2e8f0; font-weight: 700; }
+    .earnings-hero-card { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; border-radius: 18px; padding: 18px 16px; margin-bottom: 12px; box-shadow: 0 6px 16px rgba(15, 23, 42, 0.22); border: 1.5px solid #4338ca; cursor: pointer; text-align: center; }
+    .earnings-hero-top { font-size: 11px; text-transform: uppercase; color: #a5b4fc; letter-spacing: 0.9px; font-weight: 800; }
+    .earnings-hero-amt { font-size: 36px; font-weight: 900; color: #4ade80; margin: 6px 0 4px; }
+    .earnings-hero-sub { font-size: 13px; color: #e2e8f0; font-weight: 700; }
     .drawer-header { background: #0f172a; color: white; padding: calc(14px + env(safe-area-inset-top)) 16px 14px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
     .drawer-header h2 { margin: 0; font-size: 18px; font-weight: 800; }
     .btn-close-drawer { background: #334155; color: white; border: none; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
@@ -379,15 +380,10 @@
     </div>
     <div class="drawer-body" id="hubDrawerBody">
       <div class="earnings-hero-card" onclick="openTodaysLogScreen()">
-        <div class="earnings-hero-top">
-          <span id="stallBannerTitle">Today's Total Earnings</span>
-          <span>Tap for Today's Log ▶</span>
-        </div>
+        <div class="earnings-hero-top" id="stallBannerTitle">Today's Total Earnings</div>
         <div class="earnings-hero-amt" id="dailyTotal">₱0.00</div>
-        <div class="earnings-hero-sub">
-          <span id="bannerOrderCount">0 orders logged today</span>
-          <span style="color:#93c5fd;" id="expectedCashBoxLine"></span>
-        </div>
+        <div class="earnings-hero-sub" id="bannerOrderCount">0 orders logged today</div>
+        <span id="expectedCashBoxLine" style="display:none;"></span>
       </div>
 
       <button class="report-accordion-btn" onclick="openSoldTodayScreen()">
