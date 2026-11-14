@@ -1,70 +1,104 @@
+﻿<!-- ==================== PART 01: HEAD & THEMES ==================== -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="apple-touch-icon" href="./icon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Gonzales Snacks">
+  <link rel="apple-touch-icon" href="./icon.png">
   <title>Gonzales Snack Bar</title>
-  <meta name="apple-mobile-web-app-title" content="Snack Bar">
   <style>
     :root { --primary: #da291c; --accent: #ffc72c; --success: #16a34a; --danger: #dc2626; --bg: #e2e8f0; --card: #ffffff; --text: #0f172a; --muted: #64748b; --border: #cbd5e1; --topbg: #1e293b; }
     body.theme-dark { --bg: #0b1120; --card: #1e293b; --text: #f8fafc; --muted: #94a3b8; --border: #334155; --topbg: #020617; }
     body.theme-cream { --bg: #fef3c7; --card: #fffbeb; --text: #451a03; --muted: #92400e; --border: #fcd34d; --topbg: #451a03; }
     body.theme-mint { --bg: #d1fae5; --card: #ffffff; --text: #064e3b; --muted: #047857; --border: #6ee7b7; --topbg: #064e3b; }
+    /* ==================== PART 02: BODY & STICKY TOP ==================== */
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-    body { margin: 0; padding: 0 14px calc(105px + env(safe-area-inset-bottom)); background: var(--bg); color: var(--text); transition: background-color 0.2s ease; }
-    .sticky-top-zone { position: sticky; top: 0; z-index: 15; background: var(--topbg); color: #ffffff; padding-top: calc(10px + env(safe-area-inset-top)); padding-bottom: 10px; margin: 0 -14px 12px; padding-left: 14px; padding-right: 14px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 6px 18px rgba(15, 23, 42, 0.25); }
-    .toast-banner { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.85); opacity: 0; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #ffffff; border: 1.5px solid rgba(74, 222, 128, 0.8); padding: 10px 20px; border-radius: 30px; font-size: 15px; font-weight: 800; z-index: 90; box-shadow: 0 6px 20px rgba(0,0,0,0.2); transition: all 0.16s ease; white-space: nowrap; pointer-events: none; }
+    html, body { overscroll-behavior-y: none; }
+    body { margin: 0; padding: 0 12px calc(92px + env(safe-area-inset-bottom)); background: var(--bg); color: var(--text); transition: background-color 0.2s ease; }
+    body:has(.modal-overlay.open), body:has(.full-screen-drawer.open), body:has(.bottom-sheet-overlay.open) { overflow: hidden; }
+    body.font-large .food-name { font-size: 16px; }
+    body.font-large .food-price { font-size: 16px; }
+    body.font-large .order-item, body.font-large .queue-bullet-item { font-size: 16px; }
+    body.font-xlarge .food-name { font-size: 18px; }
+    body.font-xlarge .food-price { font-size: 18px; }
+    body.font-xlarge .order-item, body.font-xlarge .queue-bullet-item { font-size: 18px; }
+    .sticky-top-zone { position: sticky; top: 0; z-index: 15; background: var(--topbg); color: #ffffff; padding-top: calc(8px + env(safe-area-inset-top)); padding-bottom: 8px; margin: 0 -12px 10px; padding-left: 12px; padding-right: 12px; border-bottom-left-radius: 18px; border-bottom-right-radius: 18px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25); }
+    .toast-banner { position: fixed; top: 45%; left: 50%; transform: translate(-50%, -50%) scale(0.85); opacity: 0; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #ffffff; border: 1.5px solid rgba(74, 222, 128, 0.8); padding: 10px 20px; border-radius: 30px; font-size: 15px; font-weight: 800; z-index: 95; box-shadow: 0 6px 20px rgba(0,0,0,0.22); transition: all 0.16s ease; white-space: nowrap; pointer-events: none; }
     .toast-banner.show { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    .earnings-banner { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12); color: white; padding: 10px 14px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px; }
-    .earnings-left h2 { margin: 0; font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: #cbd5e1; }
-    .earnings-left .amount { font-size: 24px; font-weight: 900; margin: 2px 0 0; color: #4ade80; letter-spacing: -0.5px; }
-    .banner-right-btns { display: flex; gap: 6px; }
-    .btn-top-pill { background: rgba(255,255,255,0.12); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 7px 10px; font-size: 11px; font-weight: 800; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 1px; white-space: nowrap; }
-    .btn-top-pill.has-pending { background: #d97706; border-color: #fde047; }
-    .btn-top-pill span.sub-cnt { font-size: 9px; color: #e2e8f0; font-weight: 700; }
-    .kiosk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 6px; }
-    .kiosk-header h3 { margin: 0; font-size: 15px; font-weight: 900; color: #ffffff; }
-    .header-action-group { display: flex; align-items: center; gap: 6px; }
-    .btn-custom-pill { background: #f59e0b; color: #ffffff; border: none; border-radius: 20px; padding: 6px 11px; font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap; }
-    .btn-settings-icon { background: rgba(255,255,255,0.16); color: #ffffff; border: 1px solid rgba(255,255,255,0.25); border-radius: 50%; width: 32px; height: 32px; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .mode-banner { display: none; justify-content: space-between; align-items: center; background: #f59e0b; color: #111827; border-radius: 12px; padding: 7px 10px; margin-bottom: 8px; font-size: 12px; font-weight: 900; gap: 8px; }
+    /* ==================== PART 03: CATEGORY TABS & MODES ==================== */
+    .cat-bar-row { display: flex; align-items: center; gap: 6px; }
+    .category-tabs { display: flex; gap: 6px; overflow-x: auto; padding: 2px; scrollbar-width: none; flex: 1; align-items: center; }
+    .category-tabs::-webkit-scrollbar { display: none; }
+    .cat-tab-wrap { flex: 0 0 auto; display: flex; align-items: center; background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.15); border-radius: 12px; overflow: hidden; }
+    .cat-tab-wrap.active { background: #da291c; border-color: #ffc72c; box-shadow: 0 3px 10px rgba(218, 41, 28, 0.4); }
+    .cat-tab-btn { background: transparent; border: none; color: #ffffff; padding: 7px 12px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+    .cat-inline-ctrl { display: none; background: rgba(0,0,0,0.28); color: #ffffff; border: none; padding: 7px 7px; font-size: 11px; font-weight: 900; cursor: pointer; }
+    .edit-mode .cat-tab-wrap.active .cat-inline-ctrl { display: inline-block; }
+    .btn-custom-scroll { flex: 0 0 auto; background: #f59e0b; color: #ffffff; border: none; border-radius: 12px; padding: 8px 11px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+    .btn-settings-pin { flex-shrink: 0; background: rgba(255,255,255,0.16); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.25); border-radius: 12px; width: 34px; height: 34px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .mode-banner { display: none; justify-content: space-between; align-items: center; background: #f59e0b; color: #111827; border-radius: 10px; padding: 6px 10px; margin-bottom: 6px; font-size: 12px; font-weight: 900; gap: 8px; }
     .edit-mode .mode-banner.edit-banner { display: flex; }
     .soldout-mode .mode-banner.soldout-banner { display: flex; background: #dc2626; color: #ffffff; }
     .btn-done-mode { background: #0f172a; color: #ffffff; border: none; border-radius: 8px; padding: 5px 12px; font-size: 11px; font-weight: 800; cursor: pointer; }
-    .top-edit-tools { display: none; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px; }
+    .top-edit-tools { display: none; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 6px; }
     .edit-mode .top-edit-tools { display: grid; }
     .btn-top-ed { padding: 8px 4px; border: none; border-radius: 9px; font-size: 11px; font-weight: 800; color: white; cursor: pointer; text-align: center; }
-    .category-tabs { display: flex; gap: 7px; overflow-x: auto; padding: 2px; scrollbar-width: none; }
-    .category-tabs::-webkit-scrollbar { display: none; }
-    .cat-tab-wrap { flex: 0 0 auto; display: flex; align-items: center; background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.15); border-radius: 13px; overflow: hidden; }
-    .cat-tab-wrap.active { background: #da291c; border-color: #ffc72c; box-shadow: 0 3px 10px rgba(218, 41, 28, 0.4); }
-    .cat-tab-btn { background: transparent; border: none; color: #ffffff; padding: 8px 13px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; }
-    .cat-inline-ctrl { display: none; background: rgba(0,0,0,0.28); color: #ffffff; border: none; padding: 8px 7px; font-size: 11px; font-weight: 900; cursor: pointer; }
-    .edit-mode .cat-tab-wrap.active .cat-inline-ctrl { display: inline-block; }
+    .simple-mode-bar { display: none; align-items: center; justify-content: space-between; flex: 1; font-size: 13px; font-weight: 900; color: #fde047; padding-left: 4px; }
+    body.simple-tally .category-tabs { display: none; }
+    body.simple-tally .simple-mode-bar { display: flex; }
+    /* ==================== PART 04: MENU GRID & NOT AVAILABLE ==================== */
     .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .menu-card-item { position: relative; background: var(--card); border: 2px solid var(--border); border-radius: 18px; overflow: hidden; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.12s ease, border-color 0.2s ease; user-select: none; -webkit-user-select: none; }
+    body.layout-tablet .menu-grid { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; }
+    @media (min-width: 768px) { body.layout-auto .menu-grid { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; } }
+    .menu-card-item { position: relative; background: var(--card); border: 2px solid var(--border); border-radius: 18px; overflow: hidden; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.12s ease, border-color 0.2s ease; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
     .menu-card-item:active { transform: scale(0.96); }
     .menu-card-item.just-added { border-color: #16a34a; }
-    .menu-card-item.is-soldout { border-color: #fca5a5; }
-    .menu-card-item.is-soldout .visual-wrap, .menu-card-item.is-soldout .food-name { opacity: 0.45; }
-    .soldout-overlay-tag { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(220, 38, 38, 0.94); color: #ffffff; border: 2px solid #ffffff; padding: 4px 10px; border-radius: 10px; font-size: 11px; font-weight: 900; letter-spacing: 0.5px; z-index: 4; white-space: nowrap; box-shadow: 0 3px 8px rgba(0,0,0,0.25); pointer-events: none; }
-    .soldout-clear-btn { position: absolute; top: 6px; right: 6px; width: 26px; height: 26px; border-radius: 50%; background: #0f172a; color: #ffffff; border: 2px solid #ffffff; font-size: 14px; font-weight: 900; line-height: 20px; text-align: center; cursor: pointer; z-index: 6; padding: 0; }
+    .menu-card-item.is-soldout { background: #cbd5e1; border-color: #94a3b8; cursor: default; }
+    body.theme-dark .menu-card-item.is-soldout { background: #0f172a; border-color: #334155; }
+    .menu-card-item.is-soldout:active { transform: none; }
+    .menu-card-item.is-soldout .card-top-body, .menu-card-item.is-soldout .food-footer-bar { filter: grayscale(100%); opacity: 0.42; pointer-events: none; }
+    .soldout-overlay-tag { position: absolute; top: 44%; left: 50%; transform: translate(-50%, -50%); background: rgba(15, 23, 42, 0.92); color: #ffffff; border: 2px solid #f87171; padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 900; letter-spacing: 0.4px; z-index: 6; white-space: nowrap; box-shadow: 0 3px 10px rgba(0,0,0,0.3); pointer-events: none; }
+    .soldout-clear-btn { position: absolute; top: 6px; right: 6px; width: 28px; height: 28px; border-radius: 50%; background: #dc2626; color: #ffffff; border: 2px solid #ffffff; font-size: 15px; font-weight: 900; line-height: 22px; text-align: center; cursor: pointer; z-index: 8; padding: 0; pointer-events: auto; }
+    /* ==================== PART 05: CARD DETAILS & FOOTERS ==================== */
     .card-top-body { padding: 10px 10px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; width: 100%; position: relative; }
     body.menu-text-only .card-top-body { padding: 14px 10px 10px; }
     body.menu-text-only .visual-wrap { display: none; }
+    body.simple-tally .food-footer-bar { display: none; }
+    body.simple-tally .card-top-body { padding: 12px 10px; }
+    body.simple-tally.tally-lines-3 { padding-bottom: calc(205px + env(safe-area-inset-bottom)); }
+    body.simple-tally.tally-lines-5 { padding-bottom: calc(265px + env(safe-area-inset-bottom)); }
+    body.simple-tally.tally-lines-7 { padding-bottom: calc(325px + env(safe-area-inset-bottom)); }
+    body.simple-tally.tally-top.tally-lines-3, body.simple-tally.tally-top.tally-lines-5, body.simple-tally.tally-top.tally-lines-7 { padding-bottom: calc(74px + env(safe-area-inset-bottom)); }
+    .simple-tally-dock { display: none; position: fixed; left: 0; right: 0; bottom: calc(58px + env(safe-area-inset-bottom)); background: var(--card); border-top: 2px solid var(--border); box-shadow: 0 -4px 14px rgba(15, 23, 42, 0.14); z-index: 25; flex-direction: column; padding: 6px 12px 8px; }
+    body.simple-tally .simple-tally-dock { display: flex; }
+    body.simple-tally.tally-top .simple-tally-dock { position: sticky; top: calc(52px + env(safe-area-inset-top)); bottom: auto; border-top: none; border-bottom: 2px solid var(--border); border-radius: 14px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1); }
+    .tally-dock-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 6px; }
+    .tally-dock-title { font-size: 11px; font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+    .tally-dock-btns { display: flex; gap: 5px; }
+    .btn-tally-pill { background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 3px 8px; font-size: 11px; font-weight: 800; cursor: pointer; }
+    .tally-dock-scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 3px; }
+    body.tally-lines-3 .tally-dock-scroll { height: 96px; }
+    body.tally-lines-5 .tally-dock-scroll { height: 162px; }
+    body.tally-lines-7 .tally-dock-scroll { height: 228px; }
+    .tally-line-row { display: flex; align-items: center; justify-content: space-between; height: 30px; min-height: 30px; padding: 0 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 3px solid var(--success); border-radius: 7px; font-size: 12px; font-weight: 700; color: #0f172a; gap: 6px; }
+    body.theme-dark .tally-line-row { background: #0f172a; border-color: #334155; color: #f8fafc; }
+    .tally-line-left { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tally-line-time { color: var(--muted); font-size: 11px; font-weight: 700; margin-right: 5px; }
+    .tally-line-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; font-weight: 800; color: #16a34a; }
+    body.theme-dark .tally-line-right { color: #4ade80; }
     .text-only-controls { display: none; width: 100%; justify-content: space-between; align-items: center; margin-bottom: 4px; }
     body.menu-text-only .text-only-controls { display: flex; }
     .visual-wrap { position: relative; width: 100%; margin-bottom: 6px; }
     .card-minus-btn { position: absolute; top: 6px; left: 6px; width: 28px; height: 28px; border-radius: 50%; background: #dc2626; color: #ffffff; border: 2px solid #ffffff; font-size: 18px; font-weight: 900; line-height: 22px; text-align: center; cursor: pointer; z-index: 5; box-shadow: 0 2px 6px rgba(220, 38, 38, 0.45); padding: 0; }
     .text-only-controls .card-minus-btn, .text-only-controls .in-cart-pill { position: static; }
-    .edit-mode .card-minus-btn, .soldout-mode .card-minus-btn { display: none; }
+    .edit-mode .card-minus-btn, .soldout-mode .card-minus-btn, body.simple-tally .card-minus-btn { display: none; }
     .in-cart-pill { position: absolute; top: 6px; right: 6px; font-size: 11px; font-weight: 900; color: #ffffff; background: #16a34a; padding: 3px 8px; border-radius: 10px; z-index: 3; }
-    .edit-mode .in-cart-pill, .soldout-mode .in-cart-pill { display: none; }
-    .food-icon { font-size: 44px; line-height: 1; margin: 4px 0; height: 66px; display: flex; align-items: center; justify-content: center; }
-    .food-photo { width: 100%; height: 100px; object-fit: cover; border-radius: 12px; display: block; border: 1px solid #e2e8f0; }
+    .edit-mode .in-cart-pill, .soldout-mode .in-cart-pill, body.simple-tally .in-cart-pill { display: none; }
+    .food-icon { font-size: 44px; line-height: 1; margin: 4px 0; height: 66px; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+    .food-photo { width: 100%; height: 100px; object-fit: cover; border-radius: 12px; display: block; border: 1px solid #e2e8f0; pointer-events: none; -webkit-touch-callout: none; user-select: none; }
     .combo-badge { display: inline-block; font-size: 10px; font-weight: 800; color: #6b21a8; background: #f3e8ff; border: 1px solid #d8b4fe; padding: 2px 8px; border-radius: 8px; margin-bottom: 4px; }
     .food-name { font-weight: 800; font-size: 14px; color: var(--text); line-height: 1.25; }
     .food-footer-bar { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 10px; background: #f1f5f9; border-top: 1px solid #e2e8f0; gap: 4px; }
@@ -75,48 +109,70 @@
     .btn-options-pill { background: var(--accent); color: #111827; border: 1.5px solid #eab308; border-radius: 9px; padding: 5px 8px; font-size: 10px; font-weight: 900; white-space: nowrap; }
     .btn-options-pill.combo-pill { background: #9333ea; color: #ffffff; border-color: #7e22ce; }
     .edit-mode .menu-card-item { border-color: #f59e0b; padding-top: 16px; }
-    .delete-badge { display: none; position: absolute; top: 4px; right: 4px; background: #dc2626; color: white; border: 2px solid white; width: 26px; height: 26px; border-radius: 50%; font-size: 15px; font-weight: 800; line-height: 20px; text-align: center; cursor: pointer; z-index: 7; }
+    .delete-badge { display: none; position: absolute; top: 4px; right: 4px; background: #dc2626; color: white; border: 2px solid white; width: 26px; height: 26px; border-radius: 50%; font-size: 15px; font-weight: 800; line-height: 20px; text-align: center; cursor: pointer; z-index: 9; }
     .edit-mode .delete-badge { display: block; }
     .reorder-row { display: none; justify-content: center; gap: 8px; padding: 6px; background: #fef3c7; width: 100%; }
     .edit-mode .reorder-row { display: flex; }
     .move-btn { background: #ffffff; border: 1px solid #d97706; color: #92400e; border-radius: 6px; padding: 3px 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
+    /* ==================== PART 06: BOTTOM BAR & SLIDE SHEETS ==================== */
+    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; color: white; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 35; }
+    .bottom-left-tools { display: flex; align-items: center; gap: 6px; }
+    .btn-bar-pill { background: rgba(255,255,255,0.12); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.22); border-radius: 12px; padding: 9px 10px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+    .btn-bar-pill.has-pending { background: #d97706; border-color: #fde047; }
+    .bottom-mid-total { display: flex; flex-direction: column; align-items: flex-end; flex: 1; min-width: 72px; }
+    .bottom-mid-lbl { font-size: 9px; color: #94a3b8; font-weight: 700; text-transform: uppercase; }
+    .bottom-mid-val { font-size: 19px; font-weight: 900; color: #4ade80; }
+    .btn-main-checkout { background: #2563eb; color: #ffffff; border: none; border-radius: 13px; padding: 12px 16px; font-size: 14px; font-weight: 900; cursor: pointer; white-space: nowrap; min-width: 96px; transition: all 0.15s ease; }
+    .btn-main-checkout.is-pay-state { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); box-shadow: 0 3px 12px rgba(22, 163, 74, 0.45); letter-spacing: 0.5px; font-size: 15px; }
+    .btn-main-checkout:disabled { background: #475569 !important; color: #94a3b8 !important; box-shadow: none !important; cursor: not-allowed; }
+    body.simple-tally .bottom-mid-total, body.simple-tally #mainCartPayBtn { display: none; }
+    body.simple-tally #queueBarBtn { display: none; }
+    .simple-tally-badge { display: none; font-size: 12px; font-weight: 800; color: #4ade80; background: rgba(74,222,128,0.14); border: 1px solid rgba(74,222,128,0.35); padding: 7px 11px; border-radius: 11px; }
+    body.simple-tally .simple-tally-badge { display: inline-block; }
+    .bottom-sheet-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: calc(64px + env(safe-area-inset-bottom)); background: rgba(0,0,0,0.55); z-index: 30; align-items: flex-end; justify-content: center; overscroll-behavior: contain; }
+    .bottom-sheet-overlay.open { display: flex; }
+    .bottom-sheet-card { background: var(--card); color: var(--text); width: 100%; max-width: 540px; border-top-left-radius: 22px; border-top-right-radius: 22px; padding: 14px 16px 16px; box-shadow: 0 -8px 25px rgba(0,0,0,0.28); max-height: 76vh; display: flex; flex-direction: column; animation: sheetRise 0.18s ease-out; }
+    @keyframes sheetRise { from { transform: translateY(30px); opacity: 0.6; } to { transform: translateY(0); opacity: 1; } }
+    .sheet-head-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .sheet-head-row h3 { margin: 0; font-size: 16px; font-weight: 900; }
+    .cash-strip-wrap { display: flex; align-items: center; gap: 6px; padding: 8px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .cash-strip-lbl { font-size: 11px; font-weight: 800; color: var(--muted); white-space: nowrap; }
+    .cash-strip-scroll { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; flex: 1; }
+    .cash-strip-scroll::-webkit-scrollbar { display: none; }
+    .cash-bill-pill { flex: 0 0 auto; background: #eff6ff; border: 1.5px solid #bfdbfe; color: #1e40af; border-radius: 10px; padding: 6px 11px; font-size: 12px; font-weight: 800; cursor: pointer; }
+    .cash-bill-pill.active { background: #2563eb; border-color: #1d4ed8; color: #ffffff; }
+    .sheet-items-scroll { overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; padding-right: 2px; }
+    .sheet-total-footer { border-top: 2px solid var(--border); padding-top: 10px; margin-top: 8px; }
+    .sheet-total-row { display: flex; justify-content: space-between; font-size: 19px; font-weight: 900; }
+    .sheet-change-row { display: flex; justify-content: space-between; font-size: 16px; font-weight: 900; color: #dc2626; margin-top: 4px; }
+    /* ==================== PART 07: DRAWERS, QUEUE & ACCORDIONS ==================== */
     .card-box { background: var(--card); border-radius: 18px; padding: 14px; margin-bottom: 12px; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06); border: 1px solid var(--border); color: var(--text); }
     .card-box h3 { margin: 0 0 10px; font-size: 15px; font-weight: 800; }
     .report-accordion-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; background: var(--card); border: 1.5px solid var(--border); border-radius: 14px; padding: 14px 16px; font-size: 14px; font-weight: 800; color: var(--text); cursor: pointer; margin-bottom: 10px; text-align: left; }
     .report-accordion-btn.open { border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0; }
     .report-accordion-body { display: none; background: var(--card); border: 1.5px solid var(--border); border-top: none; border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; padding: 12px 14px; margin-bottom: 12px; }
     .report-accordion-body.open { display: block; }
-    .order-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 700; gap: 8px; }
+    .order-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 700; gap: 8px; }
     .order-item-info { flex: 1; line-height: 1.3; }
     .order-qty-tag { color: #2563eb; font-weight: 900; margin-right: 4px; }
     .order-item-right { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
     .cart-step-btn { width: 28px; height: 28px; border-radius: 8px; border: none; font-size: 16px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .cart-step-minus { background: #fee2e2; color: #dc2626; }
     .cart-step-plus { background: #dcfce7; color: #16a34a; }
-    .order-total { display: flex; justify-content: space-between; font-weight: 900; font-size: 20px; margin-top: 12px; padding-top: 10px; border-top: 2px solid var(--border); }
     .restock-item { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed var(--border); font-size: 14px; font-weight: 600; }
     .restock-qty { font-weight: 800; color: #2563eb; background: #eff6ff; padding: 2px 9px; border-radius: 8px; }
-    .btn { flex: 1; padding: 14px; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; color: white; cursor: pointer; transition: all 0.15s ease; }
+    .btn { flex: 1; padding: 13px; border: none; border-radius: 14px; font-size: 14px; font-weight: 800; color: white; cursor: pointer; transition: all 0.15s ease; }
     .btn:disabled, button:disabled { background: #94a3b8 !important; color: #e2e8f0 !important; opacity: 0.65; cursor: not-allowed; box-shadow: none !important; }
-    .btn-log-standout { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35); font-size: 16px; font-weight: 900; }
     .btn-reset { background: var(--danger); width: 100%; margin-top: 10px; font-size: 14px; padding: 13px; }
     .btn-copy { background: #2563eb; width: 100%; margin-top: 6px; font-size: 14px; padding: 13px; }
-    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; color: white; padding: 11px 14px calc(11px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,0.22); display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 20; }
-    .bottom-info { display: flex; flex-direction: column; min-width: 82px; }
-    .bottom-count { font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase; }
-    .bottom-total { font-size: 20px; font-weight: 900; color: #4ade80; }
-    .bottom-btns { display: flex; gap: 7px; }
-    .btn-quick-sale { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; border: none; border-radius: 12px; padding: 12px 13px; font-weight: 900; font-size: 13px; cursor: pointer; white-space: nowrap; box-shadow: 0 3px 10px rgba(22, 163, 74, 0.35); }
-    .btn-view-cart { background: #2563eb; color: white; border: none; border-radius: 12px; padding: 12px 13px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer; white-space: nowrap; }
-    .cart-badge { background: var(--accent); color: #111827; padding: 2px 7px; border-radius: 20px; font-size: 12px; font-weight: 900; }
-    .full-screen-drawer { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 40; flex-direction: column; }
+    .full-screen-drawer { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 45; flex-direction: column; overscroll-behavior: contain; }
     .full-screen-drawer.open { display: flex; }
-    .drawer-header { background: #0f172a; color: white; padding: calc(14px + env(safe-area-inset-top)) 16px 14px; display: flex; justify-content: space-between; align-items: center; }
+    .drawer-header { background: #0f172a; color: white; padding: calc(14px + env(safe-area-inset-top)) 16px 14px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
     .drawer-header h2 { margin: 0; font-size: 18px; font-weight: 800; }
     .btn-close-drawer { background: #334155; color: white; border: none; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
     .btn-clear-top { background: #dc2626; color: white; border: none; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 800; cursor: pointer; }
-    .drawer-body { flex: 1; overflow-y: auto; padding: 14px; padding-bottom: 40px; }
-    .drawer-footer { background: var(--card); padding: 12px 14px calc(12px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 12px rgba(0,0,0,0.08); display: flex; gap: 8px; }
+    .drawer-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 14px; padding-bottom: 40px; }
+    .drawer-footer { background: var(--card); padding: 12px 14px calc(12px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 12px rgba(0,0,0,0.08); display: flex; gap: 8px; flex-shrink: 0; }
     .queue-card { background: #ffffff; border: 2px solid #f59e0b; border-radius: 14px; padding: 12px; margin-bottom: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.06); color: #0f172a; }
     .queue-card.completed { background: #e2e8f0; border-color: #cbd5e1; opacity: 0.65; }
     .queue-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 900; font-size: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; }
@@ -124,12 +180,11 @@
     .queue-bullet-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 8px; font-size: 14px; font-weight: 800; color: #1e293b; cursor: pointer; margin-bottom: 4px; background: #f8fafc; }
     .queue-bullet-item.prepped { text-decoration: line-through; color: #94a3b8; background: #f1f5f9; }
     .btn-mark-done { width: 100%; background: #16a34a; color: white; border: none; border-radius: 10px; padding: 10px; font-size: 14px; font-weight: 800; cursor: pointer; }
-    .weekly-compare-box { background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; color: #1e3a8a; }
-    .history-card { background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; color: #0f172a; }
-    .history-head { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 14px; cursor: pointer; }
-    .history-details { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #cbd5e1; font-size: 13px; }
-    .history-details.open { display: block; }
+    /* ==================== PART 08: SETTINGS, LOGS & MODALS CSS ==================== */
+    .history-card { background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 11px 12px; margin-bottom: 8px; color: #0f172a; cursor: pointer; }
+    .history-head { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 14px; }
     .settings-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .settings-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .settings-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
     .seg-btn { padding: 10px 6px; border-radius: 11px; border: 2px solid var(--border); background: #f8fafc; color: #0f172a; font-size: 12px; font-weight: 800; cursor: pointer; text-align: center; }
     .seg-btn.active { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; }
@@ -137,11 +192,9 @@
     .log-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; margin-bottom: 4px; }
     .log-details { color: #475569; font-size: 13px; }
     .del-sale-btn { background: #fee2e2; color: #dc2626; border: none; border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 800; margin-left: 8px; cursor: pointer; }
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.62); z-index: 60; align-items: center; justify-content: center; padding: 16px; overscroll-behavior: contain; }
     .modal-overlay.open { display: flex; }
-    body:has(.modal-overlay.open) { overflow: hidden; }
-    .modal-overlay { overscroll-behavior: contain; }
-    .modal-box { background: white; color: #0f172a; width: 100%; max-width: 380px; border-radius: 20px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.25); max-height: 88vh; overflow-y: auto; }
+    .modal-box { background: white; color: #0f172a; width: 100%; max-width: 380px; border-radius: 20px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.28); max-height: 88vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
     .modal-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
     .btn-modal-back { background: #f1f5f9; color: #0f172a; border: none; border-radius: 10px; width: 36px; height: 36px; font-size: 18px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .modal-title { font-size: 18px; font-weight: 900; margin: 0; text-align: center; flex: 1; }
@@ -150,15 +203,15 @@
     .popup-card-choice { position: relative; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 14px; padding: 8px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
     .popup-card-choice.selected { background: #eff6ff; border-color: #2563eb; }
     .popup-card-choice.has-qty { background: #f3e8ff; border-color: #9333ea; }
-    .popup-card-choice.choice-soldout { opacity: 0.45; cursor: not-allowed; }
-    .popup-choice-img { width: 100%; height: 68px; object-fit: cover; border-radius: 10px; margin-bottom: 5px; }
-    .popup-choice-icon { font-size: 32px; height: 50px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; }
+    .popup-card-choice.choice-soldout { opacity: 0.42; filter: grayscale(100%); cursor: default; }
+    .popup-choice-img { width: 100%; height: 68px; object-fit: cover; border-radius: 10px; margin-bottom: 5px; pointer-events: none; }
+    .popup-choice-icon { font-size: 32px; height: 50px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; pointer-events: none; }
     .addon-choice-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px 14px; margin-bottom: 8px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 14px; font-weight: 700; color: #1e293b; cursor: pointer; }
     .addon-choice-btn.selected { background: #eff6ff; border-color: #2563eb; color: #1e40af; }
-    .addon-choice-btn.choice-soldout { opacity: 0.45; cursor: not-allowed; }
+    .addon-choice-btn.choice-soldout { opacity: 0.42; filter: grayscale(100%); cursor: default; }
     .combo-choice-row { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 11px 12px; margin-bottom: 8px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; gap: 8px; }
     .combo-choice-row.has-qty { background: #f3e8ff; border-color: #9333ea; }
-    .combo-choice-row.choice-soldout { opacity: 0.45; cursor: not-allowed; }
+    .combo-choice-row.choice-soldout { opacity: 0.42; filter: grayscale(100%); cursor: default; }
     .combo-row-left { display: flex; align-items: center; gap: 8px; flex: 1; font-size: 14px; font-weight: 800; color: #1e293b; }
     .combo-qty-badge { background: #9333ea; color: white; font-size: 11px; font-weight: 900; padding: 2px 7px; border-radius: 8px; }
     .combo-row-right { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; color: #6b21a8; }
@@ -181,83 +234,110 @@
     .backup-textarea { width: 100%; height: 110px; padding: 10px; font-size: 12px; font-family: monospace; border: 1.5px solid #cbd5e1; border-radius: 10px; margin-top: 6px; }
     .item-addon-row { display: flex; justify-content: space-between; align-items: center; background: #fffbeb; border: 1px solid #fde68a; padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
     .btn-sm-pill { border: none; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 4px; }
-    .calc-row { display: flex; justify-content: space-between; font-size: 16px; margin-bottom: 10px; font-weight: 800; }
-    .cash-input { width: 100%; padding: 12px; font-size: 22px; font-weight: 900; text-align: right; border: 2px solid #cbd5e1; border-radius: 12px; margin-bottom: 10px; }
-    .quick-bills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
-    .bill-btn { background: #eff6ff; border: 1.5px solid #bfdbfe; color: #1e40af; padding: 9px 4px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; }
-    .change-display { background: #f0fdf4; border: 1.5px solid #bbf7d0; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .change-label { font-size: 14px; font-weight: 700; color: #166534; }
-    .change-amount { font-size: 24px; font-weight: 900; color: #15803d; }
     .modal-actions { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
   </style>
 </head>
+<!-- ==================== PART 09: MAIN SCREEN & BOTTOM BAR HTML ==================== -->
 <body>
   <div class="toast-banner" id="toastBanner">✓ Added</div>
   <div id="kioskSection">
     <div class="sticky-top-zone">
-      <div class="earnings-banner">
-        <div class="earnings-left">
-          <h2 id="stallBannerTitle">Today's Total Earnings</h2>
-          <div class="amount" id="dailyTotal">₱0.00</div>
-        </div>
-        <div class="banner-right-btns">
-          <button class="btn-top-pill" id="queueBannerBtn" onclick="openQueueScreen()">
-            <span>🍳 Queue</span>
-            <span class="sub-cnt" id="queuePendingCount">0 waiting</span>
-          </button>
-          <button class="btn-top-pill" onclick="openReportsScreen()">
-            <span>📊 Summary</span>
-            <span class="sub-cnt" id="bannerOrderCount">0 orders</span>
-          </button>
-        </div>
-      </div>
-      <div class="kiosk-header">
-        <h3 id="menuTitle">Order Menu</h3>
-        <div class="header-action-group">
-          <button class="btn-custom-pill" onclick="addCustomItem()">+ Custom Order</button>
-          <button class="btn-settings-icon" onclick="openSettingsScreen()" title="Settings">⚙️</button>
-        </div>
-      </div>
       <div class="mode-banner edit-banner">
         <span>✏️ Editing Menu — Tap item to edit</span>
         <button class="btn-done-mode" onclick="exitAllModes()">Done</button>
       </div>
       <div class="mode-banner soldout-banner">
-        <span>🚫 Sold Out Mode — Tap item to toggle</span>
+        <span>🚫 Not Available Mode — Tap item to toggle</span>
         <button class="btn-done-mode" onclick="exitAllModes()">Done</button>
       </div>
       <div class="top-edit-tools">
-        <button class="btn-top-ed" style="background:#10b981;" onclick="addNewMenuItem()">+ Food</button>
-        <button class="btn-top-ed" style="background:#9333ea;" onclick="addNewComboItem()">+ Combo</button>
+        <button class="btn-top-ed" style="background:#10b981;" onclick="openAddFoodModal()">+ Food</button>
+        <button class="btn-top-ed" style="background:#9333ea;" onclick="openAddComboModal()">+ Combo</button>
         <button class="btn-top-ed" style="background:#3b82f6;" onclick="sortActiveCategoryAZ()">Sort A–Z</button>
-        <button class="btn-top-ed" style="background:#8b5cf6;" onclick="addNewCategory()">+ Category</button>
+        <button class="btn-top-ed" style="background:#8b5cf6;" onclick="openCustomPrompt('Add New Category', 'Category Name (e.g., Drinks)', 'text', '', 'addCategory')">+ Category</button>
       </div>
-      <div class="category-tabs" id="categoryTabs"></div>
+      <div class="cat-bar-row">
+        <div class="category-tabs" id="categoryTabs"></div>
+        <div class="simple-mode-bar">
+          <span>⚡ Simple Tally Mode</span>
+          <button class="btn-custom-scroll" onclick="openCustomOrderModal()">+ Custom</button>
+        </div>
+        <button class="btn-settings-pin" onclick="openSettingsScreen()" title="Settings">⚙️</button>
+      </div>
+    </div>
+    <div class="simple-tally-dock" id="simpleTallyDock">
+      <div class="tally-dock-header">
+        <span class="tally-dock-title" onclick="openTodaysLogScreen()">📒 Recent Taps</span>
+        <div class="tally-dock-btns">
+          <button type="button" class="btn-tally-pill" id="tallyPosCycleBtn" onclick="toggleTallyDockPos()">⬆ Top</button>
+          <button type="button" class="btn-tally-pill" id="tallyLinesCycleBtn" onclick="cycleTallyLines()">Lines: 3</button>
+          <button type="button" class="btn-tally-pill" style="background:#0f172a; color:#ffffff; border-color:#334155;" onclick="openTodaysLogScreen()">↗ Full Log</button>
+        </div>
+      </div>
+      <div class="tally-dock-scroll" id="simpleTallyFeedList"></div>
     </div>
     <div class="menu-grid" id="menuGrid"></div>
   </div>
   <div class="bottom-bar">
-    <div class="bottom-info">
-      <span class="bottom-count">Order Total</span>
-      <span class="bottom-total" id="barTotal">₱0.00</span>
+    <div class="bottom-left-tools">
+      <button class="btn-bar-pill" onclick="toggleEarningsSheet()">📊</button>
+      <button class="btn-bar-pill" id="queueBarBtn" onclick="openQueueScreen()">🍳 <span id="queuePendingCount">0</span></button>
+      <span class="simple-tally-badge" id="simpleLastUndoWrap" onclick="undoLastSimpleSale()">↩ Undo Last</span>
     </div>
-    <div class="bottom-btns">
-      <button class="btn-quick-sale" id="barLogSaleBtn" onclick="quickLogSale()" disabled>⚡ Log Sale</button>
-      <button class="btn-view-cart" id="barCartBtn" onclick="openCartScreen()" disabled>
-        <span>🛒 Cart</span>
-        <span class="cart-badge" id="barCount">0</span>
-      </button>
+    <div class="bottom-mid-total">
+      <span class="bottom-mid-lbl">Order Total</span>
+      <span class="bottom-mid-val" id="barTotal">₱0.00</span>
+    </div>
+    <button class="btn-main-checkout" id="mainCartPayBtn" onclick="handleMainCheckoutBtn()" disabled>Cart (0)</button>
+  </div>
+  <!-- ==================== PART 10: SLIDE-UP CART & EARNINGS SHEETS ==================== -->
+  <div class="bottom-sheet-overlay" id="cartSheetOverlay" onclick="if(event.target===this) closeCartSheet()">
+    <div class="bottom-sheet-card">
+      <div class="sheet-head-row">
+        <h3>🛒 Current Order</h3>
+        <div style="display:flex; gap:6px;">
+          <button class="btn-sm-pill" style="background:#fee2e2; color:#dc2626; padding:6px 10px;" onclick="askClearOrder()">Clear</button>
+          <button class="btn-sm-pill" style="background:#e2e8f0; color:#0f172a; padding:6px 10px;" onclick="closeCartSheet()">↓ Hide</button>
+        </div>
+      </div>
+      <div class="cash-strip-wrap" id="cashStripRow">
+        <span class="cash-strip-lbl">Cash Received:</span>
+        <div class="cash-strip-scroll" id="cashBillsScroll"></div>
+      </div>
+      <div class="sheet-items-scroll" id="currentOrderList"></div>
+      <div class="sheet-total-footer">
+        <div class="sheet-total-row"><span>Total to Pay:</span><span id="orderTotal">₱0.00</span></div>
+        <div class="sheet-change-row" id="sheetChangeLine" style="display:none;">
+          <span id="sheetChangeLabel">Change:</span>
+          <span id="sheetChangeVal">₱0.00</span>
+        </div>
+      </div>
     </div>
   </div>
+  <div class="bottom-sheet-overlay" id="earningsSheetOverlay" onclick="if(event.target===this) closeEarningsSheet()">
+    <div class="bottom-sheet-card">
+      <div class="sheet-head-row">
+        <h3 id="stallBannerTitle">Today's Total Earnings</h3>
+        <button class="btn-sm-pill" style="background:#e2e8f0; color:#0f172a; padding:6px 10px;" onclick="closeEarningsSheet()">↓ Hide</button>
+      </div>
+      <div style="background:#0f172a; color:white; border-radius:16px; padding:14px; text-align:center; margin-bottom:10px;">
+        <div style="font-size:32px; font-weight:900; color:#4ade80;" id="dailyTotal">₱0.00</div>
+        <div style="font-size:12px; color:#cbd5e1; font-weight:700; margin-top:2px;" id="bannerOrderCount">0 orders logged today</div>
+        <div style="font-size:12px; color:#93c5fd; font-weight:700; margin-top:4px;" id="sheetCashBoxLine"></div>
+      </div>
+      <button class="btn" style="background:#2563eb; width:100%;" onclick="closeEarningsSheet(); openReportsScreen();">📊 Open Daily Summary & History</button>
+    </div>
+  </div>
+  <!-- ==================== PART 11: QUEUE & SUMMARY DRAWERS ==================== -->
   <div class="full-screen-drawer" id="queueScreen">
-        <div class="drawer-header">
+    <div class="drawer-header">
       <h2>🍳 Active Order Queue</h2>
       <div style="display:flex; gap:6px;">
-        <button class="btn-clear-top" onclick="clearQueueList()">Clear</button>
+        <button class="btn-clear-top" onclick="askClearCompletedQueue()">Clear</button>
         <button class="btn-close-drawer" onclick="closeQueueScreen()">← Back</button>
       </div>
     </div>
-    <div class="drawer-body">
+    <div class="drawer-body" id="queueDrawerBody">
       <div style="font-size:12px; color:var(--muted); margin-bottom:10px; font-weight:700;" id="queueTimerHint">Tap items to check off as cooked. Auto-completes after 30 mins.</div>
       <div id="queueListContainer"></div>
     </div>
@@ -267,7 +347,7 @@
       <h2>📊 Daily Summary</h2>
       <button class="btn-close-drawer" onclick="closeReportsScreen()">← Back</button>
     </div>
-        <div class="drawer-body">
+    <div class="drawer-body" id="reportsDrawerBody">
       <div class="card-box" style="text-align:center; background:#0f172a; color:white;">
         <div style="font-size:11px; text-transform:uppercase; color:#94a3b8; letter-spacing:1px;">Today's Total Earnings</div>
         <div style="font-size:32px; font-weight:900; color:#4ade80; margin-top:4px;" id="reportScreenTotal">₱0.00</div>
@@ -290,11 +370,11 @@
       </button>
       <div class="report-accordion-body" id="historyAccBody">
         <div id="pastHistoryContainer"></div>
-        <button class="btn btn-reset" style="margin-top:8px;" onclick="clearAllPastHistory()">Clear All History</button>
+        <button class="btn btn-reset" style="margin-top:8px;" onclick="askClearAllHistory()">Clear All History</button>
       </div>
       <div class="card-box" style="margin-top:14px;">
         <button class="btn btn-copy" onclick="copyReport()">📋 Copy Today's Summary</button>
-        <button class="btn btn-reset" onclick="resetDay()">Save & Start New Shift (Reset Today)</button>
+        <button class="btn btn-reset" onclick="askResetDay()">Save & Start New Shift (Reset Today)</button>
       </div>
     </div>
   </div>
@@ -303,7 +383,11 @@
       <h2>🧾 Today's Sales Log</h2>
       <button class="btn-close-drawer" onclick="closeTodaysLogScreen()">← Back</button>
     </div>
-    <div class="drawer-body">
+    <div class="drawer-body" id="todaysLogDrawerBody">
+      <div class="card-box" style="text-align:center; background:#0f172a; color:white;">
+        <div style="font-size:11px; text-transform:uppercase; color:#94a3b8; letter-spacing:1px;">Today's Total Earnings (<span id="todaysLogTopCount">0</span> orders)</div>
+        <div style="font-size:30px; font-weight:900; color:#4ade80; margin-top:4px;" id="todaysLogTopTotal">₱0.00</div>
+      </div>
       <div id="salesLog"></div>
     </div>
   </div>
@@ -317,21 +401,36 @@
       <button class="btn btn-copy" style="margin-top:0;" id="pastDetailCopyBtn">📋 Copy This Report</button>
     </div>
   </div>
+  <!-- ==================== PART 12: SETTINGS DRAWER HTML ==================== -->
   <div class="full-screen-drawer" id="settingsScreen">
     <div class="drawer-header">
       <h2>⚙️ Settings</h2>
       <button class="btn-close-drawer" onclick="closeSettingsScreen()">← Back</button>
     </div>
-    <div class="drawer-body">
+    <div class="drawer-body" id="settingsDrawerBody">
       <div class="card-box">
         <h3>🏪 Menu & Stock Actions</h3>
         <div class="settings-grid-2">
           <button class="btn" style="background:#f59e0b; padding:12px 8px; font-size:13px;" onclick="startEditMenuFromSettings()">✏️ Edit Menu</button>
-          <button class="btn" style="background:#dc2626; padding:12px 8px; font-size:13px;" onclick="startSoldOutFromSettings()">🚫 Mark Sold Out</button>
+          <button class="btn" style="background:#dc2626; padding:12px 8px; font-size:13px;" onclick="startSoldOutFromSettings()">🚫 Not Available</button>
         </div>
       </div>
       <div class="card-box">
-        <h3>🖼️ Display View Mode</h3>
+        <h3>⚡ Operating & Screen Mode</h3>
+        <label class="edit-field-label" style="margin-top:2px;">Checkout Mode</label>
+        <div class="settings-grid-2">
+          <button type="button" class="seg-btn" id="opModePosBtn" onclick="setOperatingMode('pos')">🧾 Standard POS</button>
+          <button type="button" class="seg-btn" id="opModeSimpleBtn" onclick="setOperatingMode('simple')">⚡ Simple Tally</button>
+        </div>
+        <label class="edit-field-label">Screen Layout</label>
+        <div class="settings-grid-3">
+          <button type="button" class="seg-btn" id="layoutPhoneBtn" onclick="setScreenLayout('phone')">📱 Phone</button>
+          <button type="button" class="seg-btn" id="layoutTabletBtn" onclick="setScreenLayout('tablet')">💻 Tablet/PC</button>
+          <button type="button" class="seg-btn" id="layoutAutoBtn" onclick="setScreenLayout('auto')">✨ Auto</button>
+        </div>
+      </div>
+      <div class="card-box">
+        <h3>🖼️ Display & Text Size</h3>
         <label class="edit-field-label" style="margin-top:2px;">Menu Cards</label>
         <div class="settings-grid-2">
           <button type="button" class="seg-btn" id="menuViewPhotoBtn" onclick="setMenuViewMode('photo')">🖼️ Photo + Text</button>
@@ -341,6 +440,12 @@
         <div class="settings-grid-2">
           <button type="button" class="seg-btn" id="popupViewPhotoBtn" onclick="setPopupViewMode('photo')">🖼️ Photo + Text</button>
           <button type="button" class="seg-btn" id="popupViewTextBtn" onclick="setPopupViewMode('text')">🔤 Text Only</button>
+        </div>
+        <label class="edit-field-label">Text Size</label>
+        <div class="settings-grid-3">
+          <button type="button" class="seg-btn" id="fontSizeNormal" onclick="setFontSizeMode('normal')">Normal</button>
+          <button type="button" class="seg-btn" id="fontSizeLarge" onclick="setFontSizeMode('large')">Large</button>
+          <button type="button" class="seg-btn" id="fontSizeXlarge" onclick="setFontSizeMode('xlarge')">Extra Large</button>
         </div>
       </div>
       <div class="card-box">
@@ -363,9 +468,9 @@
       </div>
       <div class="card-box">
         <h3>🏪 Stall Info & Cash Drawer</h3>
-        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-bottom:8px;" onclick="configureStallName()">✏️ Set Stall Name (<span id="stallNameDisplay">Not Set</span>)</button>
-        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-bottom:8px;" onclick="configureStartingCash()">💵 Starting Cash Box (<span id="startingCashDisplay">₱0.00</span>)</button>
-        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px;" onclick="configureQuickBills()">💰 Edit Quick Cash Bills</button>
+        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-bottom:8px;" onclick="openCustomPrompt('Set Stall Name', 'Stall / Business Name', 'text', appSettings.stallName, 'stallName')">✏️ Stall Name (<span id="stallNameDisplay">Not Set</span>)</button>
+        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-bottom:8px;" onclick="openCustomPrompt('Starting Cash Box', 'Starting Loose Change (₱)', 'decimal', appSettings.startingCash || '', 'startingCash')">💵 Starting Cash Box (<span id="startingCashDisplay">₱0.00</span>)</button>
+        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px;" onclick="openCustomPrompt('Quick Cash Bills', 'Bills separated by commas (leave blank to hide)', 'text', (appSettings.quickBills || new Array()).join(', '), 'quickBills')">💰 Edit Quick Cash Bills</button>
       </div>
       <div class="card-box">
         <h3>🔔 Sound & Vibration</h3>
@@ -381,29 +486,12 @@
       </div>
       <div class="card-box">
         <h3>🔄 Reset</h3>
-        <button class="btn" style="background:#64748b; width:100%; padding:13px; font-size:14px;" onclick="restoreDefaultMenu()">Reset Menu to Defaults</button>
-        <button class="btn btn-reset" onclick="clearAllPastHistory()">Clear All 7-Day History</button>
+        <button class="btn" style="background:#64748b; width:100%; padding:13px; font-size:14px;" onclick="askRestoreDefaultMenu()">Reset Menu to Defaults</button>
+        <button class="btn btn-reset" onclick="askClearAllHistory()">Clear All 7-Day History</button>
       </div>
     </div>
   </div>
-  <div class="full-screen-drawer" id="cartScreen">
-    <div class="drawer-header">
-      <h2>🛒 Customer Order</h2>
-      <button class="btn-clear-top" onclick="clearOrder()">Clear All</button>
-    </div>
-    <div class="drawer-body">
-      <div class="card-box">
-        <h3>Items in Cart</h3>
-        <div id="currentOrderList"><div style="color:#9ca3af; font-size:14px;">Your cart is empty</div></div>
-        <div class="order-total"><span>Total to Pay:</span><span id="orderTotal">₱0.00</span></div>
-      </div>
-    </div>
-    <div class="drawer-footer">
-      <button class="btn" style="background:#64748b; flex:0.65;" onclick="closeCartScreen()">← Back</button>
-      <button class="btn" style="background:#2563eb; flex:0.95;" id="cartCalcBtn" onclick="openCheckoutModal()">🧮 Calculator</button>
-      <button class="btn btn-log-standout" style="flex:1.4;" id="cartLogSaleBtn" onclick="quickLogSale()">⚡ Log Sale</button>
-    </div>
-  </div>
+  <!-- ==================== PART 13: ADD-ON & COMBO MODALS HTML ==================== -->
   <div class="modal-overlay" id="addonModal" onclick="if(event.target===this) closeAddonModal()">
     <div class="modal-box">
       <div class="modal-top-row">
@@ -430,13 +518,14 @@
         <div class="modal-title" id="soldOutComboTitle">Combo Stock</div>
         <div style="width:36px;"></div>
       </div>
-      <div class="modal-sub">Tap a pairing to toggle Sold Out, or mark the whole combo out:</div>
+      <div class="modal-sub">Tap a pairing to toggle Not Available, or mark the whole combo out:</div>
       <div id="soldOutComboList"></div>
       <div class="modal-actions">
-        <button class="btn" style="background:#dc2626;" id="toggleWholeComboSoldOutBtn" onclick="toggleWholeComboSoldOut()">Mark Whole Combo Sold Out</button>
+        <button class="btn" style="background:#dc2626;" id="toggleWholeComboSoldOutBtn" onclick="toggleWholeComboSoldOut()">Mark Whole Combo Not Available</button>
       </div>
     </div>
   </div>
+  <!-- ==================== PART 14: ITEM EDITOR & IMPORT MODALS HTML ==================== -->
   <div class="modal-overlay" id="itemEditorModal" onclick="if(event.target===this) closeItemEditorModal()">
     <div class="modal-box">
       <div class="modal-title" id="itemEditorModalTitle">Edit Item, Icon & Photo</div>
@@ -464,7 +553,7 @@
       </div>
       <label class="edit-field-label" id="itemEditorChoicesLabel" style="margin-top:14px;">Add-ons for This Item Only</label>
       <div id="itemSpecificAddonsList"></div>
-      <button class="btn" id="itemEditorAddChoiceBtn" style="background:#d97706; width:100%; padding:10px; font-size:13px; margin-top:4px;" onclick="addSpecificAddonToItem()">+ Add Add-on Option</button>
+      <button class="btn" id="itemEditorAddChoiceBtn" style="background:#d97706; width:100%; padding:10px; font-size:13px; margin-top:4px;" onclick="openAddonChoiceForm(-1)">+ Add Add-on Option</button>
       <input type="file" id="addonChoicePhotoInput" accept="image/*" style="display:none;" onchange="handleAddonChoicePhotoUpload(event)">
       <div class="modal-actions">
         <button class="btn" style="background:#94a3b8;" onclick="closeItemEditorModal()">Cancel</button>
@@ -483,29 +572,63 @@
       </div>
     </div>
   </div>
-  <div class="modal-overlay" id="checkoutModal" onclick="if(event.target===this) closeCheckoutModal()">
+  <!-- ==================== PART 15: CUSTOM DIALOG MODALS HTML ==================== -->
+  <div class="modal-overlay" id="namePriceModal" onclick="if(event.target===this) closeNamePriceModal()">
     <div class="modal-box">
-      <div class="modal-title">Cash & Change Calculator</div>
-      <div class="calc-row"><span>Order Total:</span><span id="modalOrderTotal">₱0.00</span></div>
-      <input type="number" inputmode="decimal" class="cash-input" id="cashInput" placeholder="Cash Received (₱)" oninput="updateChange()">
-      <div class="quick-bills" id="quickBillsGrid"></div>
-      <div class="change-display">
-        <span class="change-label">Change to Give:</span>
-        <span class="change-amount" id="modalChange">₱0.00</span>
-      </div>
+      <div class="modal-title" id="namePriceModalTitle">Add Item</div>
+      <label class="edit-field-label" id="namePriceNameLbl">Item Name</label>
+      <input type="text" class="edit-text-input" id="namePriceNameInput" placeholder="Enter name...">
+      <label class="edit-field-label" id="namePriceAmtLbl">Price (₱)</label>
+      <input type="number" inputmode="decimal" class="edit-text-input" id="namePriceAmtInput" placeholder="0.00">
       <div class="modal-actions">
-        <button class="btn" style="background:#94a3b8;" onclick="closeCheckoutModal()">Cancel</button>
-        <button class="btn btn-log-standout" onclick="confirmSale()">⚡ Log Sale</button>
+        <button class="btn" style="background:#94a3b8;" onclick="closeNamePriceModal()">Cancel</button>
+        <button class="btn" style="background:#16a34a;" id="namePriceSaveBtn" onclick="submitNamePriceModal()">Save</button>
       </div>
     </div>
   </div>
-    <script>
+  <div class="modal-overlay" id="addComboModal" onclick="if(event.target===this) closeAddComboModal()">
+    <div class="modal-box">
+      <div class="modal-title">Create New Combo</div>
+      <label class="edit-field-label">Main Combo Item (e.g., Juice)</label>
+      <input type="text" class="edit-text-input" id="newComboMainInput" placeholder="Enter main item...">
+      <label class="edit-field-label" style="margin-top:12px;">Add Paired Items & Full Combo Prices</label>
+      <div style="display:flex; gap:6px; align-items:center;">
+        <input type="text" class="edit-text-input" id="newComboPairName" placeholder="Pairing (e.g., Fries)" style="flex:1.4;">
+        <input type="number" inputmode="decimal" class="edit-text-input" id="newComboPairPrice" placeholder="₱ Price" style="flex:0.9;">
+        <button type="button" class="btn" style="background:#9333ea; padding:10px 12px; flex:0.6;" onclick="appendNewComboPair()">+ Add</button>
+      </div>
+      <div id="newComboPairsPreview" style="margin-top:8px;"></div>
+      <div class="modal-actions">
+        <button class="btn" style="background:#94a3b8;" onclick="closeAddComboModal()">Cancel</button>
+        <button class="btn" style="background:#16a34a;" onclick="saveNewComboModal()">Save Combo</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-overlay" id="singlePromptModal" onclick="if(event.target===this) closeSinglePrompt()">
+    <div class="modal-box">
+      <div class="modal-title" id="singlePromptTitle">Enter Value</div>
+      <label class="edit-field-label" id="singlePromptLabel">Value</label>
+      <input type="text" class="edit-text-input" id="singlePromptInput">
+      <div class="modal-actions">
+        <button class="btn" style="background:#94a3b8;" onclick="closeSinglePrompt()">Cancel</button>
+        <button class="btn" style="background:#2563eb;" onclick="submitSinglePrompt()">Save</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-overlay" id="confirmBoxModal" onclick="if(event.target===this) closeConfirmBox()">
+    <div class="modal-box">
+      <div class="modal-title" id="confirmBoxTitle">Confirm Action</div>
+      <div class="modal-sub" id="confirmBoxMessage" style="margin-top:8px;">Are you sure?</div>
+      <div class="modal-actions">
+        <button class="btn" style="background:#94a3b8;" onclick="closeConfirmBox()">Cancel</button>
+        <button class="btn" style="background:#dc2626;" id="confirmBoxYesBtn" onclick="runConfirmedAction()">Yes, Confirm</button>
+      </div>
+    </div>
+  </div>
+  <!-- ==================== PART 16: SCRIPT START ==================== -->
+  <script>
     const QUICK_EMOJIS = new Array('🍔','🥪','🍟','🌭','🥟','🌯','🍜','🍢','🧀','🍳','🍗','🥤','🧋','🍽️');
-
-// ========================================================
-// START OF DEFAULT MENU (PASTE YOUR BACKUP CODE BELOW)
-// ========================================================
-
+    // ==================== PART 17: DEFAULT FACTORY MENU ====================
     const DEFAULT_MENU = new Array(
       {
         title: "Snacks & Street Food",
@@ -545,12 +668,7 @@
         )
       }
     );
-
-
-// ========================================================
-// END OF DEFAULT MENU (DO NOT DELETE BELOW THIS LINE)
-// ========================================================
-
+    // ==================== PART 18: STATE VARIABLES ====================
     let menuData = JSON.parse(localStorage.getItem('miniPosMenuPH_v4')) || JSON.parse(JSON.stringify(DEFAULT_MENU));
     let currentOrder = new Array();
     let salesHistory = JSON.parse(localStorage.getItem('miniPosSalesPH')) || new Array();
@@ -562,6 +680,10 @@
       theme: 'light',
       menuView: 'photo',
       popupView: 'photo',
+      fontSize: 'normal',
+      opMode: 'pos',
+      screenLayout: 'auto',
+      tallyLines: 3,
       queueMins: 30,
       stallName: '',
       startingCash: 0,
@@ -577,36 +699,35 @@
     let selectedAddonIndexes = new Array();
     let comboQtyMap = {};
     let pendingModalQty = 1;
+    let selectedCashBill = 0;
     let editingItemIdx = null;
     let soldOutComboItemIdx = null;
     let tempItemAddons = new Array();
     let tempItemPhoto = "";
     let tempItemIsCombo = false;
+    let editingAddonChoiceIdx = -1;
+    let editingAddonPhotoIdx = null;
+    let newComboTempPairs = new Array();
+    let namePriceMode = '';
+    let singlePromptMode = '';
+    let pendingConfirmFn = null;
     let toastTimer = null;
     let longPressTimer = null;
     let longPressTriggered = false;
-   function saveSettings() {
-      localStorage.setItem('miniPosSettingsPH', JSON.stringify(appSettings));
-    }
 
+    function saveSettings() { localStorage.setItem('miniPosSettingsPH', JSON.stringify(appSettings)); }
     function getTodayDateKey() {
       const d = new Date();
       return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
     }
-
     function parseDateKeyLocal(dateKey) {
       const p = dateKey.split('-');
-      const yr = parseInt(p.at(0), 10);
-      const mo = parseInt(p.at(1), 10) - 1;
-      const dy = parseInt(p.at(2), 10);
-      return new Date(yr, mo, dy);
+      return new Date(parseInt(p.at(0), 10), parseInt(p.at(1), 10) - 1, parseInt(p.at(2), 10));
     }
-
     function formatDisplayDate(dateKey) {
-      const dt = parseDateKeyLocal(dateKey);
-      return dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      return parseDateKeyLocal(dateKey).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     }
-
+    // ==================== PART 19: SETTINGS & ROLLOVER ====================
     function triggerFeedback(isSale) {
       if (appSettings.vibeOn && navigator.vibrate) {
         navigator.vibrate(isSale ? new Array(40, 30, 40) : 25);
@@ -631,23 +752,38 @@
 
     function applyAllSettingsUI() {
       document.body.classList.remove('theme-dark', 'theme-cream', 'theme-mint');
-      if (appSettings.theme && appSettings.theme !== 'light') {
-        document.body.classList.add('theme-' + appSettings.theme);
-      }
+      if (appSettings.theme && appSettings.theme !== 'light') document.body.classList.add('theme-' + appSettings.theme);
+
       document.body.classList.toggle('menu-text-only', appSettings.menuView === 'text');
       document.getElementById('menuViewPhotoBtn').classList.toggle('active', appSettings.menuView === 'photo');
       document.getElementById('menuViewTextBtn').classList.toggle('active', appSettings.menuView === 'text');
       document.getElementById('popupViewPhotoBtn').classList.toggle('active', appSettings.popupView === 'photo');
       document.getElementById('popupViewTextBtn').classList.toggle('active', appSettings.popupView === 'text');
 
+      document.body.classList.toggle('simple-tally', appSettings.opMode === 'simple');
+      document.getElementById('opModePosBtn').classList.toggle('active', appSettings.opMode !== 'simple');
+      document.getElementById('opModeSimpleBtn').classList.toggle('active', appSettings.opMode === 'simple');
+
+      document.body.classList.remove('layout-tablet', 'layout-auto');
+      if (appSettings.screenLayout === 'tablet') document.body.classList.add('layout-tablet');
+      if (!appSettings.screenLayout || appSettings.screenLayout === 'auto') document.body.classList.add('layout-auto');
+      document.getElementById('layoutPhoneBtn').classList.toggle('active', appSettings.screenLayout === 'phone');
+      document.getElementById('layoutTabletBtn').classList.toggle('active', appSettings.screenLayout === 'tablet');
+      document.getElementById('layoutAutoBtn').classList.toggle('active', !appSettings.screenLayout || appSettings.screenLayout === 'auto');
+
+      document.body.classList.remove('font-large', 'font-xlarge');
+      if (appSettings.fontSize === 'large') document.body.classList.add('font-large');
+      if (appSettings.fontSize === 'xlarge') document.body.classList.add('font-xlarge');
+      document.getElementById('fontSizeNormal').classList.toggle('active', !appSettings.fontSize || appSettings.fontSize === 'normal');
+      document.getElementById('fontSizeLarge').classList.toggle('active', appSettings.fontSize === 'large');
+      document.getElementById('fontSizeXlarge').classList.toggle('active', appSettings.fontSize === 'xlarge');
+
       new Array(5, 10, 15, 30).forEach(m => {
         const el = document.getElementById('qTime' + m);
         if (el) el.classList.toggle('active', appSettings.queueMins === m);
       });
       document.getElementById('queueTimerHint').innerText = 'Tap items to check off as cooked. Auto-completes after ' + appSettings.queueMins + ' mins.';
-
-      const titleEl = document.getElementById('stallBannerTitle');
-      titleEl.innerText = appSettings.stallName ? appSettings.stallName + " • Today's Earnings" : "Today's Total Earnings";
+      document.getElementById('stallBannerTitle').innerText = appSettings.stallName ? appSettings.stallName + " • Today's Earnings" : "Today's Total Earnings";
       document.getElementById('stallNameDisplay').innerText = appSettings.stallName || 'Not Set';
       document.getElementById('startingCashDisplay').innerText = '₱' + (appSettings.startingCash || 0).toFixed(2);
       document.getElementById('soundToggleBtn').innerText = appSettings.soundOn ? '🔊 Sound: ON' : '🔇 Sound: OFF';
@@ -657,34 +793,15 @@
     function setAppTheme(t) { appSettings.theme = t; saveSettings(); applyAllSettingsUI(); }
     function setMenuViewMode(m) { appSettings.menuView = m; saveSettings(); applyAllSettingsUI(); }
     function setPopupViewMode(m) { appSettings.popupView = m; saveSettings(); applyAllSettingsUI(); }
+    function setFontSizeMode(sz) { appSettings.fontSize = sz; saveSettings(); applyAllSettingsUI(); }
+    function setScreenLayout(ly) { appSettings.screenLayout = ly; saveSettings(); applyAllSettingsUI(); }
+    function setOperatingMode(md) {
+      appSettings.opMode = md; saveSettings(); applyAllSettingsUI();
+      closeCartSheet(); renderMenu();
+    }
     function setQueueTimer(mins) { appSettings.queueMins = mins; saveSettings(); applyAllSettingsUI(); renderQueue(); }
     function toggleSoundSetting() { appSettings.soundOn = !appSettings.soundOn; saveSettings(); applyAllSettingsUI(); triggerFeedback(false); }
     function toggleVibeSetting() { appSettings.vibeOn = !appSettings.vibeOn; saveSettings(); applyAllSettingsUI(); triggerFeedback(false); }
-
-    function configureStallName() {
-      const val = prompt("Enter your stall or business name (leave blank to clear):", "");
-      if (val === null) return;
-      appSettings.stallName = val.trim();
-      saveSettings(); applyAllSettingsUI();
-    }
-
-    function configureStartingCash() {
-      const val = prompt("Enter starting cash/change in drawer today (₱):", "");
-      if (val === null) return;
-      const num = parseFloat(val);
-      appSettings.startingCash = isNaN(num) || num < 0 ? 0 : num;
-      saveSettings(); applyAllSettingsUI(); renderHistory();
-    }
-
-    function configureQuickBills() {
-      const val = prompt("Enter 5 quick cash bill amounts separated by commas (e.g., 20, 50, 100, 500, 1000):", "");
-      if (!val || val.trim() === '') return;
-      const nums = val.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n) && n > 0);
-      if (nums.length === 0) return alert("Please enter valid numbers.");
-      appSettings.quickBills = nums.slice(0, 5);
-      saveSettings();
-      alert("Quick cash bills updated!");
-    }
 
     function archiveSalesToPastHistory(salesList, dateKey, shiftLabel) {
       if (!salesList || salesList.length === 0) return;
@@ -692,11 +809,7 @@
       const counts = {};
       salesList.forEach(s => {
         if (s.items) {
-          Object.entries(s.items).forEach(pair => {
-            const n = pair.at(0);
-            const q = pair.at(1);
-            counts[n] = (counts[n] || 0) + q;
-          });
+          Object.entries(s.items).forEach(pair => { counts[pair.at(0)] = (counts[pair.at(0)] || 0) + pair.at(1); });
         }
       });
       const sortedItems = Object.entries(counts).sort((a, b) => b.at(1) - a.at(1));
@@ -723,70 +836,178 @@
       if (savedDayKey !== todayKey) {
         if (salesHistory.length > 0) {
           archiveSalesToPastHistory(salesHistory, savedDayKey, 'Auto-Saved');
-          salesHistory = [];
+          salesHistory = new Array();
           localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
         }
-        orderQueue = [];
+        orderQueue = new Array();
         localStorage.setItem('miniPosQueuePH', JSON.stringify(orderQueue));
         savedDayKey = todayKey;
         localStorage.setItem('miniPosCurrentDatePH', todayKey);
       }
       pruneOldHistory();
     }
-    function saveMenuData() {
-      try {
-        localStorage.setItem('miniPosMenuPH_v4', JSON.stringify(menuData));
-      } catch (e) {
-        alert("Storage is full! Try removing a few custom photos or using emojis instead.");
+    // ==================== PART 20: CUSTOM MODAL CONTROLLERS ====================
+    function openConfirmBox(title, msg, yesLabel, onConfirm) {
+      document.getElementById('confirmBoxTitle').innerText = title;
+      document.getElementById('confirmBoxMessage').innerText = msg;
+      document.getElementById('confirmBoxYesBtn').innerText = yesLabel || 'Confirm';
+      pendingConfirmFn = onConfirm;
+      document.getElementById('confirmBoxModal').classList.add('open');
+    }
+    function closeConfirmBox() { document.getElementById('confirmBoxModal').classList.remove('open'); pendingConfirmFn = null; }
+    function runConfirmedAction() {
+      const fn = pendingConfirmFn;
+      closeConfirmBox();
+      if (fn) fn();
+    }
+
+    function openCustomPrompt(title, label, inputType, defaultVal, mode) {
+      singlePromptMode = mode;
+      document.getElementById('singlePromptTitle').innerText = title;
+      document.getElementById('singlePromptLabel').innerText = label;
+      const inp = document.getElementById('singlePromptInput');
+      inp.type = inputType === 'decimal' ? 'number' : 'text';
+      if (inputType === 'decimal') inp.setAttribute('inputmode', 'decimal'); else inp.removeAttribute('inputmode');
+      inp.value = defaultVal !== undefined && defaultVal !== null ? defaultVal : '';
+      document.getElementById('singlePromptModal').classList.add('open');
+      setTimeout(() => inp.focus(), 80);
+    }
+    function closeSinglePrompt() { document.getElementById('singlePromptModal').classList.remove('open'); }
+    function submitSinglePrompt() {
+      const raw = document.getElementById('singlePromptInput').value.trim();
+      closeSinglePrompt();
+      if (singlePromptMode === 'addCategory') {
+        if (!raw) return;
+        menuData.push({ title: raw, items: new Array() });
+        activeCatIndex = menuData.length - 1;
+        saveMenuData(); renderMenu();
+      } else if (singlePromptMode === 'renameCategory') {
+        if (!raw) return;
+        menuData.at(activeCatIndex).title = raw;
+        saveMenuData(); renderMenu();
+      } else if (singlePromptMode === 'stallName') {
+        appSettings.stallName = raw;
+        saveSettings(); applyAllSettingsUI();
+      } else if (singlePromptMode === 'startingCash') {
+        const num = parseFloat(raw);
+        appSettings.startingCash = isNaN(num) || num < 0 ? 0 : num;
+        saveSettings(); applyAllSettingsUI(); renderHistory();
+      } else if (singlePromptMode === 'quickBills') {
+        if (!raw) { appSettings.quickBills = new Array(); }
+        else { appSettings.quickBills = raw.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n) && n > 0); }
+        saveSettings(); renderCartCashStrip();
+        showToast('✓ Quick Bills Updated');
+      } else if (singlePromptMode === 'customCash') {
+        const num = parseFloat(raw);
+        selectedCashBill = (!isNaN(num) && num > 0) ? num : 0;
+        renderOrder();
       }
+    }
+
+    function openCustomOrderModal() {
+      namePriceMode = 'customOrder';
+      document.getElementById('namePriceModalTitle').innerText = '+ Custom Order';
+      document.getElementById('namePriceNameLbl').innerText = 'Item Name';
+      document.getElementById('namePriceAmtLbl').innerText = 'Price (₱)';
+      document.getElementById('namePriceSaveBtn').innerText = appSettings.opMode === 'simple' ? 'Log Sale' : 'Add to Order';
+      document.getElementById('namePriceNameInput').value = '';
+      document.getElementById('namePriceAmtInput').value = '';
+      document.getElementById('namePriceModal').classList.add('open');
+      setTimeout(() => document.getElementById('namePriceNameInput').focus(), 80);
+    }
+
+    function openAddFoodModal() {
+      namePriceMode = 'addFood';
+      document.getElementById('namePriceModalTitle').innerText = '+ Add Food Item';
+      document.getElementById('namePriceNameLbl').innerText = 'Food Name';
+      document.getElementById('namePriceAmtLbl').innerText = 'Base Price (₱)';
+      document.getElementById('namePriceSaveBtn').innerText = 'Save Food';
+      document.getElementById('namePriceNameInput').value = '';
+      document.getElementById('namePriceAmtInput').value = '';
+      document.getElementById('namePriceModal').classList.add('open');
+      setTimeout(() => document.getElementById('namePriceNameInput').focus(), 80);
+    }
+
+    function openAddonChoiceForm(idx) {
+      editingAddonChoiceIdx = idx;
+      namePriceMode = 'addonChoice';
+      const existing = idx >= 0 ? tempItemAddons.at(idx) : null;
+      document.getElementById('namePriceModalTitle').innerText = tempItemIsCombo
+        ? (existing ? 'Edit Combo Pairing' : '+ Add Combo Pairing')
+        : (existing ? 'Edit Add-on Option' : '+ Add Add-on Option');
+      document.getElementById('namePriceNameLbl').innerText = tempItemIsCombo ? 'Paired Item Name' : 'Add-on Name';
+      document.getElementById('namePriceAmtLbl').innerText = tempItemIsCombo ? 'Full Combo Price (₱)' : 'Extra Price (₱)';
+      document.getElementById('namePriceSaveBtn').innerText = 'Save';
+      document.getElementById('namePriceNameInput').value = existing ? existing.name : '';
+      document.getElementById('namePriceAmtInput').value = existing ? existing.price : '';
+      document.getElementById('namePriceModal').classList.add('open');
+      setTimeout(() => document.getElementById('namePriceNameInput').focus(), 80);
+    }
+
+    function closeNamePriceModal() { document.getElementById('namePriceModal').classList.remove('open'); }
+    function submitNamePriceModal() {
+      const name = document.getElementById('namePriceNameInput').value.trim();
+      const price = parseFloat(document.getElementById('namePriceAmtInput').value);
+      if (!name) return showToast('Enter a name first');
+      if (isNaN(price) || price < 0) return showToast('Enter a valid price');
+      closeNamePriceModal();
+      if (namePriceMode === 'customOrder') {
+        if (appSettings.opMode === 'simple') logSingleSimpleSale(name, price);
+        else addItem({ name: name, price: price }, 1);
+      } else if (namePriceMode === 'addFood') {
+        menuData.at(activeCatIndex).items.push({ name: name, price: price, icon: "🍽️", photo: "", isCombo: false, soldOut: false, addons: new Array() });
+        saveMenuData(); renderMenu();
+      } else if (namePriceMode === 'addonChoice') {
+        if (editingAddonChoiceIdx >= 0) {
+          tempItemAddons.at(editingAddonChoiceIdx).name = name;
+          tempItemAddons.at(editingAddonChoiceIdx).price = price;
+        } else {
+          tempItemAddons.push({ name: name, price: price, photo: '', soldOut: false });
+        }
+        renderItemSpecificAddonsList();
+      }
+    }
+    // ==================== PART 21: MENU RENDERING & NOT AVAILABLE ====================
+    function saveMenuData() {
+      try { localStorage.setItem('miniPosMenuPH_v4', JSON.stringify(menuData)); }
+      catch (e) { showToast('Storage full! Remove some photos'); }
     }
 
     function getItemCartQty(itemName) {
       let count = 0;
-      currentOrder.forEach(orderItem => {
-        if (orderItem.name === itemName || orderItem.name.startsWith(itemName + ' + ')) {
-          count++;
-        }
-      });
+      currentOrder.forEach(o => { if (o.name === itemName || o.name.startsWith(itemName + ' + ')) count++; });
       return count;
     }
 
     function removeLastMatchingItem(event, itemName) {
       event.stopPropagation();
       for (let i = currentOrder.length - 1; i >= 0; i--) {
-        if (currentOrder[i].name === itemName || currentOrder[i].name.startsWith(itemName + ' + ')) {
+        if (currentOrder.at(i).name === itemName || currentOrder.at(i).name.startsWith(itemName + ' + ')) {
           currentOrder.splice(i, 1);
-          renderOrder();
-          renderMenu();
-          triggerFeedback(false);
-          showToast('− Removed');
+          renderOrder(); renderMenu(); triggerFeedback(false); showToast('− Removed');
           return;
         }
       }
     }
 
-    function clearSoldOutBadge(event, itemIndex) {
+    function clearSoldOutBadge(event, catIdx, itemIndex) {
       event.stopPropagation();
-      const item = menuData[activeCatIndex].items[itemIndex];
+      const item = menuData.at(catIdx).items.at(itemIndex);
       item.soldOut = false;
       if (item.addons) item.addons.forEach(a => a.soldOut = false);
-      saveMenuData();
-      renderMenu();
-      showToast('✓ Back in Stock');
+      saveMenuData(); renderMenu(); showToast('✓ Available Again');
     }
 
-    function triggerSoldOutAction(itemIndex) {
-      const item = menuData[activeCatIndex].items[itemIndex];
+    function triggerSoldOutAction(catIdx, itemIndex) {
+      const item = menuData.at(catIdx).items.at(itemIndex);
       const isCombo = !!(item.isCombo || item.isMixMatch);
       if (isCombo && item.addons && item.addons.length > 0) {
-        openSoldOutComboModal(itemIndex);
+        openSoldOutComboModal(catIdx, itemIndex);
         return;
       }
       item.soldOut = !item.soldOut;
-      saveMenuData();
-      renderMenu();
-      triggerFeedback(false);
-      showToast(item.soldOut ? '🚫 Marked Sold Out' : '✓ Back in Stock');
+      saveMenuData(); renderMenu(); triggerFeedback(false);
+      showToast(item.soldOut ? '🚫 Marked Not Available' : '✓ Available Again');
     }
 
     function renderMenu() {
@@ -803,16 +1024,36 @@
         wrap.innerHTML =
           '<button type="button" class="cat-inline-ctrl" onclick="moveActiveCategory(-1)">◀</button>' +
           '<button type="button" class="cat-tab-btn" onclick="selectCategoryTab(' + idx + ')">' + cat.title + '</button>' +
-          '<button type="button" class="cat-inline-ctrl" onclick="renameActiveCategory()">✎</button>' +
+          '<button type="button" class="cat-inline-ctrl" onclick="openCustomPrompt(\'Rename Category\', \'Category Name\', \'text\', menuData.at(activeCatIndex).title, \'renameCategory\')">✎</button>' +
           '<button type="button" class="cat-inline-ctrl" onclick="moveActiveCategory(1)">▶</button>' +
-          '<button type="button" class="cat-inline-ctrl" style="background:#dc2626;" onclick="deleteActiveCategory()">×</button>';
+          '<button type="button" class="cat-inline-ctrl" style="background:#dc2626;" onclick="askDeleteActiveCategory()">×</button>';
         tabsEl.appendChild(wrap);
       });
 
-      const currentCat = menuData[activeCatIndex];
-      if (!currentCat) return;
+      const customScrollBtn = document.createElement('button');
+      customScrollBtn.type = 'button';
+      customScrollBtn.className = 'btn-custom-scroll';
+      customScrollBtn.innerText = '+ Custom';
+      customScrollBtn.onclick = openCustomOrderModal;
+      tabsEl.appendChild(customScrollBtn);
 
-      currentCat.items.forEach((item, itemIndex) => {
+      const isSimple = appSettings.opMode === 'simple';
+      const renderList = new Array();
+      if (isSimple) {
+        menuData.forEach((cat, cIdx) => {
+          (cat.items || new Array()).forEach((it, iIdx) => renderList.push({ item: it, catIdx: cIdx, itemIndex: iIdx }));
+        });
+      } else {
+        const currentCat = menuData.at(activeCatIndex);
+        if (currentCat) {
+          (currentCat.items || new Array()).forEach((it, iIdx) => renderList.push({ item: it, catIdx: activeCatIndex, itemIndex: iIdx }));
+        }
+      }
+
+      renderList.forEach(entry => {
+        const item = entry.item;
+        const catIdx = entry.catIdx;
+        const itemIndex = entry.itemIndex;
         const isCombo = !!(item.isCombo || item.isMixMatch);
         const isSoldOut = !!item.soldOut;
         const qtyInCart = getItemCartQty(item.name);
@@ -829,10 +1070,10 @@
         const card = document.createElement('div');
         card.className = 'menu-card-item' + (isSoldOut ? ' is-soldout' : '');
         card.innerHTML =
-          '<span class="delete-badge" onclick="deleteMenuItem(event, ' + itemIndex + ')">×</span>' +
-          (isSoldOut && !isEditMode ? '<button type="button" class="soldout-clear-btn" onclick="clearSoldOutBadge(event, ' + itemIndex + ')" title="Restore Stock">×</button>' : '') +
+          '<span class="delete-badge" onclick="askDeleteMenuItem(event, ' + catIdx + ', ' + itemIndex + ')">×</span>' +
+          (isSoldOut && !isEditMode ? '<button type="button" class="soldout-clear-btn" onclick="clearSoldOutBadge(event, ' + catIdx + ', ' + itemIndex + ')" title="Restore">×</button>' : '') +
+          (isSoldOut ? '<div class="soldout-overlay-tag">🚫 NOT AVAILABLE</div>' : '') +
           '<div class="card-top-body">' +
-            (isSoldOut ? '<div class="soldout-overlay-tag">🚫 SOLD OUT</div>' : '') +
             '<div class="text-only-controls">' +
               (qtyInCart > 0 ? '<button type="button" class="card-minus-btn" onclick="removeLastMatchingItem(event, \'' + safeName + '\')">−</button>' : '<span></span>') +
               (qtyInCart > 0 ? '<span class="in-cart-pill">' + qtyInCart + ' in cart</span>' : '') +
@@ -842,16 +1083,16 @@
               (qtyInCart > 0 ? '<span class="in-cart-pill">' + qtyInCart + ' in cart</span>' : '') +
               visualHtml +
             '</div>' +
-            (isCombo ? '<span class="combo-badge">Combo</span>' : '') +
+            (isCombo && !isSimple ? '<span class="combo-badge">Combo</span>' : '') +
             '<div class="food-name">' + item.name + '</div>' +
           '</div>' +
-          '<div class="food-footer-bar' + (isCombo ? ' combo-footer' : '') + '" onclick="handleFooterTap(event, ' + itemIndex + ')">' +
+          '<div class="food-footer-bar' + (isCombo ? ' combo-footer' : '') + '" onclick="handleFooterTap(event, ' + catIdx + ', ' + itemIndex + ')">' +
             leftFooterHtml +
             '<span class="btn-options-pill' + (isCombo ? ' combo-pill' : '') + '">' + pillLabel + '</span>' +
           '</div>' +
           '<div class="reorder-row">' +
-            '<button class="move-btn" onclick="moveItem(event, ' + itemIndex + ', -1)">◀</button>' +
-            '<button class="move-btn" onclick="moveItem(event, ' + itemIndex + ', 1)">▶</button>' +
+            '<button class="move-btn" onclick="moveItem(event, ' + catIdx + ', ' + itemIndex + ', -1)">◀</button>' +
+            '<button class="move-btn" onclick="moveItem(event, ' + catIdx + ', ' + itemIndex + ', 1)">▶</button>' +
           '</div>';
 
         card.addEventListener('pointerdown', () => {
@@ -859,7 +1100,7 @@
           if (!isEditMode && !isSoldOutMode) {
             longPressTimer = setTimeout(() => {
               longPressTriggered = true;
-              triggerSoldOutAction(itemIndex);
+              triggerSoldOutAction(catIdx, itemIndex);
             }, 550);
           }
         });
@@ -869,13 +1110,10 @@
 
         card.onclick = () => {
           if (longPressTriggered) { longPressTriggered = false; return; }
-          if (isEditMode) {
-            openItemEditorModal(itemIndex);
-          } else if (isSoldOutMode) {
-            triggerSoldOutAction(itemIndex);
-          } else {
-            handleItemTap(item, card);
-          }
+          if (isEditMode) { openItemEditorModal(catIdx, itemIndex); return; }
+          if (isSoldOutMode) { triggerSoldOutAction(catIdx, itemIndex); return; }
+          if (isSoldOut) return;
+          handleItemTap(item, card);
         };
         gridEl.appendChild(card);
       });
@@ -886,7 +1124,8 @@
       renderMenu();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-        function findVisualForChoice(choiceObj) {
+    // ==================== PART 22: POPUP OPEN & VISUAL MATCH ====================
+    function findVisualForChoice(choiceObj) {
       const choiceName = typeof choiceObj === 'string' ? choiceObj : choiceObj.name;
       if (choiceObj && choiceObj.photo) {
         return { photo: choiceObj.photo, icon: choiceObj.icon || '🍽️' };
@@ -905,12 +1144,15 @@
     }
 
     function handleItemTap(item, cardEl) {
-      if (item.soldOut) {
-        showToast('🚫 Item is Sold Out');
-        return;
-      }
+      if (item.soldOut) return;
+      const isSimple = appSettings.opMode === 'simple';
       if (item.isCombo || item.isMixMatch) {
         openOptionsModal(item);
+        return;
+      }
+      if (isSimple) {
+        logSingleSimpleSale(item.name, item.price);
+        if (cardEl) { cardEl.classList.add('just-added'); setTimeout(() => cardEl.classList.remove('just-added'), 200); }
         return;
       }
       addItem({ name: item.name, price: item.price }, 1);
@@ -920,35 +1162,28 @@
       }
     }
 
-    function handleFooterTap(event, itemIndex) {
+    function handleFooterTap(event, catIdx, itemIndex) {
       event.stopPropagation();
-      if (isEditMode) {
-        openItemEditorModal(itemIndex);
-        return;
-      }
-      if (isSoldOutMode) {
-        triggerSoldOutAction(itemIndex);
-        return;
-      }
-      const item = menuData[activeCatIndex].items[itemIndex];
-      if (item.soldOut) {
-        showToast('🚫 Item is Sold Out');
-        return;
-      }
+      if (isEditMode) { openItemEditorModal(catIdx, itemIndex); return; }
+      if (isSoldOutMode) { triggerSoldOutAction(catIdx, itemIndex); return; }
+      const item = menuData.at(catIdx).items.at(itemIndex);
+      if (item.soldOut) return;
       openOptionsModal(item);
     }
 
     function openOptionsModal(item) {
       pendingItem = item;
-      selectedAddonIndexes = [];
+      selectedAddonIndexes = new Array();
       comboQtyMap = {};
       pendingModalQty = 1;
       const isCombo = !!(item.isCombo || item.isMixMatch);
+      const isSimple = appSettings.opMode === 'simple';
       document.getElementById('addonModalItemName').innerText = item.name;
       document.getElementById('addonModalBasePrice').innerText = isCombo
-        ? 'Tap item(s) below to pair with ' + item.name
+        ? (isSimple ? 'Tap a pairing below to log 1 sale' : 'Tap item(s) below to pair with ' + item.name)
         : 'Base Price: ₱' + item.price.toFixed(2);
       document.getElementById('regularQtyStepper').style.display = isCombo ? 'none' : 'flex';
+      document.getElementById('addonModalFooter').style.display = (isCombo && isSimple) ? 'none' : 'flex';
       document.getElementById('modalQtyValue').innerText = '1';
       renderAddonChoices();
       document.getElementById('addonModal').classList.add('open');
@@ -962,23 +1197,22 @@
 
     function changeComboChoiceQty(idx, delta, event) {
       if (event) event.stopPropagation();
-      const choice = pendingItem.addons[idx];
-      if (choice && choice.soldOut && delta > 0) {
-        showToast('🚫 Pairing is Sold Out');
+      const choice = pendingItem.addons.at(idx);
+      if (!choice || choice.soldOut) return;
+      if (appSettings.opMode === 'simple') {
+        logSingleSimpleSale(pendingItem.name + ' + ' + choice.name, choice.price);
+        closeAddonModal();
         return;
       }
       const nextVal = (comboQtyMap[idx] || 0) + delta;
-      if (nextVal <= 0) {
-        delete comboQtyMap[idx];
-      } else {
-        comboQtyMap[idx] = nextVal;
-      }
+      if (nextVal <= 0) delete comboQtyMap[idx]; else comboQtyMap[idx] = nextVal;
       renderAddonChoices();
     }
+    // ==================== PART 23: POPUP GRID & COMBO STOCK ====================
     function renderAddonChoices() {
       const container = document.getElementById('addonChoicesContainer');
       const confirmBtn = document.getElementById('confirmAddonBtn');
-      const itemAddons = pendingItem.addons || [];
+      const itemAddons = pendingItem.addons || new Array();
       const isCombo = !!(pendingItem.isCombo || pendingItem.isMixMatch);
       const usePhotoGrid = appSettings.popupView === 'photo';
 
@@ -997,7 +1231,7 @@
                    (q > 0 ? '<button type="button" class="combo-minus-btn" style="position:absolute; top:6px; left:6px;" onclick="changeComboChoiceQty(' + idx + ', -1, event)">−</button>' : '') +
                    visHtml +
                    '<div style="font-weight:800; font-size:13px; line-height:1.2;">' + choice.name + '</div>' +
-                   '<div style="font-weight:900; font-size:13px; color:#6b21a8; margin-top:4px;">' + (choice.soldOut ? 'SOLD OUT' : '₱' + choice.price.toFixed(2)) + '</div>' +
+                   '<div style="font-weight:900; font-size:13px; color:#6b21a8; margin-top:4px;">' + (choice.soldOut ? 'NOT AVAILABLE' : '₱' + choice.price.toFixed(2)) + '</div>' +
                  '</div>';
           }).join('') + '</div>';
         } else {
@@ -1009,24 +1243,18 @@
                      '<span>' + choice.name + '</span>' +
                    '</div>' +
                    '<div class="combo-row-right">' +
-                     '<span>' + (choice.soldOut ? 'SOLD OUT' : '₱' + choice.price.toFixed(2)) + '</span>' +
+                     '<span>' + (choice.soldOut ? 'NOT AVAILABLE' : '₱' + choice.price.toFixed(2)) + '</span>' +
                      (q > 0 ? '<button type="button" class="combo-minus-btn" onclick="changeComboChoiceQty(' + idx + ', -1, event)">−</button>' : '') +
                    '</div></div>';
           }).join('');
         }
-        let comboTotal = 0;
-        let comboCount = 0;
-        Object.entries(comboQtyMap).forEach(([idx, q]) => {
-          comboTotal += itemAddons[idx].price * q;
-          comboCount += q;
+        let comboTotal = 0; let comboCount = 0;
+        Object.entries(comboQtyMap).forEach(pair => {
+          const idx = pair.at(0); const q = pair.at(1);
+          comboTotal += itemAddons.at(idx).price * q; comboCount += q;
         });
-        if (comboCount === 0) {
-          confirmBtn.disabled = true;
-          confirmBtn.innerText = 'Select item(s) to add';
-        } else {
-          confirmBtn.disabled = false;
-          confirmBtn.innerText = 'Add to Order (₱' + comboTotal.toFixed(2) + ')';
-        }
+        if (comboCount === 0) { confirmBtn.disabled = true; confirmBtn.innerText = 'Select item(s) to add'; }
+        else { confirmBtn.disabled = false; confirmBtn.innerText = 'Add to Order (₱' + comboTotal.toFixed(2) + ')'; }
         return;
       }
 
@@ -1055,98 +1283,80 @@
         }).join('');
       }
       let unitTotal = pendingItem.price;
-      selectedAddonIndexes.forEach(idx => { unitTotal += itemAddons[idx].price; });
-      const grandTotal = unitTotal * pendingModalQty;
-      confirmBtn.innerText = 'Add to Order (₱' + grandTotal.toFixed(2) + ')';
-    }
-    function toggleAddonChoice(idx) {
-      const pos = selectedAddonIndexes.indexOf(idx);
-      if (pos > -1) { selectedAddonIndexes.splice(pos, 1); } else { selectedAddonIndexes.push(idx); }
-      renderAddonChoices();
+      selectedAddonIndexes.forEach(idx => { unitTotal += itemAddons.at(idx).price; });
+      confirmBtn.innerText = 'Add to Order (₱' + (unitTotal * pendingModalQty).toFixed(2) + ')';
     }
 
+    function toggleAddonChoice(idx) {
+      const pos = selectedAddonIndexes.indexOf(idx);
+      if (pos > -1) selectedAddonIndexes.splice(pos, 1); else selectedAddonIndexes.push(idx);
+      renderAddonChoices();
+    }
     function closeAddonModal() { document.getElementById('addonModal').classList.remove('open'); pendingItem = null; }
 
     function confirmAddWithAddons() {
       if (!pendingItem) return;
-      const itemAddons = pendingItem.addons || [];
+      const itemAddons = pendingItem.addons || new Array();
       const isCombo = !!(pendingItem.isCombo || pendingItem.isMixMatch);
-
       if (isCombo) {
         let addedAny = 0;
-        Object.entries(comboQtyMap).forEach(([idx, q]) => {
-          const choice = itemAddons[idx];
+        Object.entries(comboQtyMap).forEach(pair => {
+          const choice = itemAddons.at(pair.at(0)); const q = pair.at(1);
           if (choice && q > 0) {
-            for (let i = 0; i < q; i++) {
-              currentOrder.push({ name: pendingItem.name + ' + ' + choice.name, price: choice.price });
-              addedAny++;
-            }
+            for (let i = 0; i < q; i++) { currentOrder.push({ name: pendingItem.name + ' + ' + choice.name, price: choice.price }); addedAny++; }
           }
         });
         if (addedAny === 0) return;
-        renderOrder();
-        triggerFeedback(false);
-        showToast('✓ Added ' + addedAny + 'x Combo');
-        closeAddonModal();
-        renderMenu();
+        renderOrder(); triggerFeedback(false); showToast('✓ Added ' + addedAny + 'x Combo');
+        closeAddonModal(); renderMenu();
         return;
       }
-
-      let finalName = pendingItem.name;
-      let finalPrice = pendingItem.price;
+      let finalName = pendingItem.name; let finalPrice = pendingItem.price;
       if (selectedAddonIndexes.length > 0) {
-        const names = selectedAddonIndexes.map(idx => itemAddons[idx].name);
-        finalName += ' + ' + names.join(' + ');
-        selectedAddonIndexes.forEach(idx => { finalPrice += itemAddons[idx].price; });
+        finalName += ' + ' + selectedAddonIndexes.map(idx => itemAddons.at(idx).name).join(' + ');
+        selectedAddonIndexes.forEach(idx => { finalPrice += itemAddons.at(idx).price; });
       }
       addItem({ name: finalName, price: finalPrice }, pendingModalQty);
-      closeAddonModal();
-      renderMenu();
+      closeAddonModal(); renderMenu();
     }
 
-    function openSoldOutComboModal(itemIndex) {
-      soldOutComboItemIdx = itemIndex;
-      const item = menuData[activeCatIndex].items[itemIndex];
+    let soldOutComboCatIdx = 0;
+    function openSoldOutComboModal(catIdx, itemIndex) {
+      soldOutComboCatIdx = catIdx; soldOutComboItemIdx = itemIndex;
+      const item = menuData.at(catIdx).items.at(itemIndex);
       document.getElementById('soldOutComboTitle').innerText = item.name + ' Stock';
       renderSoldOutComboList();
       document.getElementById('soldOutComboModal').classList.add('open');
     }
-
     function closeSoldOutComboModal() { document.getElementById('soldOutComboModal').classList.remove('open'); }
-
     function renderSoldOutComboList() {
-      const item = menuData[activeCatIndex].items[soldOutComboItemIdx];
-      const list = document.getElementById('soldOutComboList');
-      list.innerHTML = (item.addons || []).map((c, idx) =>
+      const item = menuData.at(soldOutComboCatIdx).items.at(soldOutComboItemIdx);
+      document.getElementById('soldOutComboList').innerHTML = (item.addons || new Array()).map((c, idx) =>
         '<button type="button" class="addon-choice-btn' + (c.soldOut ? ' selected' : '') + '" style="' + (c.soldOut ? 'background:#fee2e2; border-color:#dc2626; color:#991b1b;' : '') + '" onclick="toggleComboPairingSoldOut(' + idx + ')">' +
           '<span>' + (c.soldOut ? '🚫 ' : '✓ ') + c.name + '</span>' +
-          '<span>' + (c.soldOut ? 'SOLD OUT' : 'Available') + '</span>' +
+          '<span>' + (c.soldOut ? 'NOT AVAILABLE' : 'Available') + '</span>' +
         '</button>'
       ).join('');
       const wholeBtn = document.getElementById('toggleWholeComboSoldOutBtn');
-      wholeBtn.innerText = item.soldOut ? '✓ Restore Whole Combo' : '🚫 Mark Whole Combo Sold Out';
+      wholeBtn.innerText = item.soldOut ? '✓ Restore Whole Combo' : '🚫 Mark Whole Combo Not Available';
       wholeBtn.style.background = item.soldOut ? '#16a34a' : '#dc2626';
     }
-
     function toggleComboPairingSoldOut(choiceIdx) {
-      const item = menuData[activeCatIndex].items[soldOutComboItemIdx];
-      item.addons[choiceIdx].soldOut = !item.addons[choiceIdx].soldOut;
-      saveMenuData();
-      renderSoldOutComboList();
-      renderMenu();
+      const item = menuData.at(soldOutComboCatIdx).items.at(soldOutComboItemIdx);
+      item.addons.at(choiceIdx).soldOut = !item.addons.at(choiceIdx).soldOut;
+      saveMenuData(); renderSoldOutComboList(); renderMenu();
     }
-
     function toggleWholeComboSoldOut() {
-      const item = menuData[activeCatIndex].items[soldOutComboItemIdx];
+      const item = menuData.at(soldOutComboCatIdx).items.at(soldOutComboItemIdx);
       item.soldOut = !item.soldOut;
-      saveMenuData();
-      closeSoldOutComboModal();
-      renderMenu();
-      showToast(item.soldOut ? '🚫 Combo Sold Out' : '✓ Combo Restored');
+      saveMenuData(); closeSoldOutComboModal(); renderMenu();
+      showToast(item.soldOut ? '🚫 Combo Not Available' : '✓ Combo Restored');
     }
-    function openItemEditorModal(itemIndex) {
-      editingItemIdx = itemIndex;
-      const item = menuData[activeCatIndex].items[itemIndex];
+    // ==================== PART 24: ITEM & PAIRING PHOTO EDITOR ====================
+    let editingItemCatIdx = 0;
+    function openItemEditorModal(catIdx, itemIndex) {
+      editingItemCatIdx = catIdx; editingItemIdx = itemIndex;
+      const item = menuData.at(catIdx).items.at(itemIndex);
       tempItemIsCombo = !!(item.isCombo || item.isMixMatch);
       document.getElementById('itemEditorModalTitle').innerText = tempItemIsCombo ? 'Edit Combo Item' : 'Edit Item, Icon & Photo';
       document.getElementById('editBasePriceWrap').style.display = tempItemIsCombo ? 'none' : 'block';
@@ -1157,236 +1367,187 @@
       document.getElementById('editItemPriceInput').value = item.price || '';
       document.getElementById('editItemEmojiInput').value = item.icon || '🍽️';
       tempItemPhoto = item.photo || '';
-      tempItemAddons = JSON.parse(JSON.stringify(item.addons || []));
+      tempItemAddons = JSON.parse(JSON.stringify(item.addons || new Array()));
 
       const quickGrid = document.getElementById('emojiQuickGrid');
       quickGrid.classList.remove('open');
-      quickGrid.innerHTML = QUICK_EMOJIS.map(em =>
-        '<button type="button" class="emoji-pick-btn" onclick="selectQuickEmoji(\'' + em + '\')">' + em + '</button>'
-      ).join('');
-
-      updateVisualPreview();
-      renderItemSpecificAddonsList();
+      quickGrid.innerHTML = QUICK_EMOJIS.map(em => '<button type="button" class="emoji-pick-btn" onclick="selectQuickEmoji(\'' + em + '\')">' + em + '</button>').join('');
+      updateVisualPreview(); renderItemSpecificAddonsList();
       document.getElementById('itemEditorModal').classList.add('open');
     }
 
-    function toggleEmojiGrid() {
-      document.getElementById('emojiQuickGrid').classList.toggle('open');
-    }
-
-    function selectQuickEmoji(em) {
-      tempItemPhoto = '';
-      document.getElementById('editItemEmojiInput').value = em;
-      document.getElementById('emojiQuickGrid').classList.remove('open');
-      updateVisualPreview();
-    }
-
-    function onEmojiInput() {
-      tempItemPhoto = '';
-      updateVisualPreview();
-    }
-
-    function clearItemPhoto() {
-      tempItemPhoto = '';
-      updateVisualPreview();
-    }
-
+    function toggleEmojiGrid() { document.getElementById('emojiQuickGrid').classList.toggle('open'); }
+    function selectQuickEmoji(em) { tempItemPhoto = ''; document.getElementById('editItemEmojiInput').value = em; document.getElementById('emojiQuickGrid').classList.remove('open'); updateVisualPreview(); }
+    function onEmojiInput() { tempItemPhoto = ''; updateVisualPreview(); }
+    function clearItemPhoto() { tempItemPhoto = ''; updateVisualPreview(); }
     function updateVisualPreview() {
       const box = document.getElementById('visualPreviewBox');
-      if (tempItemPhoto) {
-        box.innerHTML = '<img src="' + tempItemPhoto + '" alt="">';
-      } else {
-        const em = document.getElementById('editItemEmojiInput').value.trim() || '🍽️';
-        box.innerHTML = em;
-      }
+      box.innerHTML = tempItemPhoto ? '<img src="' + tempItemPhoto + '" alt="">' : (document.getElementById('editItemEmojiInput').value.trim() || '🍽️');
     }
 
     function handlePhotoUpload(event) {
       const file = event.target.files.item(0);
       if (!file) return;
-      const img = new Image();
-      const objectUrl = URL.createObjectURL(file);
+      const img = new Image(); const objectUrl = URL.createObjectURL(file);
       img.onload = function() {
         const canvas = document.createElement('canvas');
         canvas.width = 240; canvas.height = 180;
         const ctx = canvas.getContext('2d');
         const ratio = Math.max(canvas.width / img.width, canvas.height / img.height);
-        const w = img.width * ratio;
-        const h = img.height * ratio;
-        ctx.drawImage(img, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
+        ctx.drawImage(img, (canvas.width - img.width * ratio) / 2, (canvas.height - img.height * ratio) / 2, img.width * ratio, img.height * ratio);
         tempItemPhoto = canvas.toDataURL('image/jpeg', 0.78);
-        URL.revokeObjectURL(objectUrl);
-        updateVisualPreview();
+        URL.revokeObjectURL(objectUrl); updateVisualPreview();
       };
-      img.src = objectUrl;
-      event.target.value = '';
+      img.src = objectUrl; event.target.value = '';
     }
 
-    function closeItemEditorModal() { document.getElementById('itemEditorModal').classList.remove('open'); }
-        let editingAddonPhotoIdx = null;
-
-    function triggerAddonChoicePhoto(idx) {
-      editingAddonPhotoIdx = idx;
-      document.getElementById('addonChoicePhotoInput').click();
-    }
-
+    function triggerAddonChoicePhoto(idx) { editingAddonPhotoIdx = idx; document.getElementById('addonChoicePhotoInput').click(); }
     function handleAddonChoicePhotoUpload(event) {
       const file = event.target.files.item(0);
       if (!file || editingAddonPhotoIdx === null) return;
-      const img = new Image();
-      const objectUrl = URL.createObjectURL(file);
+      const img = new Image(); const objectUrl = URL.createObjectURL(file);
       img.onload = function() {
         const canvas = document.createElement('canvas');
         canvas.width = 240; canvas.height = 180;
         const ctx = canvas.getContext('2d');
         const ratio = Math.max(canvas.width / img.width, canvas.height / img.height);
-        const w = img.width * ratio;
-        const h = img.height * ratio;
-        ctx.drawImage(img, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
+        ctx.drawImage(img, (canvas.width - img.width * ratio) / 2, (canvas.height - img.height * ratio) / 2, img.width * ratio, img.height * ratio);
         tempItemAddons.at(editingAddonPhotoIdx).photo = canvas.toDataURL('image/jpeg', 0.78);
-        URL.revokeObjectURL(objectUrl);
-        renderItemSpecificAddonsList();
+        URL.revokeObjectURL(objectUrl); renderItemSpecificAddonsList();
       };
-      img.src = objectUrl;
-      event.target.value = '';
+      img.src = objectUrl; event.target.value = '';
     }
+    function clearAddonChoicePhoto(idx) { tempItemAddons.at(idx).photo = ''; renderItemSpecificAddonsList(); }
 
-    function clearAddonChoicePhoto(idx) {
-      tempItemAddons.at(idx).photo = '';
-      renderItemSpecificAddonsList();
-    }
-
+    function closeItemEditorModal() { document.getElementById('itemEditorModal').classList.remove('open'); }
     function renderItemSpecificAddonsList() {
       const list = document.getElementById('itemSpecificAddonsList');
       if (tempItemAddons.length === 0) {
-        list.innerHTML = tempItemIsCombo
-          ? '<div style="font-size:13px; color:#64748b; margin-bottom:8px;">No combo pairings yet. Tap + Add Combo Pairing below.</div>'
-          : '<div style="font-size:13px; color:#64748b; margin-bottom:8px;">No add-ons yet.</div>';
+        list.innerHTML = tempItemIsCombo ? '<div style="font-size:13px; color:#64748b; margin-bottom:8px;">No combo pairings yet.</div>' : '<div style="font-size:13px; color:#64748b; margin-bottom:8px;">No add-ons yet.</div>';
         return;
       }
       list.innerHTML = tempItemAddons.map((addon, idx) => {
         const priceLabel = tempItemIsCombo ? '₱' + addon.price.toFixed(2) : '+₱' + addon.price.toFixed(2);
-        const thumbHtml = addon.photo
-          ? '<img src="' + addon.photo + '" style="width:28px; height:28px; border-radius:6px; object-fit:cover; vertical-align:middle; margin-right:6px;">'
-          : '';
-        const clearBtn = addon.photo
-          ? '<button type="button" class="btn-sm-pill" style="background:#e2e8f0; color:#334155;" onclick="clearAddonChoicePhoto(' + idx + ')">No Pic</button>'
-          : '';
+        const thumbHtml = addon.photo ? '<img src="' + addon.photo + '" style="width:28px; height:28px; border-radius:6px; object-fit:cover; margin-right:6px;">' : '';
+        const clearBtn = addon.photo ? '<button type="button" class="btn-sm-pill" style="background:#e2e8f0; color:#334155;" onclick="clearAddonChoicePhoto(' + idx + ')">No Pic</button>' : '';
         return '<div class="item-addon-row">' +
           '<span style="display:flex; align-items:center;">' + thumbHtml + addon.name + ' (' + priceLabel + ')</span>' +
-          '<div style="display:flex; align-items:center; flex-wrap:wrap; gap:2px;">' +
+          '<div style="display:flex; align-items:center; gap:2px;">' +
             '<button type="button" class="btn-sm-pill" style="background:#dbeafe; color:#1d4ed8;" onclick="triggerAddonChoicePhoto(' + idx + ')">📷</button>' +
             clearBtn +
-            '<button type="button" class="btn-sm-pill" style="background:#fef3c7; color:#92400e;" onclick="editSpecificAddon(' + idx + ')">Edit</button>' +
+            '<button type="button" class="btn-sm-pill" style="background:#fef3c7; color:#92400e;" onclick="openAddonChoiceForm(' + idx + ')">Edit</button>' +
             '<button type="button" class="btn-sm-pill" style="background:#fee2e2; color:#dc2626;" onclick="deleteSpecificAddon(' + idx + ')">×</button>' +
-          '</div>' +
-        '</div>';
+          '</div></div>';
       }).join('');
     }
-
-    function editSpecificAddon(idx) {
-      const addon = tempItemAddons.at(idx);
-      const newName = prompt("Edit name:", addon.name);
-      if (!newName || newName.trim() === '') return;
-      const newPriceStr = prompt("Edit price for " + newName.trim() + " (₱):", addon.price);
-      if (newPriceStr === null) return;
-      const newPrice = parseFloat(newPriceStr);
-      if (isNaN(newPrice) || newPrice < 0) return alert("Please enter a valid price.");
-      tempItemAddons.at(idx).name = newName.trim();
-      tempItemAddons.at(idx).price = newPrice;
-      renderItemSpecificAddonsList();
-    }
-
-    function editSpecificAddon(idx) {
-      const addon = tempItemAddons[idx];
-      const newName = prompt("Edit name:", addon.name);
-      if (!newName || newName.trim() === '') return;
-      const newPriceStr = prompt("Edit price for " + newName.trim() + " (₱):", addon.price);
-      if (newPriceStr === null) return;
-      const newPrice = parseFloat(newPriceStr);
-      if (isNaN(newPrice) || newPrice < 0) return alert("Please enter a valid price.");
-      tempItemAddons[idx] = { name: newName.trim(), price: newPrice, soldOut: !!addon.soldOut };
-      renderItemSpecificAddonsList();
-    }
-
     function deleteSpecificAddon(idx) { tempItemAddons.splice(idx, 1); renderItemSpecificAddonsList(); }
 
     function saveItemEditorChanges() {
       const newName = document.getElementById('editItemNameInput').value.trim();
       const newPrice = tempItemIsCombo ? 0 : parseFloat(document.getElementById('editItemPriceInput').value);
       const newIcon = document.getElementById('editItemEmojiInput').value.trim() || '🍽️';
-      const oldItem = menuData[activeCatIndex].items[editingItemIdx];
-      if (!newName) return alert("Please enter an item name.");
-      if (!tempItemIsCombo && (isNaN(newPrice) || newPrice < 0)) return alert("Please enter a valid price.");
-      menuData[activeCatIndex].items[editingItemIdx] = {
+      const oldItem = menuData.at(editingItemCatIdx).items.at(editingItemIdx);
+      if (!newName) return showToast('Enter an item name');
+      if (!tempItemIsCombo && (isNaN(newPrice) || newPrice < 0)) return showToast('Enter a valid price');
+      menuData.at(editingItemCatIdx).items[editingItemIdx] = {
         name: newName, price: newPrice, icon: newIcon, photo: tempItemPhoto, isCombo: tempItemIsCombo, soldOut: !!oldItem.soldOut, addons: tempItemAddons
       };
       saveMenuData(); closeItemEditorModal(); renderMenu();
     }
-    function addNewComboItem() {
-      const mainName = prompt("Step 1 — Main Combo item name (e.g., Juice):", "");
-      if (!mainName || mainName.trim() === '') return;
+    // ==================== PART 25: COMBO BUILDER & BACKUP ====================
+    function openAddComboModal() {
+      newComboTempPairs = new Array();
+      document.getElementById('newComboMainInput').value = '';
+      document.getElementById('newComboPairName').value = '';
+      document.getElementById('newComboPairPrice').value = '';
+      renderNewComboPairsPreview();
+      document.getElementById('addComboModal').classList.add('open');
+      setTimeout(() => document.getElementById('newComboMainInput').focus(), 80);
+    }
 
-      const choices = [];
-      while (true) {
-        const promptLabel = choices.length === 0
-          ? "Step 2 — Enter first paired item (e.g., Fries):"
-          : "Added: " + choices.map(c => c.name + " (₱" + c.price + ")").join(", ") + "\nEnter another paired item (or leave blank & press OK to finish):";
-        const choiceName = prompt(promptLabel, "");
-        if (!choiceName || choiceName.trim() === '') break;
-        const priceStr = prompt("Full combo price for " + mainName.trim() + " + " + choiceName.trim() + " (₱):", "");
-        if (priceStr === null) break;
-        const fullPrice = parseFloat(priceStr);
-        if (isNaN(fullPrice) || fullPrice < 0) {
-          alert("Invalid price, skipping " + choiceName.trim());
-          continue;
-        }
-        choices.push({ name: choiceName.trim(), price: fullPrice, soldOut: false });
+    function closeAddComboModal() { document.getElementById('addComboModal').classList.remove('open'); }
+
+    function appendNewComboPair() {
+      const pName = document.getElementById('newComboPairName').value.trim();
+      const pPrice = parseFloat(document.getElementById('newComboPairPrice').value);
+      if (!pName) return showToast('Enter paired item name');
+      if (isNaN(pPrice) || pPrice < 0) return showToast('Enter valid combo price');
+      newComboTempPairs.push({ name: pName, price: pPrice, photo: '', soldOut: false });
+      document.getElementById('newComboPairName').value = '';
+      document.getElementById('newComboPairPrice').value = '';
+      renderNewComboPairsPreview();
+      document.getElementById('newComboPairName').focus();
+    }
+
+    function removeNewComboPair(idx) {
+      newComboTempPairs.splice(idx, 1);
+      renderNewComboPairsPreview();
+    }
+
+    function renderNewComboPairsPreview() {
+      const box = document.getElementById('newComboPairsPreview');
+      if (newComboTempPairs.length === 0) {
+        box.innerHTML = '<div style="font-size:12px; color:#64748b;">No pairings added yet. Type a pairing & price above and tap + Add.</div>';
+        return;
       }
+      box.innerHTML = newComboTempPairs.map((c, idx) =>
+        '<div class="item-addon-row">' +
+          '<span>' + c.name + ' (₱' + c.price.toFixed(2) + ')</span>' +
+          '<button type="button" class="btn-sm-pill" style="background:#fee2e2; color:#dc2626;" onclick="removeNewComboPair(' + idx + ')">×</button>' +
+        '</div>'
+      ).join('');
+    }
 
-      menuData[activeCatIndex].items.push({
-        name: mainName.trim(),
-        price: 0,
-        icon: "🥤",
-        photo: "",
-        isCombo: true,
-        soldOut: false,
-        addons: choices
+    function saveNewComboModal() {
+      const mainName = document.getElementById('newComboMainInput').value.trim();
+      if (!mainName) return showToast('Enter main combo name');
+      const pendingPairName = document.getElementById('newComboPairName').value.trim();
+      const pendingPairPrice = parseFloat(document.getElementById('newComboPairPrice').value);
+      if (pendingPairName && !isNaN(pendingPairPrice) && pendingPairPrice >= 0) {
+        newComboTempPairs.push({ name: pendingPairName, price: pendingPairPrice, photo: '', soldOut: false });
+      }
+      menuData.at(activeCatIndex).items.push({
+        name: mainName, price: 0, icon: "🥤", photo: "", isCombo: true, soldOut: false, addons: newComboTempPairs
       });
-      saveMenuData();
-      renderMenu();
+      saveMenuData(); closeAddComboModal(); renderMenu();
+      showToast('✓ Combo Saved');
     }
 
     function exportMenuBackup() {
       const code = JSON.stringify(menuData);
-      navigator.clipboard.writeText(code).then(() => {
-        alert("Menu backup copied! Paste it into Messenger or Notes to transfer to another phone.");
-      }).catch(() => {
-        prompt("Copy this menu backup code:", code);
-      });
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(() => {
+          showToast('✓ Backup Code Copied');
+        }).catch(() => {
+          openImportModalWithText(code);
+        });
+      } else {
+        openImportModalWithText(code);
+      }
     }
 
-    function openImportModal() {
-      document.getElementById('importTextarea').value = '';
+    function openImportModalWithText(prefill) {
+      document.getElementById('importTextarea').value = prefill || '';
       document.getElementById('importModal').classList.add('open');
     }
 
+    function openImportModal() { openImportModalWithText(''); }
     function closeImportModal() { document.getElementById('importModal').classList.remove('open'); }
 
     function confirmImportBackup() {
       const raw = document.getElementById('importTextarea').value.trim();
-      if (!raw) return alert("Please paste the menu backup code first.");
+      if (!raw) return showToast('Paste backup code first');
       try {
         const parsed = JSON.parse(raw);
         if (!Array.isArray(parsed)) throw new Error("Invalid format");
         menuData = parsed; activeCatIndex = 0;
         saveMenuData(); closeImportModal(); renderMenu();
-        alert("Menu successfully loaded!");
+        showToast('✓ Menu Loaded');
       } catch (e) {
-        alert("Invalid menu backup code. Make sure you copied the entire message.");
+        showToast('Invalid backup code');
       }
     }
-
+    // ==================== PART 26: EDIT & STOCK MODES ====================
     function startEditMenuFromSettings() {
       closeSettingsScreen();
       isSoldOutMode = false;
@@ -1394,7 +1555,6 @@
       const kioskSec = document.getElementById('kioskSection');
       kioskSec.classList.remove('soldout-mode');
       kioskSec.classList.add('edit-mode');
-      document.getElementById('menuTitle').innerText = 'Editing Menu';
       renderMenu();
     }
 
@@ -1405,7 +1565,6 @@
       const kioskSec = document.getElementById('kioskSection');
       kioskSec.classList.remove('edit-mode');
       kioskSec.classList.add('soldout-mode');
-      document.getElementById('menuTitle').innerText = 'Mark Sold Out';
       renderMenu();
     }
 
@@ -1414,86 +1573,67 @@
       isSoldOutMode = false;
       const kioskSec = document.getElementById('kioskSection');
       kioskSec.classList.remove('edit-mode', 'soldout-mode');
-      document.getElementById('menuTitle').innerText = 'Order Menu';
       renderMenu();
     }
 
     function moveActiveCategory(direction) {
       const newIndex = activeCatIndex + direction;
       if (newIndex < 0 || newIndex >= menuData.length) return;
-      const tempCat = menuData[activeCatIndex];
-      menuData[activeCatIndex] = menuData[newIndex];
+      const tempCat = menuData.at(activeCatIndex);
+      menuData[activeCatIndex] = menuData.at(newIndex);
       menuData[newIndex] = tempCat;
       activeCatIndex = newIndex;
       saveMenuData(); renderMenu();
     }
 
-    function addNewCategory() {
-      const title = prompt("New menu category name (e.g., Drinks & Coolers):", "");
-      if (!title || title.trim() === '') return;
-      menuData.push({ title: title.trim(), items: [] });
-      activeCatIndex = menuData.length - 1;
-      saveMenuData(); renderMenu();
-    }
-
-    function renameActiveCategory() {
-      const newTitle = prompt("Rename category:", menuData[activeCatIndex].title);
-      if (!newTitle || newTitle.trim() === '') return;
-      menuData[activeCatIndex].title = newTitle.trim();
-      saveMenuData(); renderMenu();
-    }
-
-    function deleteActiveCategory() {
-      if (menuData.length <= 1) return alert("You must keep at least one category.");
-      if (confirm("Delete the entire \"" + menuData[activeCatIndex].title + "\" category?")) {
+    function askDeleteActiveCategory() {
+      if (menuData.length <= 1) return showToast('Keep at least 1 category');
+      const catTitle = menuData.at(activeCatIndex).title;
+      openConfirmBox('Delete Category?', 'Delete the entire "' + catTitle + '" category and its items?', 'Delete', () => {
         menuData.splice(activeCatIndex, 1);
         activeCatIndex = 0;
         saveMenuData(); renderMenu();
-      }
+        showToast('✓ Category Deleted');
+      });
     }
 
-    function moveItem(event, itemIndex, direction) {
+    function moveItem(event, catIdx, itemIndex, direction) {
       event.stopPropagation();
-      const items = menuData[activeCatIndex].items;
+      const items = menuData.at(catIdx).items;
       const newIndex = itemIndex + direction;
       if (newIndex < 0 || newIndex >= items.length) return;
-      const temp = items[itemIndex]; items[itemIndex] = items[newIndex]; items[newIndex] = temp;
+      const temp = items.at(itemIndex);
+      items[itemIndex] = items.at(newIndex);
+      items[newIndex] = temp;
       saveMenuData(); renderMenu();
     }
 
     function sortActiveCategoryAZ() {
-      menuData[activeCatIndex].items.sort((a, b) => a.name.localeCompare(b.name));
+      menuData.at(activeCatIndex).items.sort((a, b) => a.name.localeCompare(b.name));
       saveMenuData(); renderMenu();
+      showToast('✓ Sorted A–Z');
     }
 
-    function deleteMenuItem(event, itemIndex) {
+    function askDeleteMenuItem(event, catIdx, itemIndex) {
       event.stopPropagation();
-      if (confirm("Delete \"" + menuData[activeCatIndex].items[itemIndex].name + "\" permanently?")) {
-        menuData[activeCatIndex].items.splice(itemIndex, 1);
+      const itemName = menuData.at(catIdx).items.at(itemIndex).name;
+      openConfirmBox('Delete Item?', 'Remove "' + itemName + '" from your menu permanently?', 'Delete', () => {
+        menuData.at(catIdx).items.splice(itemIndex, 1);
         saveMenuData(); renderMenu();
-      }
+        showToast('✓ Item Deleted');
+      });
     }
 
-    function addNewMenuItem() {
-      const name = prompt("New item name for " + menuData[activeCatIndex].title + ":", "");
-      if (!name || name.trim() === '') return;
-      const priceStr = prompt("Base price for " + name.trim() + " (₱):", "");
-      if (priceStr === null) return;
-      const price = parseFloat(priceStr);
-      if (isNaN(price) || price < 0) return alert("Please enter a valid price.");
-      menuData[activeCatIndex].items.push({ name: name.trim(), price: price, icon: "🍽️", photo: "", isCombo: false, soldOut: false, addons: [] });
-      saveMenuData(); renderMenu();
-    }
-
-    function restoreDefaultMenu() {
-      if (confirm("Reset entire menu back to original items, prices, icons, and add-ons?")) {
+    function askRestoreDefaultMenu() {
+      openConfirmBox('Reset Menu?', 'Restore entire menu back to factory default items, prices, and add-ons?', 'Reset Menu', () => {
         menuData = JSON.parse(JSON.stringify(DEFAULT_MENU));
         activeCatIndex = 0;
         localStorage.removeItem('miniPosMenuPH_v4');
         renderMenu();
-        alert("Menu restored to defaults!");
-      }
+        showToast('✓ Factory Menu Restored');
+      });
     }
+    // ==================== PART 27: DRAWERS & SLIDE-UP SHEETS ====================
     function showToast(msg) {
       const banner = document.getElementById('toastBanner');
       banner.innerText = msg;
@@ -1502,14 +1642,48 @@
       toastTimer = setTimeout(() => banner.classList.remove('show'), 1100);
     }
 
-    function openQueueScreen() { renderQueue(); document.getElementById('queueScreen').classList.add('open'); }
+    function resetDrawerScroll(bodyId) {
+      const el = document.getElementById(bodyId);
+      if (el) el.scrollTop = 0;
+    }
+
+    function openQueueScreen() {
+      closeCartSheet(); closeEarningsSheet();
+      renderQueue();
+      document.getElementById('queueScreen').classList.add('open');
+      resetDrawerScroll('queueDrawerBody');
+    }
     function closeQueueScreen() { document.getElementById('queueScreen').classList.remove('open'); }
-    function openReportsScreen() { renderHistory(); document.getElementById('reportsScreen').classList.add('open'); }
+
+    function openReportsScreen() {
+      closeCartSheet(); closeEarningsSheet();
+      new Array('restock', 'history').forEach(sec => {
+        const btn = document.getElementById(sec + 'AccBtn');
+        const body = document.getElementById(sec + 'AccBody');
+        const arrow = document.getElementById(sec + 'Arrow');
+        if (btn) btn.classList.remove('open');
+        if (body) body.classList.remove('open');
+        if (arrow) arrow.innerText = '▼';
+      });
+      renderHistory();
+      document.getElementById('reportsScreen').classList.add('open');
+      resetDrawerScroll('reportsDrawerBody');
+    }
     function closeReportsScreen() { document.getElementById('reportsScreen').classList.remove('open'); }
-    function openTodaysLogScreen() { document.getElementById('todaysLogScreen').classList.add('open'); }
+
+    function openTodaysLogScreen() {
+      document.getElementById('todaysLogScreen').classList.add('open');
+      resetDrawerScroll('todaysLogDrawerBody');
+    }
     function closeTodaysLogScreen() { document.getElementById('todaysLogScreen').classList.remove('open'); }
     function closePastDetailScreen() { document.getElementById('pastDetailScreen').classList.remove('open'); }
-    function openSettingsScreen() { applyAllSettingsUI(); document.getElementById('settingsScreen').classList.add('open'); }
+
+    function openSettingsScreen() {
+      closeCartSheet(); closeEarningsSheet();
+      applyAllSettingsUI();
+      document.getElementById('settingsScreen').classList.add('open');
+      resetDrawerScroll('settingsDrawerBody');
+    }
     function closeSettingsScreen() { document.getElementById('settingsScreen').classList.remove('open'); }
 
     function toggleReportSection(section) {
@@ -1521,12 +1695,61 @@
       arrow.innerText = isOpen ? '▲' : '▼';
     }
 
-    function openCartScreen() {
+    function openCartSheet() {
       if (currentOrder.length === 0) return;
-      document.getElementById('cartScreen').classList.add('open');
+      closeEarningsSheet();
+      selectedCashBill = 0;
+      renderCartCashStrip();
+      renderOrder();
+      document.getElementById('cartSheetOverlay').classList.add('open');
+      updateMainCheckoutButton();
     }
-    function closeCartScreen() { document.getElementById('cartScreen').classList.remove('open'); }
 
+    function closeCartSheet() {
+      document.getElementById('cartSheetOverlay').classList.remove('open');
+      selectedCashBill = 0;
+      updateMainCheckoutButton();
+    }
+
+    function toggleEarningsSheet() {
+      const ov = document.getElementById('earningsSheetOverlay');
+      if (ov.classList.contains('open')) {
+        closeEarningsSheet();
+      } else {
+        closeCartSheet();
+        renderHistory();
+        ov.classList.add('open');
+      }
+    }
+
+    function closeEarningsSheet() {
+      document.getElementById('earningsSheetOverlay').classList.remove('open');
+    }
+
+    function updateMainCheckoutButton() {
+      const btn = document.getElementById('mainCartPayBtn');
+      const isOpen = document.getElementById('cartSheetOverlay').classList.contains('open');
+      const count = currentOrder.length;
+      btn.disabled = count === 0;
+      if (isOpen && count > 0) {
+        btn.innerText = 'PAY';
+        btn.classList.add('is-pay-state');
+      } else {
+        btn.innerText = 'Cart (' + count + ')';
+        btn.classList.remove('is-pay-state');
+      }
+    }
+
+    function handleMainCheckoutBtn() {
+      if (currentOrder.length === 0) return;
+      const isOpen = document.getElementById('cartSheetOverlay').classList.contains('open');
+      if (!isOpen) {
+        openCartSheet();
+      } else {
+        confirmSale();
+      }
+    }
+    // ==================== PART 28: CART & INSTANT CHANGE MATH ====================
     function addItem(item, qty) {
       const count = qty || 1;
       for (let i = 0; i < count; i++) {
@@ -1537,22 +1760,12 @@
       showToast(count > 1 ? '✓ Added ' + count + 'x' : '✓ Added');
     }
 
-    function addCustomItem() {
-      const name = prompt("Custom order item name:", "");
-      if (!name || name.trim() === '') return;
-      const priceStr = prompt("Enter price for " + name.trim() + " (₱):", "");
-      if (priceStr === null) return;
-      const price = parseFloat(priceStr);
-      if (isNaN(price) || price <= 0) return alert("Please enter a valid price.");
-      addItem({ name: name.trim(), price: price }, 1);
-    }
-
     function changeGroupedCartQty(targetName, targetPrice, delta) {
       if (delta > 0) {
         currentOrder.push({ name: targetName, price: targetPrice });
       } else {
         for (let i = currentOrder.length - 1; i >= 0; i--) {
-          if (currentOrder[i].name === targetName && currentOrder[i].price === targetPrice) {
+          if (currentOrder.at(i).name === targetName && currentOrder.at(i).price === targetPrice) {
             currentOrder.splice(i, 1);
             break;
           }
@@ -1561,54 +1774,78 @@
       renderOrder();
       renderMenu();
       triggerFeedback(false);
-      if (currentOrder.length === 0) closeCartScreen();
+      if (currentOrder.length === 0) closeCartSheet();
     }
 
-    function clearOrder() {
-      if (currentOrder.length === 0) return closeCartScreen();
-      if (confirm("Are you sure you want to clear all items from the cart?")) {
-        currentOrder = [];
-        renderOrder();
-        renderMenu();
-        closeCartScreen();
-      }
+    function askClearOrder() {
+      if (currentOrder.length === 0) return closeCartSheet();
+      openConfirmBox('Clear Order?', 'Remove all items from the current cart?', 'Clear All', () => {
+        currentOrder = new Array();
+        selectedCashBill = 0;
+        renderOrder(); renderMenu(); closeCartSheet();
+        showToast('✓ Cart Cleared');
+      });
     }
 
     function getOrderSum() { return currentOrder.reduce((sum, item) => sum + item.price, 0); }
 
-    function quickLogSale() {
-      if (currentOrder.length === 0) return;
-      const total = getOrderSum();
-      const count = currentOrder.length;
-      const label = count === 1 ? "1 item" : count + " items";
-      if (confirm("Log sale for " + label + " (Total: ₱" + total.toFixed(2) + ")?")) {
-        confirmSale();
+    function selectQuickCashBill(amount) {
+      selectedCashBill = (selectedCashBill === amount) ? 0 : amount;
+      renderCartCashStrip();
+      renderOrder();
+    }
+
+    function renderCartCashStrip() {
+      const row = document.getElementById('cashStripRow');
+      const scroll = document.getElementById('cashBillsScroll');
+      const bills = appSettings.quickBills || new Array();
+      if (bills.length === 0) {
+        row.style.display = 'none';
+        return;
       }
+      row.style.display = 'flex';
+      scroll.innerHTML = bills.map(b =>
+        '<button type="button" class="cash-bill-pill' + (selectedCashBill === b ? ' active' : '') + '" onclick="selectQuickCashBill(' + b + ')">₱' + b + '</button>'
+      ).join('') +
+      '<button type="button" class="cash-bill-pill" onclick="openCustomPrompt(\'Cash Received\', \'Enter Cash Amount (₱)\', \'decimal\', selectedCashBill || \'\', \'customCash\')">Other</button>';
     }
 
     function renderOrder() {
       const list = document.getElementById('currentOrderList');
       const totalEl = document.getElementById('orderTotal');
-      const barCount = document.getElementById('barCount');
       const barTotal = document.getElementById('barTotal');
-      const barLogBtn = document.getElementById('barLogSaleBtn');
-      const barCartBtn = document.getElementById('barCartBtn');
-      const cartCalcBtn = document.getElementById('cartCalcBtn');
-      const cartLogBtn = document.getElementById('cartLogSaleBtn');
+      const changeLine = document.getElementById('sheetChangeLine');
+      const changeLbl = document.getElementById('sheetChangeLabel');
+      const changeVal = document.getElementById('sheetChangeVal');
 
-      const isEmpty = currentOrder.length === 0;
-      barLogBtn.disabled = isEmpty;
-      barCartBtn.disabled = isEmpty;
-      if (cartCalcBtn) cartCalcBtn.disabled = isEmpty;
-      if (cartLogBtn) cartLogBtn.disabled = isEmpty;
+      updateMainCheckoutButton();
+      const total = getOrderSum();
+      barTotal.innerText = '₱' + total.toFixed(2);
+      totalEl.innerText = '₱' + total.toFixed(2);
 
-      if (isEmpty) {
-        list.innerHTML = '<div style="color:#9ca3af; font-size:14px;">Your cart is empty</div>';
-        totalEl.innerText = '₱0.00'; barCount.innerText = '0'; barTotal.innerText = '₱0.00';
+      if (currentOrder.length === 0) {
+        list.innerHTML = '<div style="color:#9ca3af; font-size:14px; padding:10px 0;">Cart is empty</div>';
+        changeLine.style.display = 'none';
         return;
       }
 
-      const groupedList = [];
+      if (selectedCashBill > 0) {
+        changeLine.style.display = 'flex';
+        const diff = selectedCashBill - total;
+        if (diff < 0) {
+          changeLbl.innerText = 'Short (Cash ₱' + selectedCashBill + '):';
+          changeVal.innerText = 'Short ₱' + Math.abs(diff).toFixed(2);
+          changeVal.style.color = '#dc2626';
+        } else {
+          changeLbl.innerText = 'Change (from ₱' + selectedCashBill + '):';
+          changeVal.innerText = '₱' + diff.toFixed(2);
+          changeVal.style.color = '#dc2626';
+        }
+      } else {
+        changeLine.style.display = 'none';
+      }
+
+      const groupedList = new Array();
       const groupMap = {};
       currentOrder.forEach(item => {
         const key = item.name + '||' + item.price;
@@ -1619,110 +1856,95 @@
         groupMap[key].qty++;
       });
 
-      let total = getOrderSum();
-      let html = '';
-      groupedList.forEach(entry => {
+      list.innerHTML = groupedList.map(entry => {
         const safeName = entry.name.replace(/'/g, "\\'");
         const lineTotal = entry.price * entry.qty;
-        html +=
-          '<div class="order-item">' +
-            '<div class="order-item-info"><span class="order-qty-tag">' + entry.qty + 'x</span> ' + entry.name + '</div>' +
-            '<div class="order-item-right">' +
-              '<span>₱' + lineTotal.toFixed(2) + '</span>' +
-              '<button type="button" class="cart-step-btn cart-step-minus" onclick="changeGroupedCartQty(\'' + safeName + '\', ' + entry.price + ', -1)">−</button>' +
-              '<button type="button" class="cart-step-btn cart-step-plus" onclick="changeGroupedCartQty(\'' + safeName + '\', ' + entry.price + ', 1)">+</button>' +
-            '</div>' +
-          '</div>';
+        return '<div class="order-item">' +
+          '<div class="order-item-info"><span class="order-qty-tag">' + entry.qty + 'x</span> ' + entry.name + '</div>' +
+          '<div class="order-item-right">' +
+            '<span>₱' + lineTotal.toFixed(2) + '</span>' +
+            '<button type="button" class="cart-step-btn cart-step-minus" onclick="changeGroupedCartQty(\'' + safeName + '\', ' + entry.price + ', -1)">−</button>' +
+            '<button type="button" class="cart-step-btn cart-step-plus" onclick="changeGroupedCartQty(\'' + safeName + '\', ' + entry.price + ', 1)">+</button>' +
+          '</div></div>';
+      }).join('');
+    }
+    // ==================== PART 29: SALE LOGGING & QUEUE ====================
+    function logSingleSimpleSale(itemName, itemPrice) {
+      checkAutoMidnightRollover();
+      const now = Date.now();
+      const time = new Date(now).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      const grouped = {};
+      grouped[itemName] = 1;
+      const summary = '1x ' + itemName;
+      salesHistory.unshift({ time: time, summary: summary, total: itemPrice, items: grouped });
+      localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
+      renderHistory();
+      triggerFeedback(true);
+      showToast('✓ +₱' + itemPrice.toFixed(2) + ' (' + itemName + ')');
+    }
+
+    function undoLastSimpleSale() {
+      if (salesHistory.length === 0) return showToast('Nothing to undo');
+      const last = salesHistory.at(0);
+      openConfirmBox('Undo Last Tap?', 'Remove last logged item: ' + last.summary + ' (₱' + last.total.toFixed(2) + ')?', 'Undo', () => {
+        salesHistory.shift();
+        localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
+        renderHistory();
+        showToast('↩ Undid ' + last.summary);
       });
-      list.innerHTML = html;
-      totalEl.innerText = '₱' + total.toFixed(2);
-      barCount.innerText = currentOrder.length;
-      barTotal.innerText = '₱' + total.toFixed(2);
     }
 
-        function openCheckoutModal() {
-      if (currentOrder.length === 0) return;
-      const total = getOrderSum();
-      document.getElementById('modalOrderTotal').innerText = '₱' + total.toFixed(2);
-      document.getElementById('cashInput').value = '';
-      document.getElementById('modalChange').innerText = '₱0.00';
-
-      const billsGrid = document.getElementById('quickBillsGrid');
-      const bills = appSettings.quickBills || new Array(50, 100, 200, 500, 1000);
-      billsGrid.innerHTML = '<button class="bill-btn" onclick="setExactCash()">Exact</button>' +
-        bills.map(b => '<button class="bill-btn" onclick="setCash(' + b + ')">₱' + b + '</button>').join('');
-
-      document.getElementById('checkoutModal').classList.add('open');
-    }
-
-    function closeCheckoutModal() { document.getElementById('checkoutModal').classList.remove('open'); }
-    function setExactCash() { document.getElementById('cashInput').value = getOrderSum(); updateChange(); }
-    function setCash(amount) { document.getElementById('cashInput').value = amount; updateChange(); }
-
-    function updateChange() {
-      const total = getOrderSum();
-      const cash = parseFloat(document.getElementById('cashInput').value) || 0;
-      const changeEl = document.getElementById('modalChange');
-      if (cash === 0) { changeEl.innerText = '₱0.00'; changeEl.style.color = '#15803d'; return; }
-      const diff = cash - total;
-      if (diff < 0) {
-        changeEl.innerText = 'Short ₱' + Math.abs(diff).toFixed(2);
-        changeEl.style.color = '#dc2626';
-      } else {
-        changeEl.innerText = '₱' + diff.toFixed(2);
-        changeEl.style.color = '#15803d';
-      }
-    }
     function confirmSale() {
       if (currentOrder.length === 0) return;
       checkAutoMidnightRollover();
       const total = getOrderSum();
       const now = Date.now();
-      const time = new Date(now).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const time = new Date(now).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
       const grouped = {};
       currentOrder.forEach(item => grouped[item.name] = (grouped[item.name] || 0) + 1);
-      const summary = Object.entries(grouped).map(([name, qty]) => qty + 'x ' + name).join(', ');
-      const prepLines = Object.entries(grouped).map(([name, qty]) => ({ text: qty + 'x ' + name, prepped: false }));
+      const summary = Object.entries(grouped).map(p => p.at(1) + 'x ' + p.at(0)).join(', ');
+      const prepLines = Object.entries(grouped).map(p => ({ text: p.at(1) + 'x ' + p.at(0), prepped: false }));
 
-      salesHistory.unshift({ time, summary, total, items: grouped });
+      salesHistory.unshift({ time: time, summary: summary, total: total, items: grouped });
       localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
 
       orderQueue.unshift({ id: now + Math.random(), time: time, createdAt: now, summary: summary, lines: prepLines, total: total, done: false });
       localStorage.setItem('miniPosQueuePH', JSON.stringify(orderQueue));
 
-      currentOrder = []; closeCheckoutModal(); closeCartScreen(); renderOrder(); renderMenu(); renderQueue(); renderHistory();
+      currentOrder = new Array();
+      selectedCashBill = 0;
+      closeCartSheet();
+      renderOrder(); renderMenu(); renderQueue(); renderHistory();
       triggerFeedback(true);
-      showToast('✓ Logged ₱' + total.toFixed(2));
+      showToast('✓ Paid ₱' + total.toFixed(2));
     }
 
     function toggleQueueBullet(qIdx, lineIdx) {
-      const q = orderQueue[qIdx];
-      if (!q || q.done || !q.lines || !q.lines[lineIdx]) return;
-      q.lines[lineIdx].prepped = !q.lines[lineIdx].prepped;
+      const q = orderQueue.at(qIdx);
+      if (!q || q.done || !q.lines || !q.lines.at(lineIdx)) return;
+      q.lines.at(lineIdx).prepped = !q.lines.at(lineIdx).prepped;
       localStorage.setItem('miniPosQueuePH', JSON.stringify(orderQueue));
       renderQueue();
     }
 
     function markQueueOrderDone(idx) {
-      if (orderQueue[idx]) {
-        orderQueue[idx].done = true;
+      const q = orderQueue.at(idx);
+      if (q) {
+        q.done = true;
         localStorage.setItem('miniPosQueuePH', JSON.stringify(orderQueue));
         renderQueue();
       }
     }
 
-    function clearQueueList() {
+    function askClearCompletedQueue() {
       const doneCount = orderQueue.filter(q => q.done).length;
-      if (doneCount === 0) {
-        alert("No completed orders to clear yet! Active waiting orders will stay safe.");
-        return;
-      }
-      if (confirm("Clear " + doneCount + " completed order(s)? Active waiting orders will stay.")) {
+      if (doneCount === 0) return showToast('No completed orders to clear');
+      openConfirmBox('Clear Completed?', 'Clear ' + doneCount + ' completed order(s)? Active waiting orders will stay.', 'Clear', () => {
         orderQueue = orderQueue.filter(q => !q.done);
         localStorage.setItem('miniPosQueuePH', JSON.stringify(orderQueue));
         renderQueue();
         showToast('✓ Cleared Completed');
-      }
+      });
     }
 
     function renderQueue() {
@@ -1730,10 +1952,7 @@
       const now = Date.now();
       let changed = false;
       orderQueue.forEach(q => {
-        if (!q.done && (now - q.createdAt) >= timeoutMs) {
-          q.done = true;
-          changed = true;
-        }
+        if (!q.done && (now - q.createdAt) >= timeoutMs) { q.done = true; changed = true; }
       });
       if (changed) localStorage.setItem('miniPosQueuePH', JSON.stringify(orderQueue));
 
@@ -1741,14 +1960,10 @@
       const doneList = orderQueue.filter(q => q.done);
       const sortedQueue = activeList.concat(doneList);
 
-      const pendingCountEl = document.getElementById('queuePendingCount');
-      const queueBannerBtn = document.getElementById('queueBannerBtn');
-      pendingCountEl.innerText = activeList.length + ' waiting';
-      if (activeList.length > 0) {
-        queueBannerBtn.classList.add('has-pending');
-      } else {
-        queueBannerBtn.classList.remove('has-pending');
-      }
+      document.getElementById('queuePendingCount').innerText = activeList.length;
+      const queueBarBtn = document.getElementById('queueBarBtn');
+      if (activeList.length > 0) queueBarBtn.classList.add('has-pending');
+      else queueBarBtn.classList.remove('has-pending');
 
       const container = document.getElementById('queueListContainer');
       if (!container) return;
@@ -1759,11 +1974,10 @@
 
       container.innerHTML = sortedQueue.map(q => {
         const realIdx = orderQueue.indexOf(q);
-        const lines = q.lines || [{ text: q.summary, prepped: q.done }];
+        const lines = q.lines || new Array({ text: q.summary, prepped: q.done });
         const bulletsHtml = '<ul class="queue-bullet-list">' + lines.map((ln, lIdx) =>
           '<li class="queue-bullet-item' + (ln.prepped ? ' prepped' : '') + '" onclick="toggleQueueBullet(' + realIdx + ', ' + lIdx + ')">' +
-            '<span>' + (ln.prepped ? '☑' : '⬜') + '</span>' +
-            '<span>' + ln.text + '</span>' +
+            '<span>' + (ln.prepped ? '☑' : '⬜') + '</span><span>' + ln.text + '</span>' +
           '</li>'
         ).join('') + '</ul>';
 
@@ -1774,35 +1988,64 @@
         '</div>';
       }).join('');
     }
-    function deleteSale(index) {
-      const sale = salesHistory[index];
-      if (confirm("Delete this mistaken sale (₱" + sale.total.toFixed(2) + " - " + sale.summary + ")?")) {
+    // ==================== PART 30: REPORTS & PAST HISTORY ====================
+    function applyTallyLinesClass() {
+      const lines = appSettings.tallyLines || 3;
+      document.body.classList.remove('tally-lines-3', 'tally-lines-5', 'tally-lines-7');
+      document.body.classList.add('tally-lines-' + lines);
+      const btn = document.getElementById('tallyLinesCycleBtn');
+      if (btn) btn.innerText = 'Lines: ' + lines;
+    }
+
+    function cycleTallyLines() {
+      const curr = appSettings.tallyLines || 3;
+      appSettings.tallyLines = curr === 3 ? 5 : (curr === 5 ? 7 : 3);
+      saveSettings();
+      applyTallyLinesClass();
+    }
+
+    function applyTallyDockPos() {
+      const isTop = appSettings.tallyPos === 'top';
+      document.body.classList.toggle('tally-top', isTop);
+      const posBtn = document.getElementById('tallyPosCycleBtn');
+      if (posBtn) posBtn.innerText = isTop ? '⬇ Bot' : '⬆ Top';
+    }
+
+    function toggleTallyDockPos() {
+      appSettings.tallyPos = appSettings.tallyPos === 'top' ? 'bottom' : 'top';
+      saveSettings();
+      applyTallyDockPos();
+    }
+
+    function askDeleteSale(index) {
+      const sale = salesHistory.at(index);
+      if (!sale) return;
+      openConfirmBox('Delete Sale?', 'Remove mistaken sale: ₱' + sale.total.toFixed(2) + ' (' + sale.summary + ')?', 'Delete', () => {
         salesHistory.splice(index, 1);
         localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
         renderHistory();
-      }
+        showToast('✓ Sale Removed');
+      });
     }
 
     function getRestockCounts() {
       const counts = {};
       salesHistory.forEach(sale => {
         if (sale.items) {
-          Object.entries(sale.items).forEach(([name, qty]) => {
-            counts[name] = (counts[name] || 0) + qty;
-          });
+          Object.entries(sale.items).forEach(p => { counts[p.at(0)] = (counts[p.at(0)] || 0) + p.at(1); });
         }
       });
-      return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      return Object.entries(counts).sort((a, b) => b.at(1) - a.at(1));
     }
 
-        function openPastDetailScreen(idx) {
+    function openPastDetailScreen(idx) {
       const h = pastHistory.at(idx);
       if (!h) return;
       document.getElementById('pastDetailHeaderTitle').innerText = h.label;
       document.getElementById('pastDetailCopyBtn').onclick = function() { copyPastHistoryEntry(idx); };
 
       const itemsHtml = (h.sortedItems && h.sortedItems.length > 0)
-        ? h.sortedItems.map(pair => '<div class="restock-item"><span>' + pair.at(0) + '</span><span class="restock-qty">' + pair.at(1) + ' sold</span></div>').join('')
+        ? h.sortedItems.map(p => '<div class="restock-item"><span>' + p.at(0) + '</span><span class="restock-qty">' + p.at(1) + ' sold</span></div>').join('')
         : '<div style="color:#9ca3af; font-size:13px;">No items recorded</div>';
 
       const salesHtml = (h.sales && h.sales.length > 0)
@@ -1817,7 +2060,9 @@
         '<div class="card-box"><h3>📦 Items Sold (Highest → Lowest)</h3>' + itemsHtml + '</div>' +
         '<div class="card-box"><h3>🧾 Complete Order Log</h3>' + salesHtml + '</div>';
 
-      document.getElementById('pastDetailScreen').classList.add('open');
+      const detScreen = document.getElementById('pastDetailScreen');
+      detScreen.classList.add('open');
+      resetDrawerScroll('pastDetailBody');
     }
 
     function copyPastHistoryEntry(idx) {
@@ -1827,102 +2072,100 @@
       let text = headerTitle + "Sales Report (" + h.label + ")\nTotal Earnings: ₱" + h.total.toFixed(2) + "\nTotal Orders: " + h.orderCount + "\n\n";
       if (h.sortedItems && h.sortedItems.length > 0) {
         text += "--- ITEMS SOLD (HIGHEST TO LOWEST) ---\n";
-        h.sortedItems.forEach(pair => text += pair.at(1) + "x " + pair.at(0) + "\n");
+        h.sortedItems.forEach(p => text += p.at(1) + "x " + p.at(0) + "\n");
         text += "\n--- ORDER LOG ---\n";
       }
       (h.sales || new Array()).forEach(s => text += "[" + s.time + "] ₱" + s.total.toFixed(2) + " - " + s.summary + "\n");
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => {
-          alert("Copied report for " + h.label + "!");
-        }).catch(() => {
-          prompt("Copy this saved report:", text);
-        });
+        navigator.clipboard.writeText(text).then(() => showToast('✓ Report Copied')).catch(() => openImportModalWithText(text));
       } else {
-        prompt("Copy this saved report:", text);
+        openImportModalWithText(text);
       }
     }
 
-    function deletePastHistoryEntry(idx) {
+    function askDeletePastHistoryEntry(event, idx) {
+      event.stopPropagation();
       const target = pastHistory.at(idx);
       if (!target) return;
-      if (confirm("Delete this saved report (" + target.label + ")?")) {
+      openConfirmBox('Delete Saved Report?', 'Remove report for "' + target.label + '"?', 'Delete', () => {
         pastHistory.splice(idx, 1);
         localStorage.setItem('miniPosPastHistoryPH', JSON.stringify(pastHistory));
         renderHistory();
         showToast('✓ Report Deleted');
-      }
+      });
     }
 
-    function clearAllPastHistory() {
-      if (!pastHistory || pastHistory.length === 0) {
-        alert("History is already empty.");
-        return;
-      }
-      if (confirm("Delete all saved 7-day history reports?")) {
+    function askClearAllHistory() {
+      if (!pastHistory || pastHistory.length === 0) return showToast('History is already empty');
+      openConfirmBox('Clear All History?', 'Delete all saved 7-day history reports permanently?', 'Clear All', () => {
         pastHistory = new Array();
         localStorage.removeItem('miniPosPastHistoryPH');
         renderHistory();
         showToast('✓ All History Cleared');
-        alert("All past history cleared!");
-      }
+      });
     }
-
+    // ==================== PART 31: RENDER HISTORY & STARTUP ====================
     function renderHistory() {
       const logEl = document.getElementById('salesLog');
       const totalEl = document.getElementById('dailyTotal');
       const reportTotalEl = document.getElementById('reportScreenTotal');
+      const logTopTotalEl = document.getElementById('todaysLogTopTotal');
+      const logTopCountEl = document.getElementById('todaysLogTopCount');
+      const tallyFeedEl = document.getElementById('simpleTallyFeedList');
       const cashBoxEl = document.getElementById('expectedCashBoxLine');
+      const sheetCashEl = document.getElementById('sheetCashBoxLine');
       const bannerCountEl = document.getElementById('bannerOrderCount');
       const countEl = document.getElementById('orderCount');
       const restockEl = document.getElementById('restockSummary');
       const histBtnLabel = document.getElementById('historyBtnLabel');
       const histContainer = document.getElementById('pastHistoryContainer');
 
-      let dailySum = 0; let html = '';
+      let dailySum = 0; let html = ''; let tallyHtml = '';
       salesHistory.forEach((sale, index) => {
         dailySum += sale.total;
-        html += '<div class="log-item"><div class="log-header"><span>' + sale.time + '</span><span>₱' + sale.total.toFixed(2) + '<button class="del-sale-btn" onclick="deleteSale(' + index + ')">×</button></span></div><div class="log-details">' + sale.summary + '</div></div>';
+        html += '<div class="log-item"><div class="log-header"><span>' + sale.time + '</span><span>₱' + sale.total.toFixed(2) + '<button class="del-sale-btn" onclick="askDeleteSale(' + index + ')">×</button></span></div><div class="log-details">' + sale.summary + '</div></div>';
+        tallyHtml += '<div class="tally-line-row"><div class="tally-line-left"><span class="tally-line-time">' + sale.time + '</span>' + sale.summary + '</div><div class="tally-line-right"><span>₱' + sale.total.toFixed(2) + '</span><button class="del-sale-btn" style="margin-left:2px; padding:1px 6px;" onclick="askDeleteSale(' + index + ')">×</button></div></div>';
       });
       logEl.innerHTML = html || '<div style="color:#9ca3af; font-size:14px;">No orders recorded yet today</div>';
+      if (tallyFeedEl) {
+        tallyFeedEl.innerHTML = tallyHtml || '<div style="color:#9ca3af; font-size:12px; padding:6px 4px;">Tap any item above to log instantly...</div>';
+        tallyFeedEl.scrollTop = 0;
+      }
       totalEl.innerText = '₱' + dailySum.toFixed(2);
       reportTotalEl.innerText = '₱' + dailySum.toFixed(2);
+      if (logTopTotalEl) logTopTotalEl.innerText = '₱' + dailySum.toFixed(2);
+      if (logTopCountEl) logTopCountEl.innerText = salesHistory.length;
 
       const startCash = appSettings.startingCash || 0;
-      cashBoxEl.innerText = startCash > 0
-        ? 'Expected Cash in Box: ₱' + (startCash + dailySum).toFixed(2) + ' (incl. ₱' + startCash.toFixed(2) + ' float)'
-        : '';
+      const cashLineText = startCash > 0 ? 'Expected Cash in Box: ₱' + (startCash + dailySum).toFixed(2) + ' (incl. ₱' + startCash.toFixed(2) + ' float)' : '';
+      cashBoxEl.innerText = cashLineText;
+      if (sheetCashEl) sheetCashEl.innerText = cashLineText;
 
       countEl.innerText = salesHistory.length;
-      bannerCountEl.innerText = salesHistory.length + (salesHistory.length === 1 ? ' order' : ' orders');
+      bannerCountEl.innerText = salesHistory.length + (salesHistory.length === 1 ? ' order logged today' : ' orders logged today');
 
       const sortedItems = getRestockCounts();
-      if (sortedItems.length === 0) {
-        restockEl.innerHTML = '<div style="color:#9ca3af; font-size:14px;">No items sold yet today</div>';
-      } else {
-        restockEl.innerHTML = sortedItems.map(pair =>
-          '<div class="restock-item"><span>' + pair.at(0) + '</span><span class="restock-qty">' + pair.at(1) + ' sold</span></div>'
-        ).join('');
-      }
+      restockEl.innerHTML = sortedItems.length === 0
+        ? '<div style="color:#9ca3af; font-size:14px;">No items sold yet today</div>'
+        : sortedItems.map(p => '<div class="restock-item"><span>' + p.at(0) + '</span><span class="restock-qty">' + p.at(1) + ' sold</span></div>').join('');
 
       const sevenDayTotal = pastHistory.reduce((sum, h) => sum + (h.total || 0), 0);
       histBtnLabel.innerText = '📅 Past 7 Days History (' + pastHistory.length + ' • ₱' + sevenDayTotal.toFixed(2) + ')';
 
-      if (pastHistory.length === 0) {
-        histContainer.innerHTML = '<div style="color:#9ca3af; font-size:13px;">No past reports saved yet.</div>';
-      } else {
-        histContainer.innerHTML = pastHistory.map((h, idx) =>
-          '<div class="history-card" onclick="openPastDetailScreen(' + idx + ')">' +
-            '<div class="history-head">' +
-              '<span>' + h.label + '</span>' +
-              '<span>₱' + h.total.toFixed(2) + ' <button class="del-sale-btn" onclick="event.stopPropagation(); deletePastHistoryEntry(' + idx + ')">×</button></span>' +
-            '</div>' +
-          '</div>'
-        ).join('');
-      }
+      histContainer.innerHTML = pastHistory.length === 0
+        ? '<div style="color:#9ca3af; font-size:13px;">No past reports saved yet.</div>'
+        : pastHistory.map((h, idx) =>
+            '<div class="history-card" onclick="openPastDetailScreen(' + idx + ')">' +
+              '<div class="history-head">' +
+                '<span>' + h.label + '</span>' +
+                '<span>₱' + h.total.toFixed(2) + ' <button class="del-sale-btn" onclick="askDeletePastHistoryEntry(event, ' + idx + ')">×</button></span>' +
+              '</div>' +
+            '</div>'
+          ).join('');
     }
 
     function copyReport() {
-      if (salesHistory.length === 0) return alert("No sales to copy yet!");
+      if (salesHistory.length === 0) return showToast('No sales to copy yet');
       const total = salesHistory.reduce((sum, s) => sum + s.total, 0);
       const date = new Date().toLocaleDateString();
       const headerTitle = appSettings.stallName ? appSettings.stallName + " — " : "";
@@ -1930,22 +2173,27 @@
       const sortedItems = getRestockCounts();
       if (sortedItems.length > 0) {
         text += "--- ITEMS SOLD TODAY (HIGHEST TO LOWEST) ---\n";
-       sortedItems.forEach(pair => text += pair.at(1) + "x " + pair.at(0) + "\n");
+        sortedItems.forEach(p => text += p.at(1) + "x " + p.at(0) + "\n");
+        text += "\n--- ORDER LOG ---\n";
       }
       salesHistory.forEach(s => text += "[" + s.time + "] ₱" + s.total.toFixed(2) + " - " + s.summary + "\n");
-      navigator.clipboard.writeText(text).then(() => alert("Today's report & item summary copied!"));
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast('✓ Summary Copied')).catch(() => openImportModalWithText(text));
+      } else {
+        openImportModalWithText(text);
+      }
     }
 
-    function resetDay() {
-      if (salesHistory.length === 0) return alert("Today's sales are already at ₱0.00.");
-      if (confirm("Save today's current sales into 7-Day History and reset today back to ₱0.00?")) {
-        const shiftTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    function askResetDay() {
+      if (salesHistory.length === 0) return showToast("Today's sales are already ₱0.00");
+      openConfirmBox('Save & Reset Shift?', "Save today's sales into 7-Day History and reset today back to ₱0.00?", 'Save & Reset', () => {
+        const shiftTime = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
         archiveSalesToPastHistory(salesHistory, savedDayKey, 'Saved at ' + shiftTime);
-        salesHistory = [];
+        salesHistory = new Array();
         localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
         renderHistory();
-        alert("Saved to 7-Day History! Today is reset to ₱0.00.");
-      }
+        showToast('✓ Saved & Reset to ₱0.00');
+      });
     }
 
     if ('serviceWorker' in navigator) {
@@ -1953,6 +2201,8 @@
     }
 
     applyAllSettingsUI();
+    applyTallyLinesClass();
+    applyTallyDockPos();
     checkAutoMidnightRollover();
     renderMenu();
     renderOrder();
