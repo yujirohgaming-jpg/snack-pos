@@ -80,18 +80,18 @@
     body.menu-text-only .card-top-body { padding: 14px 10px 10px; }
     body.menu-text-only .visual-wrap { display: none; }
     body.simple-tally #kioskSection { padding-top: calc(10px + env(safe-area-inset-top)); }
-    body.simple-tally:has(.edit-mode) #kioskSection, body.simple-tally:has(.soldout-mode) #kioskSection { padding-top: 0; padding-bottom: 24px !important; }
+    body.simple-tally:has(.edit-mode) #kioskSection, body.simple-tally:has(.soldout-mode) #kioskSection { padding-top: 10px; padding-bottom: 24px !important; }
     body.simple-tally .food-footer-bar { display: none; }
     body.simple-tally .card-top-body { padding: 12px 10px; }
     body.simple-tally.tally-lines-3 #kioskSection { padding-bottom: calc(205px + env(safe-area-inset-bottom)); }
     body.simple-tally.tally-lines-5 #kioskSection { padding-bottom: calc(265px + env(safe-area-inset-bottom)); }
     body.simple-tally.tally-lines-7 #kioskSection { padding-bottom: calc(325px + env(safe-area-inset-bottom)); }
-    body.simple-tally.tally-top.tally-lines-3 #kioskSection, body.simple-tally.tally-top.tally-lines-5 #kioskSection, body.simple-tally.tally-top.tally-lines-7 #kioskSection { padding-bottom: calc(74px + env(safe-area-inset-bottom)); }
+    body.simple-tally.tally-top.tally-lines-3 #kioskSection, body.simple-tally.tally-top.tally-lines-5 #kioskSection, body.simple-tally.tally-top.tally-lines-7 #kioskSection { padding-top: 10px; padding-bottom: calc(74px + env(safe-area-inset-bottom)); }
     .simple-tally-dock { display: none; position: fixed; left: 0; right: 0; bottom: calc(62px + env(safe-area-inset-bottom)); background: var(--card); border-top: 2px solid var(--border); box-shadow: 0 -4px 14px rgba(15, 23, 42, 0.14); z-index: 25; flex-direction: column; padding: 6px 12px 8px; }
     body.simple-tally .simple-tally-dock { display: flex; }
     body.simple-tally:has(.edit-mode) .simple-tally-dock, body.simple-tally:has(.soldout-mode) .simple-tally-dock { display: none !important; }
     .edit-mode .custom-tally-card, .soldout-mode .custom-tally-card { display: none !important; }
-    body.simple-tally.tally-top .simple-tally-dock { position: sticky; top: calc(8px + env(safe-area-inset-top)); bottom: auto; border-top: none; border-bottom: 2px solid var(--border); border-radius: 14px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1); }
+    body.simple-tally.tally-top .simple-tally-dock { position: relative; top: auto; bottom: auto; flex-shrink: 0; border-top: none; border-bottom: 2px solid var(--border); border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; padding-top: calc(8px + env(safe-area-inset-top)); box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12); }
     .tally-dock-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 6px; }
     .tally-dock-title { font-size: 11px; font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
     .tally-dock-btns { display: flex; gap: 5px; }
@@ -295,18 +295,18 @@
       <div class="category-tabs" id="categoryTabs"></div>
     </div>
   </div>
-  <div id="kioskSection">
-    <div class="simple-tally-dock" id="simpleTallyDock">
-      <div class="tally-dock-header">
-        <span class="tally-dock-title" onclick="openTodaysLogScreen()">📒 Recent Taps</span>
-        <div class="tally-dock-btns">
-          <button type="button" class="btn-tally-pill" id="tallyPosCycleBtn" onclick="toggleTallyDockPos()">⬆ Top</button>
-          <button type="button" class="btn-tally-pill" id="tallyLinesCycleBtn" onclick="cycleTallyLines()">Lines: 3</button>
-          <button type="button" class="btn-tally-pill" style="background:#0f172a; color:#ffffff; border-color:#334155;" onclick="openTodaysLogScreen()">↗ Full Log</button>
-        </div>
+  <div class="simple-tally-dock" id="simpleTallyDock">
+    <div class="tally-dock-header">
+      <span class="tally-dock-title" onclick="openTodaysLogScreen()">📒 Recent Taps</span>
+      <div class="tally-dock-btns">
+        <button type="button" class="btn-tally-pill" id="tallyPosCycleBtn" onclick="toggleTallyDockPos()">⬆ Top</button>
+        <button type="button" class="btn-tally-pill" id="tallyLinesCycleBtn" onclick="cycleTallyLines()">Lines: 3</button>
+        <button type="button" class="btn-tally-pill" style="background:#0f172a; color:#ffffff; border-color:#334155;" onclick="openTodaysLogScreen()">↗ Full Log</button>
       </div>
-      <div class="tally-dock-scroll" id="simpleTallyFeedList"></div>
     </div>
+    <div class="tally-dock-scroll" id="simpleTallyFeedList"></div>
+  </div>
+  <div id="kioskSection">
     <div class="menu-grid" id="menuGrid"></div>
   </div>
   <div class="bottom-bar">
