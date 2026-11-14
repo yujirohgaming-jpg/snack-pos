@@ -30,6 +30,10 @@
     .toast-banner.show { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     /* ==================== PART 03: CATEGORY TABS & MODES ==================== */
     body.simple-tally .sticky-top-zone { display: none; }
+    body.simple-tally:has(.edit-mode) .sticky-top-zone, body.simple-tally:has(.soldout-mode) .sticky-top-zone { display: block; }
+    body.simple-tally:has(.edit-mode) .cat-bar-row, body.simple-tally:has(.soldout-mode) .cat-bar-row { display: none; }
+    body.simple-tally .edit-mode .top-edit-tools { grid-template-columns: repeat(3, 1fr); }
+    body.simple-tally .btn-add-cat-tool { display: none; }
     body.header-large .cat-tab-btn { padding: 11px 15px; font-size: 14px; }
     body.header-large .btn-custom-scroll { padding: 11px 14px; font-size: 14px; }
     body.header-large .cat-inline-ctrl { padding: 11px 9px; font-size: 13px; }
@@ -76,6 +80,7 @@
     body.menu-text-only .card-top-body { padding: 14px 10px 10px; }
     body.menu-text-only .visual-wrap { display: none; }
     body.simple-tally { padding-top: calc(10px + env(safe-area-inset-top)); }
+    body.simple-tally:has(.edit-mode), body.simple-tally:has(.soldout-mode) { padding-top: 0; padding-bottom: 24px !important; }
     body.simple-tally .food-footer-bar { display: none; }
     body.simple-tally .card-top-body { padding: 12px 10px; }
     body.simple-tally.tally-lines-3 { padding-bottom: calc(205px + env(safe-area-inset-bottom)); }
@@ -84,6 +89,8 @@
     body.simple-tally.tally-top.tally-lines-3, body.simple-tally.tally-top.tally-lines-5, body.simple-tally.tally-top.tally-lines-7 { padding-bottom: calc(74px + env(safe-area-inset-bottom)); }
     .simple-tally-dock { display: none; position: fixed; left: 0; right: 0; bottom: calc(62px + env(safe-area-inset-bottom)); background: var(--card); border-top: 2px solid var(--border); box-shadow: 0 -4px 14px rgba(15, 23, 42, 0.14); z-index: 25; flex-direction: column; padding: 6px 12px 8px; }
     body.simple-tally .simple-tally-dock { display: flex; }
+    body.simple-tally:has(.edit-mode) .simple-tally-dock, body.simple-tally:has(.soldout-mode) .simple-tally-dock { display: none !important; }
+    .edit-mode .custom-tally-card, .soldout-mode .custom-tally-card { display: none !important; }
     body.simple-tally.tally-top .simple-tally-dock { position: sticky; top: calc(8px + env(safe-area-inset-top)); bottom: auto; border-top: none; border-bottom: 2px solid var(--border); border-radius: 14px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1); }
     .tally-dock-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 6px; }
     .tally-dock-title { font-size: 11px; font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
@@ -132,6 +139,8 @@
     .move-btn { background: #ffffff; border: 1px solid #d97706; color: #92400e; border-radius: 6px; padding: 3px 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
     /* ==================== PART 06: BOTTOM BAR & SLIDE SHEETS ==================== */
     .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; color: white; padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,0.28); display: flex; align-items: center; justify-content: space-between; gap: 10px; z-index: 35; }
+    body:has(.edit-mode) .bottom-bar, body:has(.soldout-mode) .bottom-bar { display: none !important; }
+    body:has(.edit-mode), body:has(.soldout-mode) { padding-bottom: 24px !important; }
     .btn-hub-icon { background: rgba(255,255,255,0.14); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.25); border-radius: 14px; width: 48px; height: 48px; font-size: 21px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .bottom-right-group { display: flex; align-items: center; gap: 8px; flex: 1; justify-content: flex-end; }
     .btn-queue-pill { background: rgba(255,255,255,0.14); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.25); border-radius: 14px; padding: 0 14px; height: 48px; font-size: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
@@ -281,7 +290,7 @@
         <button class="btn-top-ed" style="background:#10b981;" onclick="openAddFoodModal()">+ Food</button>
         <button class="btn-top-ed" style="background:#9333ea;" onclick="openAddComboModal()">+ Combo</button>
         <button class="btn-top-ed" style="background:#3b82f6;" onclick="sortActiveCategoryAZ()">Sort A–Z</button>
-        <button class="btn-top-ed" style="background:#8b5cf6;" onclick="openCustomPrompt('Add New Category', 'Category Name (e.g., Drinks)', 'text', '', 'addCategory')">+ Category</button>
+        <button class="btn-top-ed btn-add-cat-tool" style="background:#8b5cf6;" onclick="openCustomPrompt('Add New Category', 'Category Name (e.g., Drinks)', 'text', '', 'addCategory')">+ Category</button>
       </div>
       <div class="cat-bar-row">
         <div class="category-tabs" id="categoryTabs"></div>
@@ -819,6 +828,13 @@
       document.getElementById('headerCompactBtn').classList.toggle('active', appSettings.headerSize !== 'large');
       document.getElementById('headerLargeBtn').classList.toggle('active', appSettings.headerSize === 'large');
 
+      document.body.classList.remove('card-compact', 'card-large');
+      if (appSettings.cardSize === 'compact') document.body.classList.add('card-compact');
+      if (appSettings.cardSize === 'large') document.body.classList.add('card-large');
+      document.getElementById('cardSizeCompact').classList.toggle('active', appSettings.cardSize === 'compact');
+      document.getElementById('cardSizeNormal').classList.toggle('active', !appSettings.cardSize || appSettings.cardSize === 'normal');
+      document.getElementById('cardSizeLarge').classList.toggle('active', appSettings.cardSize === 'large');
+
       document.body.classList.toggle('menu-text-only', appSettings.menuView === 'text');
       document.getElementById('menuViewPhotoBtn').classList.toggle('active', appSettings.menuView === 'photo');
       document.getElementById('menuViewTextBtn').classList.toggle('active', appSettings.menuView === 'text');
@@ -857,6 +873,7 @@
 
     function setAppTheme(t) { appSettings.theme = t; saveSettings(); applyAllSettingsUI(); }
     function setHeaderSizeMode(sz) { appSettings.headerSize = sz; saveSettings(); applyAllSettingsUI(); }
+    function setCardSizeMode(sz) { appSettings.cardSize = sz; saveSettings(); applyAllSettingsUI(); }
     function setMenuViewMode(m) { appSettings.menuView = m; saveSettings(); applyAllSettingsUI(); }
     function setPopupViewMode(m) { appSettings.popupView = m; saveSettings(); applyAllSettingsUI(); }
     function setFontSizeMode(sz) { appSettings.fontSize = sz; saveSettings(); applyAllSettingsUI(); }
