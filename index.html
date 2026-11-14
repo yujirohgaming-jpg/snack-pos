@@ -29,6 +29,10 @@
     .toast-banner { position: fixed; top: 45%; left: 50%; transform: translate(-50%, -50%) scale(0.85); opacity: 0; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #ffffff; border: 1.5px solid rgba(74, 222, 128, 0.8); padding: 10px 20px; border-radius: 30px; font-size: 15px; font-weight: 800; z-index: 95; box-shadow: 0 6px 20px rgba(0,0,0,0.22); transition: all 0.16s ease; white-space: nowrap; pointer-events: none; }
     .toast-banner.show { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     /* ==================== PART 03: CATEGORY TABS & MODES ==================== */
+    body.simple-tally .sticky-top-zone { display: none; }
+    body.header-large .cat-tab-btn { padding: 11px 15px; font-size: 14px; }
+    body.header-large .btn-custom-scroll { padding: 11px 14px; font-size: 14px; }
+    body.header-large .cat-inline-ctrl { padding: 11px 9px; font-size: 13px; }
     .cat-bar-row { display: flex; align-items: center; gap: 6px; }
     .category-tabs { display: flex; gap: 6px; overflow-x: auto; padding: 2px; scrollbar-width: none; flex: 1; align-items: center; }
     .category-tabs::-webkit-scrollbar { display: none; }
@@ -38,7 +42,6 @@
     .cat-inline-ctrl { display: none; background: rgba(0,0,0,0.28); color: #ffffff; border: none; padding: 7px 7px; font-size: 11px; font-weight: 900; cursor: pointer; }
     .edit-mode .cat-tab-wrap.active .cat-inline-ctrl { display: inline-block; }
     .btn-custom-scroll { flex: 0 0 auto; background: #f59e0b; color: #ffffff; border: none; border-radius: 12px; padding: 8px 11px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; }
-    .btn-settings-pin { flex-shrink: 0; background: rgba(255,255,255,0.16); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.25); border-radius: 12px; width: 34px; height: 34px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .mode-banner { display: none; justify-content: space-between; align-items: center; background: #f59e0b; color: #111827; border-radius: 10px; padding: 6px 10px; margin-bottom: 6px; font-size: 12px; font-weight: 900; gap: 8px; }
     .edit-mode .mode-banner.edit-banner { display: flex; }
     .soldout-mode .mode-banner.soldout-banner { display: flex; background: #dc2626; color: #ffffff; }
@@ -46,9 +49,6 @@
     .top-edit-tools { display: none; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 6px; }
     .edit-mode .top-edit-tools { display: grid; }
     .btn-top-ed { padding: 8px 4px; border: none; border-radius: 9px; font-size: 11px; font-weight: 800; color: white; cursor: pointer; text-align: center; }
-    .simple-mode-bar { display: none; align-items: center; justify-content: space-between; flex: 1; font-size: 13px; font-weight: 900; color: #fde047; padding-left: 4px; }
-    body.simple-tally .category-tabs { display: none; }
-    body.simple-tally .simple-mode-bar { display: flex; }
     /* ==================== PART 04: MENU GRID & NOT AVAILABLE ==================== */
     .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     body.layout-tablet .menu-grid { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; }
@@ -66,15 +66,16 @@
     .card-top-body { padding: 10px 10px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; width: 100%; position: relative; }
     body.menu-text-only .card-top-body { padding: 14px 10px 10px; }
     body.menu-text-only .visual-wrap { display: none; }
+    body.simple-tally { padding-top: calc(10px + env(safe-area-inset-top)); }
     body.simple-tally .food-footer-bar { display: none; }
     body.simple-tally .card-top-body { padding: 12px 10px; }
     body.simple-tally.tally-lines-3 { padding-bottom: calc(205px + env(safe-area-inset-bottom)); }
     body.simple-tally.tally-lines-5 { padding-bottom: calc(265px + env(safe-area-inset-bottom)); }
     body.simple-tally.tally-lines-7 { padding-bottom: calc(325px + env(safe-area-inset-bottom)); }
     body.simple-tally.tally-top.tally-lines-3, body.simple-tally.tally-top.tally-lines-5, body.simple-tally.tally-top.tally-lines-7 { padding-bottom: calc(74px + env(safe-area-inset-bottom)); }
-    .simple-tally-dock { display: none; position: fixed; left: 0; right: 0; bottom: calc(58px + env(safe-area-inset-bottom)); background: var(--card); border-top: 2px solid var(--border); box-shadow: 0 -4px 14px rgba(15, 23, 42, 0.14); z-index: 25; flex-direction: column; padding: 6px 12px 8px; }
+    .simple-tally-dock { display: none; position: fixed; left: 0; right: 0; bottom: calc(62px + env(safe-area-inset-bottom)); background: var(--card); border-top: 2px solid var(--border); box-shadow: 0 -4px 14px rgba(15, 23, 42, 0.14); z-index: 25; flex-direction: column; padding: 6px 12px 8px; }
     body.simple-tally .simple-tally-dock { display: flex; }
-    body.simple-tally.tally-top .simple-tally-dock { position: sticky; top: calc(52px + env(safe-area-inset-top)); bottom: auto; border-top: none; border-bottom: 2px solid var(--border); border-radius: 14px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1); }
+    body.simple-tally.tally-top .simple-tally-dock { position: sticky; top: calc(8px + env(safe-area-inset-top)); bottom: auto; border-top: none; border-bottom: 2px solid var(--border); border-radius: 14px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1); }
     .tally-dock-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 6px; }
     .tally-dock-title { font-size: 11px; font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
     .tally-dock-btns { display: flex; gap: 5px; }
@@ -89,6 +90,8 @@
     .tally-line-time { color: var(--muted); font-size: 11px; font-weight: 700; margin-right: 5px; }
     .tally-line-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; font-weight: 800; color: #16a34a; }
     body.theme-dark .tally-line-right { color: #4ade80; }
+    .custom-tally-card { border: 2px dashed #f59e0b !important; background: #fffbeb !important; }
+    body.theme-dark .custom-tally-card { background: #1e293b !important; }
     .text-only-controls { display: none; width: 100%; justify-content: space-between; align-items: center; margin-bottom: 4px; }
     body.menu-text-only .text-only-controls { display: flex; }
     .visual-wrap { position: relative; width: 100%; margin-bottom: 6px; }
@@ -115,20 +118,19 @@
     .edit-mode .reorder-row { display: flex; }
     .move-btn { background: #ffffff; border: 1px solid #d97706; color: #92400e; border-radius: 6px; padding: 3px 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
     /* ==================== PART 06: BOTTOM BAR & SLIDE SHEETS ==================== */
-    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; color: white; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 35; }
-    .bottom-left-tools { display: flex; align-items: center; gap: 6px; }
-    .btn-bar-pill { background: rgba(255,255,255,0.12); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.22); border-radius: 12px; padding: 9px 10px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
-    .btn-bar-pill.has-pending { background: #d97706; border-color: #fde047; }
-    .bottom-mid-total { display: flex; flex-direction: column; align-items: flex-end; flex: 1; min-width: 72px; }
-    .bottom-mid-lbl { font-size: 9px; color: #94a3b8; font-weight: 700; text-transform: uppercase; }
-    .bottom-mid-val { font-size: 19px; font-weight: 900; color: #4ade80; }
-    .btn-main-checkout { background: #2563eb; color: #ffffff; border: none; border-radius: 13px; padding: 12px 16px; font-size: 14px; font-weight: 900; cursor: pointer; white-space: nowrap; min-width: 96px; transition: all 0.15s ease; }
-    .btn-main-checkout.is-pay-state { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); box-shadow: 0 3px 12px rgba(22, 163, 74, 0.45); letter-spacing: 0.5px; font-size: 15px; }
+    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; color: white; padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,0.28); display: flex; align-items: center; justify-content: space-between; gap: 10px; z-index: 35; }
+    .btn-hub-icon { background: rgba(255,255,255,0.14); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.25); border-radius: 14px; width: 48px; height: 48px; font-size: 21px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .bottom-right-group { display: flex; align-items: center; gap: 8px; flex: 1; justify-content: flex-end; }
+    .btn-queue-pill { background: rgba(255,255,255,0.14); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.25); border-radius: 14px; padding: 0 14px; height: 48px; font-size: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .btn-queue-pill.has-pending { background: #d97706; border-color: #fde047; color: #ffffff; }
+    .btn-main-checkout { background: #2563eb; color: #ffffff; border: none; border-radius: 14px; padding: 0 18px; height: 48px; font-size: 14px; font-weight: 900; cursor: pointer; white-space: nowrap; min-width: 118px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; transition: all 0.15s ease; }
+    .btn-main-checkout .cart-btn-amt { font-size: 13px; color: #fde047; font-weight: 900; margin-top: 1px; }
+    .btn-main-checkout.is-pay-state { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); box-shadow: 0 3px 12px rgba(22, 163, 74, 0.45); letter-spacing: 0.6px; font-size: 17px; }
     .btn-main-checkout:disabled { background: #475569 !important; color: #94a3b8 !important; box-shadow: none !important; cursor: not-allowed; }
-    body.simple-tally .bottom-mid-total, body.simple-tally #mainCartPayBtn { display: none; }
-    body.simple-tally #queueBarBtn { display: none; }
-    .simple-tally-badge { display: none; font-size: 12px; font-weight: 800; color: #4ade80; background: rgba(74,222,128,0.14); border: 1px solid rgba(74,222,128,0.35); padding: 7px 11px; border-radius: 11px; }
-    body.simple-tally .simple-tally-badge { display: inline-block; }
+    .btn-main-checkout:disabled .cart-btn-amt { color: #cbd5e1; }
+    body.simple-tally #queueBarBtn, body.simple-tally #mainCartPayBtn { display: none; }
+    .btn-simple-undo { display: none; background: #f59e0b; color: #0f172a; border: none; border-radius: 14px; padding: 0 18px; height: 48px; font-size: 14px; font-weight: 900; cursor: pointer; align-items: center; justify-content: center; gap: 5px; }
+    body.simple-tally .btn-simple-undo { display: flex; }
     .bottom-sheet-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: calc(64px + env(safe-area-inset-bottom)); background: rgba(0,0,0,0.55); z-index: 30; align-items: flex-end; justify-content: center; overscroll-behavior: contain; }
     .bottom-sheet-overlay.open { display: flex; }
     .bottom-sheet-card { background: var(--card); color: var(--text); width: 100%; max-width: 540px; border-top-left-radius: 22px; border-top-right-radius: 22px; padding: 14px 16px 16px; box-shadow: 0 -8px 25px rgba(0,0,0,0.28); max-height: 76vh; display: flex; flex-direction: column; animation: sheetRise 0.18s ease-out; }
@@ -167,6 +169,15 @@
     .btn-copy { background: #2563eb; width: 100%; margin-top: 6px; font-size: 14px; padding: 13px; }
     .full-screen-drawer { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 45; flex-direction: column; overscroll-behavior: contain; }
     .full-screen-drawer.open { display: flex; }
+    .full-screen-drawer.hub-theme { background: #cbd5e1; }
+    body.theme-dark .full-screen-drawer.hub-theme { background: #020617; }
+    .hub-theme .drawer-header { background: #1e1b4b; border-bottom: 2px solid #4338ca; }
+    .hub-section-divider { font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #312e81; margin: 18px 4px 10px; display: flex; align-items: center; gap: 6px; }
+    body.theme-dark .hub-section-divider { color: #a5b4fc; }
+    .earnings-hero-card { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; border-radius: 18px; padding: 16px; margin-bottom: 12px; box-shadow: 0 6px 16px rgba(15, 23, 42, 0.22); border: 1.5px solid #4338ca; cursor: pointer; }
+    .earnings-hero-top { display: flex; justify-content: space-between; align-items: center; font-size: 11px; text-transform: uppercase; color: #a5b4fc; letter-spacing: 0.8px; font-weight: 800; }
+    .earnings-hero-amt { font-size: 34px; font-weight: 900; color: #4ade80; margin: 6px 0 4px; }
+    .earnings-hero-sub { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #e2e8f0; font-weight: 700; }
     .drawer-header { background: #0f172a; color: white; padding: calc(14px + env(safe-area-inset-top)) 16px 14px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
     .drawer-header h2 { margin: 0; font-size: 18px; font-weight: 800; }
     .btn-close-drawer { background: #334155; color: white; border: none; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
@@ -258,11 +269,6 @@
       </div>
       <div class="cat-bar-row">
         <div class="category-tabs" id="categoryTabs"></div>
-        <div class="simple-mode-bar">
-          <span>⚡ Simple Tally Mode</span>
-          <button class="btn-custom-scroll" onclick="openCustomOrderModal()">+ Custom</button>
-        </div>
-        <button class="btn-settings-pin" onclick="openSettingsScreen()" title="Settings">⚙️</button>
       </div>
     </div>
     <div class="simple-tally-dock" id="simpleTallyDock">
@@ -279,18 +285,17 @@
     <div class="menu-grid" id="menuGrid"></div>
   </div>
   <div class="bottom-bar">
-    <div class="bottom-left-tools">
-      <button class="btn-bar-pill" onclick="toggleEarningsSheet()">📊</button>
-      <button class="btn-bar-pill" id="queueBarBtn" onclick="openQueueScreen()">🍳 <span id="queuePendingCount">0</span></button>
-      <span class="simple-tally-badge" id="simpleLastUndoWrap" onclick="undoLastSimpleSale()">↩ Undo Last</span>
+    <button class="btn-hub-icon" onclick="openHubScreen()" title="Stall Hub & Settings">☰</button>
+    <div class="bottom-right-group">
+      <button class="btn-queue-pill" id="queueBarBtn" onclick="openQueueScreen()">🍳 Queue (<span id="queuePendingCount">0</span>)</button>
+      <button class="btn-main-checkout" id="mainCartPayBtn" onclick="handleMainCheckoutBtn()" disabled>
+        <span>Cart (0)</span>
+        <span class="cart-btn-amt">₱0.00</span>
+      </button>
+      <button class="btn-simple-undo" onclick="undoLastSimpleSale()">↩ UNDO</button>
     </div>
-    <div class="bottom-mid-total">
-      <span class="bottom-mid-lbl">Order Total</span>
-      <span class="bottom-mid-val" id="barTotal">₱0.00</span>
-    </div>
-    <button class="btn-main-checkout" id="mainCartPayBtn" onclick="handleMainCheckoutBtn()" disabled>Cart (0)</button>
   </div>
-  <!-- ==================== PART 10: SLIDE-UP CART & EARNINGS SHEETS ==================== -->
+  <!-- ==================== PART 10: SLIDE-UP CART SHEET ==================== -->
   <div class="bottom-sheet-overlay" id="cartSheetOverlay" onclick="if(event.target===this) closeCartSheet()">
     <div class="bottom-sheet-card">
       <div class="sheet-head-row">
@@ -314,21 +319,7 @@
       </div>
     </div>
   </div>
-  <div class="bottom-sheet-overlay" id="earningsSheetOverlay" onclick="if(event.target===this) closeEarningsSheet()">
-    <div class="bottom-sheet-card">
-      <div class="sheet-head-row">
-        <h3 id="stallBannerTitle">Today's Total Earnings</h3>
-        <button class="btn-sm-pill" style="background:#e2e8f0; color:#0f172a; padding:6px 10px;" onclick="closeEarningsSheet()">↓ Hide</button>
-      </div>
-      <div style="background:#0f172a; color:white; border-radius:16px; padding:14px; text-align:center; margin-bottom:10px;">
-        <div style="font-size:32px; font-weight:900; color:#4ade80;" id="dailyTotal">₱0.00</div>
-        <div style="font-size:12px; color:#cbd5e1; font-weight:700; margin-top:2px;" id="bannerOrderCount">0 orders logged today</div>
-        <div style="font-size:12px; color:#93c5fd; font-weight:700; margin-top:4px;" id="sheetCashBoxLine"></div>
-      </div>
-      <button class="btn" style="background:#2563eb; width:100%;" onclick="closeEarningsSheet(); openReportsScreen();">📊 Open Daily Summary & History</button>
-    </div>
-  </div>
-  <!-- ==================== PART 11: QUEUE & SUMMARY DRAWERS ==================== -->
+  <!-- ==================== PART 11: QUEUE & LOG DRAWERS ==================== -->
   <div class="full-screen-drawer" id="queueScreen">
     <div class="drawer-header">
       <h2>🍳 Active Order Queue</h2>
@@ -340,42 +331,6 @@
     <div class="drawer-body" id="queueDrawerBody">
       <div style="font-size:12px; color:var(--muted); margin-bottom:10px; font-weight:700;" id="queueTimerHint">Tap items to check off as cooked. Auto-completes after 30 mins.</div>
       <div id="queueListContainer"></div>
-    </div>
-  </div>
-  <div class="full-screen-drawer" id="reportsScreen">
-    <div class="drawer-header">
-      <h2>📊 Daily Summary</h2>
-      <button class="btn-close-drawer" onclick="closeReportsScreen()">← Back</button>
-    </div>
-    <div class="drawer-body" id="reportsDrawerBody">
-      <div class="card-box" style="text-align:center; background:#0f172a; color:white;">
-        <div style="font-size:11px; text-transform:uppercase; color:#94a3b8; letter-spacing:1px;">Today's Total Earnings</div>
-        <div style="font-size:32px; font-weight:900; color:#4ade80; margin-top:4px;" id="reportScreenTotal">₱0.00</div>
-        <div id="expectedCashBoxLine" style="font-size:12px; color:#93c5fd; font-weight:700; margin-top:6px;"></div>
-      </div>
-      <button class="report-accordion-btn" id="restockAccBtn" onclick="toggleReportSection('restock')">
-        <span>📦 Sold Today (Highest → Lowest)</span>
-        <span id="restockArrow">▼</span>
-      </button>
-      <div class="report-accordion-body" id="restockAccBody">
-        <div id="restockSummary"><div style="color:#9ca3af; font-size:14px;">No items sold yet today</div></div>
-      </div>
-      <button class="report-accordion-btn" onclick="openTodaysLogScreen()">
-        <span>🧾 Today's Sales Log (<span id="orderCount">0</span> orders)</span>
-        <span>▶</span>
-      </button>
-      <button class="report-accordion-btn" id="historyAccBtn" onclick="toggleReportSection('history')">
-        <span id="historyBtnLabel">📅 Past 7 Days History (0 • ₱0.00)</span>
-        <span id="historyArrow">▼</span>
-      </button>
-      <div class="report-accordion-body" id="historyAccBody">
-        <div id="pastHistoryContainer"></div>
-        <button class="btn btn-reset" style="margin-top:8px;" onclick="askClearAllHistory()">Clear All History</button>
-      </div>
-      <div class="card-box" style="margin-top:14px;">
-        <button class="btn btn-copy" onclick="copyReport()">📋 Copy Today's Summary</button>
-        <button class="btn btn-reset" onclick="askResetDay()">Save & Start New Shift (Reset Today)</button>
-      </div>
     </div>
   </div>
   <div class="full-screen-drawer" id="todaysLogScreen">
@@ -390,6 +345,21 @@
       </div>
       <div id="salesLog"></div>
     </div>
+    <div class="drawer-footer">
+      <button class="btn btn-copy" style="margin-top:0;" onclick="copyReport()">📋 Copy Today's Summary</button>
+    </div>
+  </div>
+  <div class="full-screen-drawer" id="soldTodayScreen">
+    <div class="drawer-header">
+      <h2>📦 Sold Today</h2>
+      <button class="btn-close-drawer" onclick="closeSoldTodayScreen()">← Back</button>
+    </div>
+    <div class="drawer-body" id="soldTodayDrawerBody">
+      <div class="card-box">
+        <h3>Highest → Lowest Quantity</h3>
+        <div id="restockSummary"><div style="color:#9ca3af; font-size:14px;">No items sold yet today</div></div>
+      </div>
+    </div>
   </div>
   <div class="full-screen-drawer" id="pastDetailScreen">
     <div class="drawer-header">
@@ -401,22 +371,55 @@
       <button class="btn btn-copy" style="margin-top:0;" id="pastDetailCopyBtn">📋 Copy This Report</button>
     </div>
   </div>
-  <!-- ==================== PART 12: SETTINGS DRAWER HTML ==================== -->
-  <div class="full-screen-drawer" id="settingsScreen">
+  <!-- ==================== PART 12: UNIFIED STALL HUB & SETTINGS DRAWER ==================== -->
+  <div class="full-screen-drawer hub-theme" id="hubScreen">
     <div class="drawer-header">
-      <h2>⚙️ Settings</h2>
-      <button class="btn-close-drawer" onclick="closeSettingsScreen()">← Back</button>
+      <h2 id="hubHeaderTitle">🏪 Stall Hub & Settings</h2>
+      <button class="btn-close-drawer" onclick="closeHubScreen()">← Back</button>
     </div>
-    <div class="drawer-body" id="settingsDrawerBody">
-      <div class="card-box">
-        <h3>🏪 Menu & Stock Actions</h3>
-        <div class="settings-grid-2">
-          <button class="btn" style="background:#f59e0b; padding:12px 8px; font-size:13px;" onclick="startEditMenuFromSettings()">✏️ Edit Menu</button>
-          <button class="btn" style="background:#dc2626; padding:12px 8px; font-size:13px;" onclick="startSoldOutFromSettings()">🚫 Not Available</button>
+    <div class="drawer-body" id="hubDrawerBody">
+      <div class="earnings-hero-card" onclick="openTodaysLogScreen()">
+        <div class="earnings-hero-top">
+          <span id="stallBannerTitle">Today's Total Earnings</span>
+          <span>Tap for Today's Log ▶</span>
+        </div>
+        <div class="earnings-hero-amt" id="dailyTotal">₱0.00</div>
+        <div class="earnings-hero-sub">
+          <span id="bannerOrderCount">0 orders logged today</span>
+          <span style="color:#93c5fd;" id="expectedCashBoxLine"></span>
         </div>
       </div>
+
+      <button class="report-accordion-btn" onclick="openSoldTodayScreen()">
+        <span>📦 Sold Today (Highest → Lowest)</span>
+        <span>▶</span>
+      </button>
+
+      <button class="report-accordion-btn" id="historyAccBtn" onclick="toggleHubAccordion('history')">
+        <span id="historyBtnLabel">📅 Past 7 Days History (0 • ₱0.00)</span>
+        <span id="historyArrow">▼</span>
+      </button>
+      <div class="report-accordion-body" id="historyAccBody">
+        <div id="pastHistoryContainer"></div>
+        <button class="btn btn-reset" style="margin-top:8px;" onclick="askClearAllHistory()">Clear All History</button>
+      </div>
+
+      <button class="btn btn-reset" style="margin-top:2px; margin-bottom:14px;" onclick="askResetDay()">Save & Start New Shift (Reset Today)</button>
+
+      <div class="hub-section-divider">⚙️ App & Menu Settings</div>
+
       <div class="card-box">
-        <h3>⚡ Operating & Screen Mode</h3>
+        <div class="settings-grid-2">
+          <button class="btn" style="background:#f59e0b; padding:12px 8px; font-size:13px;" onclick="startEditMenuFromHub()">✏️ Edit Menu</button>
+          <button class="btn" style="background:#dc2626; padding:12px 8px; font-size:13px;" onclick="startSoldOutFromHub()">🚫 Not Available</button>
+        </div>
+      </div>
+
+      <button class="report-accordion-btn" id="setModeAccBtn" onclick="toggleHubAccordion('setMode')">
+        <span>⚡ Mode, Screen Layout & Header Size</span>
+        <span id="setModeArrow">▼</span>
+      </button>
+      <div class="report-accordion-body" id="setModeAccBody">
         <label class="edit-field-label" style="margin-top:2px;">Checkout Mode</label>
         <div class="settings-grid-2">
           <button type="button" class="seg-btn" id="opModePosBtn" onclick="setOperatingMode('pos')">🧾 Standard POS</button>
@@ -428,10 +431,33 @@
           <button type="button" class="seg-btn" id="layoutTabletBtn" onclick="setScreenLayout('tablet')">💻 Tablet/PC</button>
           <button type="button" class="seg-btn" id="layoutAutoBtn" onclick="setScreenLayout('auto')">✨ Auto</button>
         </div>
+        <label class="edit-field-label">Top Category Bar Size (POS Mode)</label>
+        <div class="settings-grid-2">
+          <button type="button" class="seg-btn" id="headerCompactBtn" onclick="setHeaderSizeMode('compact')">Compact</button>
+          <button type="button" class="seg-btn" id="headerLargeBtn" onclick="setHeaderSizeMode('large')">Large</button>
+        </div>
+        <label class="edit-field-label">Queue Auto-Complete Timer</label>
+        <div class="settings-grid-4">
+          <button type="button" class="seg-btn" id="qTime5" onclick="setQueueTimer(5)">5 min</button>
+          <button type="button" class="seg-btn" id="qTime10" onclick="setQueueTimer(10)">10 min</button>
+          <button type="button" class="seg-btn" id="qTime15" onclick="setQueueTimer(15)">15 min</button>
+          <button type="button" class="seg-btn" id="qTime30" onclick="setQueueTimer(30)">30 min</button>
+        </div>
       </div>
-      <div class="card-box">
-        <h3>🖼️ Display & Text Size</h3>
-        <label class="edit-field-label" style="margin-top:2px;">Menu Cards</label>
+
+      <button class="report-accordion-btn" id="setLookAccBtn" onclick="toggleHubAccordion('setLook')">
+        <span>🎨 Theme, Display, Text & Sound</span>
+        <span id="setLookArrow">▼</span>
+      </button>
+      <div class="report-accordion-body" id="setLookAccBody">
+        <label class="edit-field-label" style="margin-top:2px;">App Background Theme</label>
+        <div class="settings-grid-2">
+          <button type="button" class="seg-btn" style="background:#e2e8f0; color:#0f172a;" onclick="setAppTheme('light')">☀️ Classic Light</button>
+          <button type="button" class="seg-btn" style="background:#0f172a; color:#f8fafc;" onclick="setAppTheme('dark')">🌙 Dark Mode</button>
+          <button type="button" class="seg-btn" style="background:#fef3c7; color:#451a03;" onclick="setAppTheme('cream')">🍦 Warm Cream</button>
+          <button type="button" class="seg-btn" style="background:#d1fae5; color:#064e3b;" onclick="setAppTheme('mint')">🌿 Fresh Mint</button>
+        </div>
+        <label class="edit-field-label">Menu Cards</label>
         <div class="settings-grid-2">
           <button type="button" class="seg-btn" id="menuViewPhotoBtn" onclick="setMenuViewMode('photo')">🖼️ Photo + Text</button>
           <button type="button" class="seg-btn" id="menuViewTextBtn" onclick="setMenuViewMode('text')">🔤 Text Only</button>
@@ -447,47 +473,24 @@
           <button type="button" class="seg-btn" id="fontSizeLarge" onclick="setFontSizeMode('large')">Large</button>
           <button type="button" class="seg-btn" id="fontSizeXlarge" onclick="setFontSizeMode('xlarge')">Extra Large</button>
         </div>
-      </div>
-      <div class="card-box">
-        <h3>⏱️ Queue Auto-Complete Timer</h3>
-        <div class="settings-grid-4">
-          <button type="button" class="seg-btn" id="qTime5" onclick="setQueueTimer(5)">5 min</button>
-          <button type="button" class="seg-btn" id="qTime10" onclick="setQueueTimer(10)">10 min</button>
-          <button type="button" class="seg-btn" id="qTime15" onclick="setQueueTimer(15)">15 min</button>
-          <button type="button" class="seg-btn" id="qTime30" onclick="setQueueTimer(30)">30 min</button>
-        </div>
-      </div>
-      <div class="card-box">
-        <h3>🎨 App Background Theme</h3>
-        <div class="settings-grid-2">
-          <button type="button" class="seg-btn" style="background:#e2e8f0; color:#0f172a;" onclick="setAppTheme('light')">☀️ Classic Light</button>
-          <button type="button" class="seg-btn" style="background:#0f172a; color:#f8fafc;" onclick="setAppTheme('dark')">🌙 Dark Mode</button>
-          <button type="button" class="seg-btn" style="background:#fef3c7; color:#451a03;" onclick="setAppTheme('cream')">🍦 Warm Cream</button>
-          <button type="button" class="seg-btn" style="background:#d1fae5; color:#064e3b;" onclick="setAppTheme('mint')">🌿 Fresh Mint</button>
-        </div>
-      </div>
-      <div class="card-box">
-        <h3>🏪 Stall Info & Cash Drawer</h3>
-        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-bottom:8px;" onclick="openCustomPrompt('Set Stall Name', 'Stall / Business Name', 'text', appSettings.stallName, 'stallName')">✏️ Stall Name (<span id="stallNameDisplay">Not Set</span>)</button>
-        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-bottom:8px;" onclick="openCustomPrompt('Starting Cash Box', 'Starting Loose Change (₱)', 'decimal', appSettings.startingCash || '', 'startingCash')">💵 Starting Cash Box (<span id="startingCashDisplay">₱0.00</span>)</button>
-        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px;" onclick="openCustomPrompt('Quick Cash Bills', 'Bills separated by commas (leave blank to hide)', 'text', (appSettings.quickBills || new Array()).join(', '), 'quickBills')">💰 Edit Quick Cash Bills</button>
-      </div>
-      <div class="card-box">
-        <h3>🔔 Sound & Vibration</h3>
+        <label class="edit-field-label">Sound & Vibration</label>
         <div class="settings-grid-2">
           <button type="button" class="seg-btn" id="soundToggleBtn" onclick="toggleSoundSetting()">🔊 Sound: ON</button>
           <button type="button" class="seg-btn" id="vibeToggleBtn" onclick="toggleVibeSetting()">📳 Vibrate: ON</button>
         </div>
       </div>
-      <div class="card-box">
-        <h3>💾 Menu Backup & Transfer</h3>
+
+      <button class="report-accordion-btn" id="setDataAccBtn" onclick="toggleHubAccordion('setData')">
+        <span>🏪 Stall Info, Cash Drawer & Menu Backup</span>
+        <span id="setDataArrow">▼</span>
+      </button>
+      <div class="report-accordion-body" id="setDataAccBody">
+        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-bottom:8px;" onclick="openCustomPrompt('Set Stall Name', 'Stall / Business Name', 'text', appSettings.stallName, 'stallName')">✏️ Stall Name (<span id="stallNameDisplay">Not Set</span>)</button>
+        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-bottom:8px;" onclick="openCustomPrompt('Starting Cash Box', 'Starting Loose Change (₱)', 'decimal', appSettings.startingCash || '', 'startingCash')">💵 Starting Cash Box (<span id="startingCashDisplay">₱0.00</span>)</button>
+        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-bottom:10px;" onclick="openCustomPrompt('Quick Cash Bills', 'Bills separated by commas (leave blank to hide)', 'text', (appSettings.quickBills || new Array()).join(', '), 'quickBills')">💰 Edit Quick Cash Bills</button>
         <button class="btn btn-copy" onclick="exportMenuBackup()">Copy Menu Backup Code</button>
         <button class="btn" style="background:#0d9488; width:100%; margin-top:8px; padding:13px; font-size:14px;" onclick="openImportModal()">Import Menu Backup</button>
-      </div>
-      <div class="card-box">
-        <h3>🔄 Reset</h3>
-        <button class="btn" style="background:#64748b; width:100%; padding:13px; font-size:14px;" onclick="askRestoreDefaultMenu()">Reset Menu to Defaults</button>
-        <button class="btn btn-reset" onclick="askClearAllHistory()">Clear All 7-Day History</button>
+        <button class="btn" style="background:#64748b; width:100%; margin-top:8px; padding:13px; font-size:14px;" onclick="askRestoreDefaultMenu()">Reset Menu to Defaults</button>
       </div>
     </div>
   </div>
@@ -728,24 +731,41 @@
       return parseDateKeyLocal(dateKey).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     }
     // ==================== PART 19: SETTINGS & ROLLOVER ====================
+    let sharedAudioCtx = null;
+    function unlockIosAudio() {
+      try {
+        if (!sharedAudioCtx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) sharedAudioCtx = new AudioCtx();
+        }
+        if (sharedAudioCtx && sharedAudioCtx.state === 'suspended') {
+          sharedAudioCtx.resume();
+        }
+      } catch (e) {}
+    }
+    document.addEventListener('touchstart', unlockIosAudio, { passive: true });
+    document.addEventListener('click', unlockIosAudio, { passive: true });
+
     function triggerFeedback(isSale) {
       if (appSettings.vibeOn && navigator.vibrate) {
         navigator.vibrate(isSale ? new Array(40, 30, 40) : 25);
       }
       if (appSettings.soundOn) {
         try {
-          const ctx = new (window.AudioContext || window.webkitAudioContext)();
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
+          unlockIosAudio();
+          if (!sharedAudioCtx) return;
+          const now = sharedAudioCtx.currentTime;
+          const osc = sharedAudioCtx.createOscillator();
+          const gain = sharedAudioCtx.createGain();
           osc.type = 'sine';
-          osc.frequency.setValueAtTime(isSale ? 880 : 620, ctx.currentTime);
-          if (isSale) osc.frequency.setValueAtTime(1175, ctx.currentTime + 0.08);
-          gain.gain.setValueAtTime(0.08, ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (isSale ? 0.22 : 0.07));
+          osc.frequency.setValueAtTime(isSale ? 880 : 620, now);
+          if (isSale) osc.frequency.setValueAtTime(1175, now + 0.08);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + (isSale ? 0.24 : 0.08));
           osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start();
-          osc.stop(ctx.currentTime + (isSale ? 0.23 : 0.08));
+          gain.connect(sharedAudioCtx.destination);
+          osc.start(now);
+          osc.stop(now + (isSale ? 0.25 : 0.09));
         } catch (e) {}
       }
     }
@@ -753,6 +773,10 @@
     function applyAllSettingsUI() {
       document.body.classList.remove('theme-dark', 'theme-cream', 'theme-mint');
       if (appSettings.theme && appSettings.theme !== 'light') document.body.classList.add('theme-' + appSettings.theme);
+
+      document.body.classList.toggle('header-large', appSettings.headerSize === 'large');
+      document.getElementById('headerCompactBtn').classList.toggle('active', appSettings.headerSize !== 'large');
+      document.getElementById('headerLargeBtn').classList.toggle('active', appSettings.headerSize === 'large');
 
       document.body.classList.toggle('menu-text-only', appSettings.menuView === 'text');
       document.getElementById('menuViewPhotoBtn').classList.toggle('active', appSettings.menuView === 'photo');
@@ -791,6 +815,7 @@
     }
 
     function setAppTheme(t) { appSettings.theme = t; saveSettings(); applyAllSettingsUI(); }
+    function setHeaderSizeMode(sz) { appSettings.headerSize = sz; saveSettings(); applyAllSettingsUI(); }
     function setMenuViewMode(m) { appSettings.menuView = m; saveSettings(); applyAllSettingsUI(); }
     function setPopupViewMode(m) { appSettings.popupView = m; saveSettings(); applyAllSettingsUI(); }
     function setFontSizeMode(sz) { appSettings.fontSize = sz; saveSettings(); applyAllSettingsUI(); }
@@ -1117,6 +1142,18 @@
         };
         gridEl.appendChild(card);
       });
+
+      if (isSimple) {
+        const customCard = document.createElement('div');
+        customCard.className = 'menu-card-item custom-tally-card';
+        customCard.innerHTML =
+          '<div class="card-top-body">' +
+            '<div class="visual-wrap"><div class="food-icon">➕</div></div>' +
+            '<div class="food-name" style="color:#b45309;">+ Custom</div>' +
+          '</div>';
+        customCard.onclick = openCustomOrderModal;
+        gridEl.appendChild(customCard);
+      }
     }
 
     function selectCategoryTab(idx) {
@@ -1548,8 +1585,8 @@
       }
     }
     // ==================== PART 26: EDIT & STOCK MODES ====================
-    function startEditMenuFromSettings() {
-      closeSettingsScreen();
+    function startEditMenuFromHub() {
+      closeHubScreen();
       isSoldOutMode = false;
       isEditMode = true;
       const kioskSec = document.getElementById('kioskSection');
@@ -1558,8 +1595,8 @@
       renderMenu();
     }
 
-    function startSoldOutFromSettings() {
-      closeSettingsScreen();
+    function startSoldOutFromHub() {
+      closeHubScreen();
       isEditMode = false;
       isSoldOutMode = true;
       const kioskSec = document.getElementById('kioskSection');
@@ -1648,16 +1685,16 @@
     }
 
     function openQueueScreen() {
-      closeCartSheet(); closeEarningsSheet();
+      closeCartSheet();
       renderQueue();
       document.getElementById('queueScreen').classList.add('open');
       resetDrawerScroll('queueDrawerBody');
     }
     function closeQueueScreen() { document.getElementById('queueScreen').classList.remove('open'); }
 
-    function openReportsScreen() {
-      closeCartSheet(); closeEarningsSheet();
-      new Array('restock', 'history').forEach(sec => {
+    function openHubScreen() {
+      closeCartSheet();
+      new Array('history', 'setMode', 'setLook', 'setData').forEach(sec => {
         const btn = document.getElementById(sec + 'AccBtn');
         const body = document.getElementById(sec + 'AccBody');
         const arrow = document.getElementById(sec + 'Arrow');
@@ -1665,28 +1702,29 @@
         if (body) body.classList.remove('open');
         if (arrow) arrow.innerText = '▼';
       });
+      applyAllSettingsUI();
       renderHistory();
-      document.getElementById('reportsScreen').classList.add('open');
-      resetDrawerScroll('reportsDrawerBody');
+      document.getElementById('hubScreen').classList.add('open');
+      resetDrawerScroll('hubDrawerBody');
     }
-    function closeReportsScreen() { document.getElementById('reportsScreen').classList.remove('open'); }
+    function closeHubScreen() { document.getElementById('hubScreen').classList.remove('open'); }
+
+    function openSoldTodayScreen() {
+      renderHistory();
+      document.getElementById('soldTodayScreen').classList.add('open');
+      resetDrawerScroll('soldTodayDrawerBody');
+    }
+    function closeSoldTodayScreen() { document.getElementById('soldTodayScreen').classList.remove('open'); }
 
     function openTodaysLogScreen() {
+      renderHistory();
       document.getElementById('todaysLogScreen').classList.add('open');
       resetDrawerScroll('todaysLogDrawerBody');
     }
     function closeTodaysLogScreen() { document.getElementById('todaysLogScreen').classList.remove('open'); }
     function closePastDetailScreen() { document.getElementById('pastDetailScreen').classList.remove('open'); }
 
-    function openSettingsScreen() {
-      closeCartSheet(); closeEarningsSheet();
-      applyAllSettingsUI();
-      document.getElementById('settingsScreen').classList.add('open');
-      resetDrawerScroll('settingsDrawerBody');
-    }
-    function closeSettingsScreen() { document.getElementById('settingsScreen').classList.remove('open'); }
-
-    function toggleReportSection(section) {
+    function toggleHubAccordion(section) {
       const btn = document.getElementById(section + 'AccBtn');
       const body = document.getElementById(section + 'AccBody');
       const arrow = document.getElementById(section + 'Arrow');
@@ -1697,7 +1735,6 @@
 
     function openCartSheet() {
       if (currentOrder.length === 0) return;
-      closeEarningsSheet();
       selectedCashBill = 0;
       renderCartCashStrip();
       renderOrder();
@@ -1711,31 +1748,17 @@
       updateMainCheckoutButton();
     }
 
-    function toggleEarningsSheet() {
-      const ov = document.getElementById('earningsSheetOverlay');
-      if (ov.classList.contains('open')) {
-        closeEarningsSheet();
-      } else {
-        closeCartSheet();
-        renderHistory();
-        ov.classList.add('open');
-      }
-    }
-
-    function closeEarningsSheet() {
-      document.getElementById('earningsSheetOverlay').classList.remove('open');
-    }
-
     function updateMainCheckoutButton() {
       const btn = document.getElementById('mainCartPayBtn');
       const isOpen = document.getElementById('cartSheetOverlay').classList.contains('open');
       const count = currentOrder.length;
+      const total = getOrderSum();
       btn.disabled = count === 0;
       if (isOpen && count > 0) {
-        btn.innerText = 'PAY';
+        btn.innerHTML = '<span>PAY</span>';
         btn.classList.add('is-pay-state');
       } else {
-        btn.innerText = 'Cart (' + count + ')';
+        btn.innerHTML = '<span>Cart (' + count + ')</span><span class="cart-btn-amt">₱' + total.toFixed(2) + '</span>';
         btn.classList.remove('is-pay-state');
       }
     }
@@ -1813,14 +1836,12 @@
     function renderOrder() {
       const list = document.getElementById('currentOrderList');
       const totalEl = document.getElementById('orderTotal');
-      const barTotal = document.getElementById('barTotal');
       const changeLine = document.getElementById('sheetChangeLine');
       const changeLbl = document.getElementById('sheetChangeLabel');
       const changeVal = document.getElementById('sheetChangeVal');
 
       updateMainCheckoutButton();
       const total = getOrderSum();
-      barTotal.innerText = '₱' + total.toFixed(2);
       totalEl.innerText = '₱' + total.toFixed(2);
 
       if (currentOrder.length === 0) {
@@ -2108,14 +2129,11 @@
     function renderHistory() {
       const logEl = document.getElementById('salesLog');
       const totalEl = document.getElementById('dailyTotal');
-      const reportTotalEl = document.getElementById('reportScreenTotal');
       const logTopTotalEl = document.getElementById('todaysLogTopTotal');
       const logTopCountEl = document.getElementById('todaysLogTopCount');
       const tallyFeedEl = document.getElementById('simpleTallyFeedList');
       const cashBoxEl = document.getElementById('expectedCashBoxLine');
-      const sheetCashEl = document.getElementById('sheetCashBoxLine');
       const bannerCountEl = document.getElementById('bannerOrderCount');
-      const countEl = document.getElementById('orderCount');
       const restockEl = document.getElementById('restockSummary');
       const histBtnLabel = document.getElementById('historyBtnLabel');
       const histContainer = document.getElementById('pastHistoryContainer');
@@ -2132,16 +2150,12 @@
         tallyFeedEl.scrollTop = 0;
       }
       totalEl.innerText = '₱' + dailySum.toFixed(2);
-      reportTotalEl.innerText = '₱' + dailySum.toFixed(2);
       if (logTopTotalEl) logTopTotalEl.innerText = '₱' + dailySum.toFixed(2);
       if (logTopCountEl) logTopCountEl.innerText = salesHistory.length;
 
       const startCash = appSettings.startingCash || 0;
-      const cashLineText = startCash > 0 ? 'Expected Cash in Box: ₱' + (startCash + dailySum).toFixed(2) + ' (incl. ₱' + startCash.toFixed(2) + ' float)' : '';
-      cashBoxEl.innerText = cashLineText;
-      if (sheetCashEl) sheetCashEl.innerText = cashLineText;
+      cashBoxEl.innerText = startCash > 0 ? 'Cash Box: ₱' + (startCash + dailySum).toFixed(2) : '';
 
-      countEl.innerText = salesHistory.length;
       bannerCountEl.innerText = salesHistory.length + (salesHistory.length === 1 ? ' order logged today' : ' orders logged today');
 
       const sortedItems = getRestockCounts();
