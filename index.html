@@ -30,9 +30,9 @@
     .toast-banner.show { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     /* ==================== PART 03: CATEGORY TABS & MODES ==================== */
     body.simple-tally .sticky-top-zone { display: none; }
-    body.simple-tally:has(.edit-mode) .sticky-top-zone, body.simple-tally:has(.soldout-mode) .sticky-top-zone { display: block; }
-    body.simple-tally:has(.edit-mode) .cat-bar-row, body.simple-tally:has(.soldout-mode) .cat-bar-row { display: none; }
-    body.simple-tally .edit-mode .top-edit-tools { grid-template-columns: repeat(3, 1fr); }
+    body.simple-tally.edit-mode .sticky-top-zone, body.simple-tally.soldout-mode .sticky-top-zone { display: block; }
+    body.simple-tally.edit-mode .cat-bar-row, body.simple-tally.soldout-mode .cat-bar-row { display: none; }
+    body.simple-tally.edit-mode .top-edit-tools { grid-template-columns: repeat(3, 1fr); }
     body.simple-tally .btn-add-cat-tool { display: none; }
     body.header-large .cat-tab-btn { padding: 11px 18px; font-size: 14px; }
     body.header-large .btn-custom-scroll { padding: 11px 16px; font-size: 14px; }
@@ -79,34 +79,22 @@
     .card-top-body { padding: 0 0 8px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; width: 100%; position: relative; }
     body.menu-text-only .card-top-body { padding: 14px 10px 10px; justify-content: center; }
     body.menu-text-only .visual-wrap { display: none; }
-    body.simple-tally #kioskSection { padding-top: calc(10px + env(safe-area-inset-top)); }
-    body.simple-tally:has(.edit-mode) #kioskSection, body.simple-tally:has(.soldout-mode) #kioskSection { padding-top: 10px; padding-bottom: 24px !important; }
+    body.simple-tally #kioskSection { padding-top: calc(10px + env(safe-area-inset-top)); padding-bottom: calc(165px + env(safe-area-inset-bottom)); }
+    body.simple-tally.edit-mode #kioskSection, body.simple-tally.soldout-mode #kioskSection { padding-top: 10px; padding-bottom: 24px !important; }
     body.simple-tally .food-footer-bar { display: none; }
     body.simple-tally .card-top-body { padding: 0 0 10px; }
     body.simple-tally.menu-text-only .card-top-body { padding: 14px 10px; }
-    body.simple-tally.tally-lines-3 #kioskSection { padding-bottom: calc(205px + env(safe-area-inset-bottom)); }
-    body.simple-tally.tally-lines-5 #kioskSection { padding-bottom: calc(265px + env(safe-area-inset-bottom)); }
-    body.simple-tally.tally-lines-7 #kioskSection { padding-bottom: calc(325px + env(safe-area-inset-bottom)); }
-    body.simple-tally.tally-top.tally-lines-3 #kioskSection, body.simple-tally.tally-top.tally-lines-5 #kioskSection, body.simple-tally.tally-top.tally-lines-7 #kioskSection { padding-top: 10px; padding-bottom: calc(74px + env(safe-area-inset-bottom)); }
-    .simple-tally-dock { display: none; position: fixed; left: 0; right: 0; bottom: calc(62px + env(safe-area-inset-bottom)); background: var(--card); border-top: 1px solid var(--border); box-shadow: 0 -6px 20px rgba(28, 25, 23, 0.12); z-index: 25; flex-direction: column; padding: 6px 12px 8px; }
-    body.simple-tally .simple-tally-dock { display: flex; }
-    body.simple-tally:has(.edit-mode) .simple-tally-dock, body.simple-tally:has(.soldout-mode) .simple-tally-dock { display: none !important; }
+    .simple-mini-cart { display: none; position: fixed; left: 0; right: 0; bottom: calc(66px + env(safe-area-inset-bottom)); background: #1c1917; color: #fafaf9; border-top: 1px solid rgba(255,255,255,0.12); box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.25); z-index: 25; flex-direction: column; padding: 7px 12px 8px; }
+    body.simple-tally .simple-mini-cart { display: flex; }
+    body.simple-tally.edit-mode .simple-mini-cart, body.simple-tally.soldout-mode .simple-mini-cart { display: none !important; }
     .edit-mode .custom-tally-card, .soldout-mode .custom-tally-card { display: none !important; }
-    body.simple-tally.tally-top .simple-tally-dock { position: relative; top: auto; bottom: auto; flex-shrink: 0; border-top: none; border-bottom: 1px solid var(--border); border-bottom-left-radius: 18px; border-bottom-right-radius: 18px; padding-top: calc(8px + env(safe-area-inset-top)); box-shadow: 0 6px 18px rgba(28, 25, 23, 0.08); }
-    .tally-dock-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 6px; }
-    .tally-dock-title { font-size: 11px; font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
-    .tally-dock-btns { display: flex; gap: 5px; }
-    .btn-tally-pill { background: #fef2f2; color: #c8102e; border: 1.5px solid #fecaca; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 800; cursor: pointer; }
-    .tally-dock-scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 3px; }
-    body.tally-lines-3 .tally-dock-scroll { height: 96px; }
-    body.tally-lines-5 .tally-dock-scroll { height: 162px; }
-    body.tally-lines-7 .tally-dock-scroll { height: 228px; }
-    .tally-line-row { display: flex; align-items: center; justify-content: space-between; height: 30px; min-height: 30px; padding: 0 8px; background: #fafaf9; border: 1px solid #e7e5e4; border-left: 3px solid var(--success); border-radius: 8px; font-size: 12px; font-weight: 700; color: #1c1917; gap: 6px; }
-    body.theme-dark .tally-line-row { background: #141210; border-color: #292524; color: #fafaf9; }
-    .tally-line-left { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .tally-line-time { color: var(--muted); font-size: 11px; font-weight: 700; margin-right: 5px; }
-    .tally-line-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; font-weight: 800; color: #16a34a; }
-    body.theme-dark .tally-line-right { color: #4ade80; }
+    .mini-cart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .mini-cart-title { font-size: 10px; font-weight: 900; color: #ffb81c; text-transform: uppercase; letter-spacing: 0.5px; }
+    .btn-mini-clear { background: rgba(220, 38, 38, 0.25); color: #fca5a5; border: 1px solid rgba(248, 113, 113, 0.4); border-radius: 999px; padding: 2px 9px; font-size: 10px; font-weight: 800; cursor: pointer; }
+    .mini-cart-scroll { max-height: 76px; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 3px; }
+    .mini-cart-line { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; padding: 2px 6px; background: rgba(255,255,255,0.07); border-radius: 6px; gap: 6px; }
+    .mini-cart-line-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mini-cart-line-amt { color: #4ade80; font-weight: 800; flex-shrink: 0; }
     .custom-tally-card { border: 2px dashed #ffb81c !important; background: #fffbeb !important; justify-content: center; }
     body.theme-dark .custom-tally-card { background: #1c1917 !important; }
     .text-only-controls { display: none; width: 100%; justify-content: space-between; align-items: center; margin-bottom: 4px; }
@@ -114,9 +102,9 @@
     .visual-wrap { position: relative; width: 100%; margin-bottom: 6px; }
     .card-minus-btn { position: absolute; top: 8px; left: 8px; width: 28px; height: 28px; border-radius: 50%; background: #dc2626; color: #ffffff; border: 2px solid #ffffff; font-size: 18px; font-weight: 900; line-height: 22px; text-align: center; cursor: pointer; z-index: 5; box-shadow: 0 3px 8px rgba(220, 38, 38, 0.45); padding: 0; }
     .text-only-controls .card-minus-btn, .text-only-controls .in-cart-pill { position: static; }
-    .edit-mode .card-minus-btn, .soldout-mode .card-minus-btn, body.simple-tally .card-minus-btn { display: none; }
+    .edit-mode .card-minus-btn, .soldout-mode .card-minus-btn { display: none; }
     .in-cart-pill { position: absolute; top: 8px; right: 8px; font-size: 11px; font-weight: 900; color: #ffffff; background: #16a34a; padding: 3px 9px; border-radius: 999px; z-index: 3; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
-    .edit-mode .in-cart-pill, .soldout-mode .in-cart-pill, body.simple-tally .in-cart-pill { display: none; }
+    .edit-mode .in-cart-pill, .soldout-mode .in-cart-pill { display: none; }
     .food-icon { font-size: 46px; line-height: 1; margin: 10px 0 2px; height: 68px; display: flex; align-items: center; justify-content: center; pointer-events: none; }
     .food-photo { width: 100%; height: 108px; object-fit: cover; border-radius: 0; display: block; border-bottom: 1px solid rgba(0,0,0,0.05); pointer-events: none; -webkit-touch-callout: none; user-select: none; }
     .combo-badge { display: inline-block; font-size: 10px; font-weight: 800; color: #7e22ce; background: #f3e8ff; border: 1px solid #e9d5ff; padding: 2px 9px; border-radius: 999px; margin-bottom: 3px; }
@@ -141,8 +129,8 @@
     .move-btn { background: #ffffff; border: 1px solid #d97706; color: #92400e; border-radius: 999px; padding: 3px 14px; font-size: 12px; font-weight: 800; cursor: pointer; }
     /* ==================== PART 06: BOTTOM BAR & SLIDE SHEETS ==================== */
     .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #1c1917; color: white; padding: 9px 12px calc(9px + env(safe-area-inset-bottom)); box-shadow: 0 -6px 22px rgba(28, 25, 23, 0.25); display: flex; align-items: center; justify-content: space-between; gap: 10px; z-index: 35; border-top: 1px solid rgba(255,255,255,0.08); }
-    body:has(.edit-mode) .bottom-bar, body:has(.soldout-mode) .bottom-bar { display: none !important; }
-    body:has(.edit-mode) #kioskSection, body:has(.soldout-mode) #kioskSection { padding-bottom: 24px !important; }
+    body.edit-mode .bottom-bar, body.soldout-mode .bottom-bar { display: none !important; }
+    body.edit-mode #kioskSection, body.soldout-mode #kioskSection { padding-bottom: 24px !important; }
     .btn-hub-icon { background: rgba(255,255,255,0.12); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 14px; width: 48px; height: 48px; font-size: 21px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .bottom-right-group { display: flex; align-items: center; gap: 8px; flex: 1; justify-content: flex-end; }
     .btn-queue-pill { background: rgba(255,255,255,0.12); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 14px; padding: 0 14px; height: 48px; font-size: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
@@ -153,8 +141,11 @@
     .btn-main-checkout:disabled { background: #44403c !important; color: #a8a29e !important; box-shadow: none !important; cursor: not-allowed; }
     .btn-main-checkout:disabled .cart-btn-amt { color: #d6d3d1; }
     body.simple-tally #queueBarBtn, body.simple-tally #mainCartPayBtn { display: none; }
-    .btn-simple-undo { display: none; background: #ffb81c; color: #1c1917; border: none; border-radius: 14px; padding: 0 18px; height: 48px; font-size: 14px; font-weight: 900; cursor: pointer; align-items: center; justify-content: center; gap: 5px; box-shadow: 0 3px 10px rgba(255, 184, 28, 0.35); }
-    body.simple-tally .btn-simple-undo { display: flex; }
+    .btn-simple-confirm { display: none; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: none; border-radius: 14px; padding: 0 20px; height: 48px; font-size: 15px; font-weight: 900; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; min-width: 130px; box-shadow: 0 4px 14px rgba(22, 163, 74, 0.4); }
+    .btn-simple-confirm .cart-btn-amt { font-size: 12px; color: #fde047; font-weight: 900; margin-top: 1px; }
+    .btn-simple-confirm:disabled { background: #44403c !important; color: #a8a29e !important; box-shadow: none !important; cursor: not-allowed; }
+    .btn-simple-confirm:disabled .cart-btn-amt { color: #d6d3d1; }
+    body.simple-tally .btn-simple-confirm { display: flex; }
     .bottom-sheet-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: calc(66px + env(safe-area-inset-bottom)); background: rgba(0,0,0,0.55); z-index: 30; align-items: flex-end; justify-content: center; overscroll-behavior: contain; }
     .bottom-sheet-overlay.open { display: flex; }
     .bottom-sheet-card { background: var(--card); color: var(--text); width: 100%; max-width: 540px; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 14px 16px 16px; box-shadow: 0 -8px 28px rgba(0,0,0,0.28); max-height: 76vh; display: flex; flex-direction: column; animation: sheetRise 0.18s ease-out; }
@@ -297,19 +288,15 @@
       <div class="category-tabs" id="categoryTabs"></div>
     </div>
   </div>
-  <div class="simple-tally-dock" id="simpleTallyDock">
-    <div class="tally-dock-header">
-      <span class="tally-dock-title" onclick="openTodaysLogScreen()">📒 Recent Taps</span>
-      <div class="tally-dock-btns">
-        <button type="button" class="btn-tally-pill" id="tallyPosCycleBtn" onclick="toggleTallyDockPos()">⬆ Top</button>
-        <button type="button" class="btn-tally-pill" id="tallyLinesCycleBtn" onclick="cycleTallyLines()">Lines: 3</button>
-        <button type="button" class="btn-tally-pill" style="background:#0f172a; color:#ffffff; border-color:#334155;" onclick="openTodaysLogScreen()">↗ Full Log</button>
-      </div>
-    </div>
-    <div class="tally-dock-scroll" id="simpleTallyFeedList"></div>
-  </div>
   <div id="kioskSection">
     <div class="menu-grid" id="menuGrid"></div>
+  </div>
+  <div class="simple-mini-cart" id="simpleMiniCart">
+    <div class="mini-cart-head">
+      <span class="mini-cart-title">🧾 Current Taps (<span id="miniCartCount">0</span>)</span>
+      <button type="button" class="btn-mini-clear" id="miniCartClearBtn" onclick="clearSimpleOrderDirect()" style="display:none;">Clear</button>
+    </div>
+    <div class="mini-cart-scroll" id="simpleMiniCartList"></div>
   </div>
   <div class="bottom-bar">
     <button class="btn-hub-icon" onclick="openHubScreen()" title="Stall Hub & Settings">☰</button>
@@ -319,7 +306,10 @@
         <span>Cart (0)</span>
         <span class="cart-btn-amt">₱0.00</span>
       </button>
-      <button class="btn-simple-undo" onclick="undoLastSimpleSale()">↩ UNDO</button>
+      <button class="btn-simple-confirm" id="simpleConfirmBtn" onclick="confirmSimpleOrder()" disabled>
+        <span>Confirm</span>
+        <span class="cart-btn-amt">₱0.00</span>
+      </button>
     </div>
   </div>
   <!-- ==================== PART 10: SLIDE-UP CART SHEET ==================== -->
@@ -1265,14 +1255,8 @@
 
     function handleItemTap(item, cardEl) {
       if (item.soldOut) return;
-      const isSimple = appSettings.opMode === 'simple';
       if (item.isCombo || item.isMixMatch) {
         openOptionsModal(item);
-        return;
-      }
-      if (isSimple) {
-        logSingleSimpleSale(item.name, item.price);
-        if (cardEl) { cardEl.classList.add('just-added'); setTimeout(() => cardEl.classList.remove('just-added'), 200); }
         return;
       }
       addItem({ name: item.name, price: item.price }, 1);
@@ -1297,13 +1281,12 @@
       comboQtyMap = {};
       pendingModalQty = 1;
       const isCombo = !!(item.isCombo || item.isMixMatch);
-      const isSimple = appSettings.opMode === 'simple';
       document.getElementById('addonModalItemName').innerText = item.name;
       document.getElementById('addonModalBasePrice').innerText = isCombo
-        ? (isSimple ? 'Tap a pairing below to log 1 sale' : 'Tap item(s) below to pair with ' + item.name)
+        ? 'Tap item(s) below to pair with ' + item.name
         : 'Base Price: ₱' + item.price.toFixed(2);
       document.getElementById('regularQtyStepper').style.display = isCombo ? 'none' : 'flex';
-      document.getElementById('addonModalFooter').style.display = (isCombo && isSimple) ? 'none' : 'flex';
+      document.getElementById('addonModalFooter').style.display = 'flex';
       document.getElementById('modalQtyValue').innerText = '1';
       renderAddonChoices();
       document.getElementById('addonModal').classList.add('open');
@@ -1319,11 +1302,6 @@
       if (event) event.stopPropagation();
       const choice = pendingItem.addons.at(idx);
       if (!choice || choice.soldOut) return;
-      if (appSettings.opMode === 'simple') {
-        logSingleSimpleSale(pendingItem.name + ' + ' + choice.name, choice.price);
-        closeAddonModal();
-        return;
-      }
       const nextVal = (comboQtyMap[idx] || 0) + delta;
       if (nextVal <= 0) delete comboQtyMap[idx]; else comboQtyMap[idx] = nextVal;
       renderAddonChoices();
@@ -1672,9 +1650,8 @@
       closeHubScreen();
       isSoldOutMode = false;
       isEditMode = true;
-      const kioskSec = document.getElementById('kioskSection');
-      kioskSec.classList.remove('soldout-mode');
-      kioskSec.classList.add('edit-mode');
+      document.body.classList.remove('soldout-mode');
+      document.body.classList.add('edit-mode');
       renderMenu();
     }
 
@@ -1682,17 +1659,15 @@
       closeHubScreen();
       isEditMode = false;
       isSoldOutMode = true;
-      const kioskSec = document.getElementById('kioskSection');
-      kioskSec.classList.remove('edit-mode');
-      kioskSec.classList.add('soldout-mode');
+      document.body.classList.remove('edit-mode');
+      document.body.classList.add('soldout-mode');
       renderMenu();
     }
 
     function exitAllModes() {
       isEditMode = false;
       isSoldOutMode = false;
-      const kioskSec = document.getElementById('kioskSection');
-      kioskSec.classList.remove('edit-mode', 'soldout-mode');
+      document.body.classList.remove('edit-mode', 'soldout-mode');
       renderMenu();
     }
 
@@ -1889,6 +1864,38 @@
       if (currentOrder.length === 0) closeCartSheet();
     }
 
+    function clearSimpleOrderDirect() {
+      if (currentOrder.length === 0) return;
+      currentOrder = new Array();
+      selectedCashBill = 0;
+      renderOrder();
+      renderMenu();
+      triggerFeedback(false);
+      showToast('✓ Cleared');
+    }
+
+    function confirmSimpleOrder() {
+      if (currentOrder.length === 0) return;
+      checkAutoMidnightRollover();
+      const total = getOrderSum();
+      const now = Date.now();
+      const time = new Date(now).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      const grouped = {};
+      currentOrder.forEach(item => grouped[item.name] = (grouped[item.name] || 0) + 1);
+      const summary = Object.entries(grouped).map(p => p.at(1) + 'x ' + p.at(0)).join(', ');
+
+      salesHistory.unshift({ time: time, summary: summary, total: total, items: grouped });
+      localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
+
+      currentOrder = new Array();
+      selectedCashBill = 0;
+      renderOrder();
+      renderMenu();
+      renderHistory();
+      triggerFeedback(true);
+      showToast('✓ Logged ₱' + total.toFixed(2));
+    }
+
     function askClearOrder() {
       if (currentOrder.length === 0) return closeCartSheet();
       openConfirmBox('Clear Order?', 'Remove all items from the current cart?', 'Clear All', () => {
@@ -1928,13 +1935,25 @@
       const changeLine = document.getElementById('sheetChangeLine');
       const changeLbl = document.getElementById('sheetChangeLabel');
       const changeVal = document.getElementById('sheetChangeVal');
+      const simpleBtn = document.getElementById('simpleConfirmBtn');
+      const miniList = document.getElementById('simpleMiniCartList');
+      const miniCount = document.getElementById('miniCartCount');
+      const miniClear = document.getElementById('miniCartClearBtn');
 
       updateMainCheckoutButton();
       const total = getOrderSum();
       totalEl.innerText = '₱' + total.toFixed(2);
 
+      if (simpleBtn) {
+        simpleBtn.disabled = currentOrder.length === 0;
+        simpleBtn.innerHTML = '<span>Confirm</span><span class="cart-btn-amt">₱' + total.toFixed(2) + '</span>';
+      }
+      if (miniCount) miniCount.innerText = currentOrder.length;
+      if (miniClear) miniClear.style.display = currentOrder.length > 0 ? 'inline-block' : 'none';
+
       if (currentOrder.length === 0) {
         list.innerHTML = '<div style="color:#9ca3af; font-size:14px; padding:10px 0;">Cart is empty</div>';
+        if (miniList) miniList.innerHTML = '<div style="color:#a8a29e; font-size:11px; padding:2px 4px;">Tap items above to build order...</div>';
         changeLine.style.display = 'none';
         return;
       }
@@ -1945,11 +1964,11 @@
         if (diff < 0) {
           changeLbl.innerText = 'Short (Cash ₱' + selectedCashBill + '):';
           changeVal.innerText = 'Short ₱' + Math.abs(diff).toFixed(2);
-          changeVal.style.color = '#dc2626';
+          changeVal.style.color = '#c8102e';
         } else {
           changeLbl.innerText = 'Change (from ₱' + selectedCashBill + '):';
           changeVal.innerText = '₱' + diff.toFixed(2);
-          changeVal.style.color = '#dc2626';
+          changeVal.style.color = '#c8102e';
         }
       } else {
         changeLine.style.display = 'none';
@@ -1965,6 +1984,15 @@
         }
         groupMap[key].qty++;
       });
+
+      if (miniList) {
+        miniList.innerHTML = groupedList.map(entry =>
+          '<div class="mini-cart-line">' +
+            '<span class="mini-cart-line-name"><strong style="color:#ffb81c;">' + entry.qty + 'x</strong> ' + entry.name + '</span>' +
+            '<span class="mini-cart-line-amt">₱' + (entry.price * entry.qty).toFixed(2) + '</span>' +
+          '</div>'
+        ).join('');
+      }
 
       list.innerHTML = groupedList.map(entry => {
         const safeName = entry.name.replace(/'/g, "\\'");
