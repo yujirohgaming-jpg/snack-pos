@@ -53,6 +53,15 @@
     .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     body.layout-tablet .menu-grid { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; }
     @media (min-width: 768px) { body.layout-auto .menu-grid { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; } }
+    body.card-compact .menu-grid { gap: 8px; }
+    body.card-compact .food-photo { height: 70px; }
+    body.card-compact .food-icon { height: 48px; font-size: 36px; }
+    body.card-compact .card-top-body { padding: 7px 8px 6px; }
+    body.card-compact .food-footer-bar { padding: 6px 8px; }
+    body.card-large .food-photo { height: 135px; }
+    body.card-large .food-icon { height: 84px; font-size: 52px; }
+    body.card-large .card-top-body { padding: 13px 12px 10px; }
+    body.card-large .food-footer-bar { padding: 10px 12px; }
     .menu-card-item { position: relative; background: var(--card); border: 2px solid var(--border); border-radius: 18px; overflow: hidden; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.12s ease, border-color 0.2s ease; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
     .menu-card-item:active { transform: scale(0.96); }
     .menu-card-item.just-added { border-color: #16a34a; }
@@ -111,7 +120,11 @@
     .food-tap-hint { font-size: 11px; font-weight: 800; color: #6b21a8; }
     .btn-options-pill { background: var(--accent); color: #111827; border: 1.5px solid #eab308; border-radius: 9px; padding: 5px 8px; font-size: 10px; font-weight: 900; white-space: nowrap; }
     .btn-options-pill.combo-pill { background: #9333ea; color: #ffffff; border-color: #7e22ce; }
-    .edit-mode .menu-card-item { border-color: #f59e0b; padding-top: 16px; }
+    .edit-mode .menu-card-item { border-color: #f59e0b; padding-top: 18px; }
+    .star-pin-btn { display: none; position: absolute; top: 4px; left: 4px; background: #f1f5f9; color: #64748b; border: 2px solid #cbd5e1; width: 26px; height: 26px; border-radius: 50%; font-size: 13px; line-height: 20px; text-align: center; cursor: pointer; z-index: 9; padding: 0; }
+    .star-pin-btn.pinned { background: #fef08a; color: #b45309; border-color: #f59e0b; }
+    .edit-mode .star-pin-btn { display: block; }
+    .simple-star-tag { position: absolute; top: 6px; left: 6px; font-size: 13px; z-index: 4; pointer-events: none; }
     .delete-badge { display: none; position: absolute; top: 4px; right: 4px; background: #dc2626; color: white; border: 2px solid white; width: 26px; height: 26px; border-radius: 50%; font-size: 15px; font-weight: 800; line-height: 20px; text-align: center; cursor: pointer; z-index: 9; }
     .edit-mode .delete-badge { display: block; }
     .reorder-row { display: none; justify-content: center; gap: 8px; padding: 6px; background: #fef3c7; width: 100%; }
@@ -173,12 +186,14 @@
     .full-screen-drawer.hub-theme { background: #cbd5e1; }
     body.theme-dark .full-screen-drawer.hub-theme { background: #020617; }
     .hub-theme .drawer-header { background: #1e1b4b; border-bottom: 2px solid #4338ca; }
-    .hub-section-divider { font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #312e81; margin: 18px 4px 10px; display: flex; align-items: center; gap: 6px; }
+    .hub-section-divider { font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #312e81; margin: 16px 4px 10px; display: flex; align-items: center; gap: 6px; }
     body.theme-dark .hub-section-divider { color: #a5b4fc; }
-    .earnings-hero-card { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; border-radius: 18px; padding: 18px 16px; margin-bottom: 12px; box-shadow: 0 6px 16px rgba(15, 23, 42, 0.22); border: 1.5px solid #4338ca; cursor: pointer; text-align: center; }
+    .earnings-hero-card { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: white; border-radius: 18px; padding: 18px 16px; margin-bottom: 12px; box-shadow: 0 6px 16px rgba(15, 23, 42, 0.22); border: 1.5px solid #4338ca; text-align: center; }
     .earnings-hero-top { font-size: 11px; text-transform: uppercase; color: #a5b4fc; letter-spacing: 0.9px; font-weight: 800; }
     .earnings-hero-amt { font-size: 36px; font-weight: 900; color: #4ade80; margin: 6px 0 4px; }
     .earnings-hero-sub { font-size: 13px; color: #e2e8f0; font-weight: 700; }
+    .cart-note-input { flex: 1; padding: 8px 11px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 13px; font-weight: 700; background: var(--bg); color: var(--text); min-width: 0; }
+    .cart-note-input::placeholder { color: #94a3b8; font-weight: 600; }
     .drawer-header { background: #0f172a; color: white; padding: calc(14px + env(safe-area-inset-top)) 16px 14px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
     .drawer-header h2 { margin: 0; font-size: 18px; font-weight: 800; }
     .btn-close-drawer { background: #334155; color: white; border: none; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
@@ -299,11 +314,11 @@
   <!-- ==================== PART 10: SLIDE-UP CART SHEET ==================== -->
   <div class="bottom-sheet-overlay" id="cartSheetOverlay" onclick="if(event.target===this) closeCartSheet()">
     <div class="bottom-sheet-card">
-      <div class="sheet-head-row">
-        <h3>🛒 Current Order</h3>
-        <div style="display:flex; gap:6px;">
-          <button class="btn-sm-pill" style="background:#fee2e2; color:#dc2626; padding:6px 10px;" onclick="askClearOrder()">Clear</button>
-          <button class="btn-sm-pill" style="background:#e2e8f0; color:#0f172a; padding:6px 10px;" onclick="closeCartSheet()">↓ Hide</button>
+      <div class="sheet-head-row" style="gap:6px;">
+        <input type="text" class="cart-note-input" id="cartOrderNoteInput" placeholder="Customer name / note (optional)">
+        <div style="display:flex; gap:6px; flex-shrink:0;">
+          <button class="btn-sm-pill" style="background:#fee2e2; color:#dc2626; padding:7px 10px;" onclick="askClearOrder()">Clear</button>
+          <button class="btn-sm-pill" style="background:#e2e8f0; color:#0f172a; padding:7px 10px;" onclick="closeCartSheet()">↓ Hide</button>
         </div>
       </div>
       <div class="cash-strip-wrap" id="cashStripRow">
@@ -379,12 +394,17 @@
       <button class="btn-close-drawer" onclick="closeHubScreen()">← Back</button>
     </div>
     <div class="drawer-body" id="hubDrawerBody">
-      <div class="earnings-hero-card" onclick="openTodaysLogScreen()">
+      <div class="earnings-hero-card">
         <div class="earnings-hero-top" id="stallBannerTitle">Today's Total Earnings</div>
         <div class="earnings-hero-amt" id="dailyTotal">₱0.00</div>
         <div class="earnings-hero-sub" id="bannerOrderCount">0 orders logged today</div>
         <span id="expectedCashBoxLine" style="display:none;"></span>
       </div>
+
+      <button class="report-accordion-btn" onclick="openTodaysLogScreen()">
+        <span>🧾 Today's Sales Log (<span id="orderCount">0</span> orders)</span>
+        <span>▶</span>
+      </button>
 
       <button class="report-accordion-btn" onclick="openSoldTodayScreen()">
         <span>📦 Sold Today (Highest → Lowest)</span>
@@ -411,83 +431,20 @@
         </div>
       </div>
 
-      <button class="report-accordion-btn" id="setModeAccBtn" onclick="toggleHubAccordion('setMode')">
+      <button class="report-accordion-btn" onclick="openSettingsSubModal('setModeModal')">
         <span>⚡ Mode, Screen Layout & Header Size</span>
-        <span id="setModeArrow">▼</span>
+        <span>▶</span>
       </button>
-      <div class="report-accordion-body" id="setModeAccBody">
-        <label class="edit-field-label" style="margin-top:2px;">Checkout Mode</label>
-        <div class="settings-grid-2">
-          <button type="button" class="seg-btn" id="opModePosBtn" onclick="setOperatingMode('pos')">🧾 Standard POS</button>
-          <button type="button" class="seg-btn" id="opModeSimpleBtn" onclick="setOperatingMode('simple')">⚡ Simple Tally</button>
-        </div>
-        <label class="edit-field-label">Screen Layout</label>
-        <div class="settings-grid-3">
-          <button type="button" class="seg-btn" id="layoutPhoneBtn" onclick="setScreenLayout('phone')">📱 Phone</button>
-          <button type="button" class="seg-btn" id="layoutTabletBtn" onclick="setScreenLayout('tablet')">💻 Tablet/PC</button>
-          <button type="button" class="seg-btn" id="layoutAutoBtn" onclick="setScreenLayout('auto')">✨ Auto</button>
-        </div>
-        <label class="edit-field-label">Top Category Bar Size (POS Mode)</label>
-        <div class="settings-grid-2">
-          <button type="button" class="seg-btn" id="headerCompactBtn" onclick="setHeaderSizeMode('compact')">Compact</button>
-          <button type="button" class="seg-btn" id="headerLargeBtn" onclick="setHeaderSizeMode('large')">Large</button>
-        </div>
-        <label class="edit-field-label">Queue Auto-Complete Timer</label>
-        <div class="settings-grid-4">
-          <button type="button" class="seg-btn" id="qTime5" onclick="setQueueTimer(5)">5 min</button>
-          <button type="button" class="seg-btn" id="qTime10" onclick="setQueueTimer(10)">10 min</button>
-          <button type="button" class="seg-btn" id="qTime15" onclick="setQueueTimer(15)">15 min</button>
-          <button type="button" class="seg-btn" id="qTime30" onclick="setQueueTimer(30)">30 min</button>
-        </div>
-      </div>
 
-      <button class="report-accordion-btn" id="setLookAccBtn" onclick="toggleHubAccordion('setLook')">
-        <span>🎨 Theme, Display, Text & Sound</span>
-        <span id="setLookArrow">▼</span>
+      <button class="report-accordion-btn" onclick="openSettingsSubModal('setLookModal')">
+        <span>🎨 Theme, Display, Card & Text Size</span>
+        <span>▶</span>
       </button>
-      <div class="report-accordion-body" id="setLookAccBody">
-        <label class="edit-field-label" style="margin-top:2px;">App Background Theme</label>
-        <div class="settings-grid-2">
-          <button type="button" class="seg-btn" style="background:#e2e8f0; color:#0f172a;" onclick="setAppTheme('light')">☀️ Classic Light</button>
-          <button type="button" class="seg-btn" style="background:#0f172a; color:#f8fafc;" onclick="setAppTheme('dark')">🌙 Dark Mode</button>
-          <button type="button" class="seg-btn" style="background:#fef3c7; color:#451a03;" onclick="setAppTheme('cream')">🍦 Warm Cream</button>
-          <button type="button" class="seg-btn" style="background:#d1fae5; color:#064e3b;" onclick="setAppTheme('mint')">🌿 Fresh Mint</button>
-        </div>
-        <label class="edit-field-label">Menu Cards</label>
-        <div class="settings-grid-2">
-          <button type="button" class="seg-btn" id="menuViewPhotoBtn" onclick="setMenuViewMode('photo')">🖼️ Photo + Text</button>
-          <button type="button" class="seg-btn" id="menuViewTextBtn" onclick="setMenuViewMode('text')">🔤 Text Only</button>
-        </div>
-        <label class="edit-field-label">Add-on & Combo Popups</label>
-        <div class="settings-grid-2">
-          <button type="button" class="seg-btn" id="popupViewPhotoBtn" onclick="setPopupViewMode('photo')">🖼️ Photo + Text</button>
-          <button type="button" class="seg-btn" id="popupViewTextBtn" onclick="setPopupViewMode('text')">🔤 Text Only</button>
-        </div>
-        <label class="edit-field-label">Text Size</label>
-        <div class="settings-grid-3">
-          <button type="button" class="seg-btn" id="fontSizeNormal" onclick="setFontSizeMode('normal')">Normal</button>
-          <button type="button" class="seg-btn" id="fontSizeLarge" onclick="setFontSizeMode('large')">Large</button>
-          <button type="button" class="seg-btn" id="fontSizeXlarge" onclick="setFontSizeMode('xlarge')">Extra Large</button>
-        </div>
-        <label class="edit-field-label">Sound & Vibration</label>
-        <div class="settings-grid-2">
-          <button type="button" class="seg-btn" id="soundToggleBtn" onclick="toggleSoundSetting()">🔊 Sound: ON</button>
-          <button type="button" class="seg-btn" id="vibeToggleBtn" onclick="toggleVibeSetting()">📳 Vibrate: ON</button>
-        </div>
-      </div>
 
-      <button class="report-accordion-btn" id="setDataAccBtn" onclick="toggleHubAccordion('setData')">
+      <button class="report-accordion-btn" onclick="openSettingsSubModal('setDataModal')">
         <span>🏪 Stall Info, Cash Drawer & Menu Backup</span>
-        <span id="setDataArrow">▼</span>
+        <span>▶</span>
       </button>
-      <div class="report-accordion-body" id="setDataAccBody">
-        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-bottom:8px;" onclick="openCustomPrompt('Set Stall Name', 'Stall / Business Name', 'text', appSettings.stallName, 'stallName')">✏️ Stall Name (<span id="stallNameDisplay">Not Set</span>)</button>
-        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-bottom:8px;" onclick="openCustomPrompt('Starting Cash Box', 'Starting Loose Change (₱)', 'decimal', appSettings.startingCash || '', 'startingCash')">💵 Starting Cash Box (<span id="startingCashDisplay">₱0.00</span>)</button>
-        <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-bottom:10px;" onclick="openCustomPrompt('Quick Cash Bills', 'Bills separated by commas (leave blank to hide)', 'text', (appSettings.quickBills || new Array()).join(', '), 'quickBills')">💰 Edit Quick Cash Bills</button>
-        <button class="btn btn-copy" onclick="exportMenuBackup()">Copy Menu Backup Code</button>
-        <button class="btn" style="background:#0d9488; width:100%; margin-top:8px; padding:13px; font-size:14px;" onclick="openImportModal()">Import Menu Backup</button>
-        <button class="btn" style="background:#64748b; width:100%; margin-top:8px; padding:13px; font-size:14px;" onclick="askRestoreDefaultMenu()">Reset Menu to Defaults</button>
-      </div>
     </div>
   </div>
   <!-- ==================== PART 13: ADD-ON & COMBO MODALS HTML ==================== -->
@@ -571,7 +528,95 @@
       </div>
     </div>
   </div>
-  <!-- ==================== PART 15: CUSTOM DIALOG MODALS HTML ==================== -->
+  <!-- ==================== PART 15A: SETTINGS SUB-MODALS HTML ==================== -->
+  <div class="modal-overlay" id="setModeModal" onclick="if(event.target===this) closeSettingsSubModal('setModeModal')">
+    <div class="modal-box">
+      <div class="modal-title">⚡ Mode, Layout & Header</div>
+      <label class="edit-field-label">Checkout Mode</label>
+      <div class="settings-grid-2">
+        <button type="button" class="seg-btn" id="opModePosBtn" onclick="setOperatingMode('pos')">🧾 Standard POS</button>
+        <button type="button" class="seg-btn" id="opModeSimpleBtn" onclick="setOperatingMode('simple')">⚡ Simple Tally</button>
+      </div>
+      <label class="edit-field-label">Screen Layout</label>
+      <div class="settings-grid-3">
+        <button type="button" class="seg-btn" id="layoutPhoneBtn" onclick="setScreenLayout('phone')">📱 Phone</button>
+        <button type="button" class="seg-btn" id="layoutTabletBtn" onclick="setScreenLayout('tablet')">💻 Tablet/PC</button>
+        <button type="button" class="seg-btn" id="layoutAutoBtn" onclick="setScreenLayout('auto')">✨ Auto</button>
+      </div>
+      <label class="edit-field-label">Top Category Bar Size (POS Mode)</label>
+      <div class="settings-grid-2">
+        <button type="button" class="seg-btn" id="headerCompactBtn" onclick="setHeaderSizeMode('compact')">Compact</button>
+        <button type="button" class="seg-btn" id="headerLargeBtn" onclick="setHeaderSizeMode('large')">Large</button>
+      </div>
+      <label class="edit-field-label">Queue Auto-Complete Timer</label>
+      <div class="settings-grid-4">
+        <button type="button" class="seg-btn" id="qTime5" onclick="setQueueTimer(5)">5 min</button>
+        <button type="button" class="seg-btn" id="qTime10" onclick="setQueueTimer(10)">10 min</button>
+        <button type="button" class="seg-btn" id="qTime15" onclick="setQueueTimer(15)">15 min</button>
+        <button type="button" class="seg-btn" id="qTime30" onclick="setQueueTimer(30)">30 min</button>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" style="background:#0f172a;" onclick="closeSettingsSubModal('setModeModal')">Done</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-overlay" id="setLookModal" onclick="if(event.target===this) closeSettingsSubModal('setLookModal')">
+    <div class="modal-box">
+      <div class="modal-title">🎨 Theme, Display & Size</div>
+      <label class="edit-field-label">App Background Theme</label>
+      <div class="settings-grid-2">
+        <button type="button" class="seg-btn" style="background:#e2e8f0; color:#0f172a;" onclick="setAppTheme('light')">☀️ Classic Light</button>
+        <button type="button" class="seg-btn" style="background:#0f172a; color:#f8fafc;" onclick="setAppTheme('dark')">🌙 Dark Mode</button>
+        <button type="button" class="seg-btn" style="background:#fef3c7; color:#451a03;" onclick="setAppTheme('cream')">🍦 Warm Cream</button>
+        <button type="button" class="seg-btn" style="background:#d1fae5; color:#064e3b;" onclick="setAppTheme('mint')">🌿 Fresh Mint</button>
+      </div>
+      <label class="edit-field-label">Menu Cards</label>
+      <div class="settings-grid-2">
+        <button type="button" class="seg-btn" id="menuViewPhotoBtn" onclick="setMenuViewMode('photo')">🖼️ Photo + Text</button>
+        <button type="button" class="seg-btn" id="menuViewTextBtn" onclick="setMenuViewMode('text')">🔤 Text Only</button>
+      </div>
+      <label class="edit-field-label">Add-on & Combo Popups</label>
+      <div class="settings-grid-2">
+        <button type="button" class="seg-btn" id="popupViewPhotoBtn" onclick="setPopupViewMode('photo')">🖼️ Photo + Text</button>
+        <button type="button" class="seg-btn" id="popupViewTextBtn" onclick="setPopupViewMode('text')">🔤 Text Only</button>
+      </div>
+      <label class="edit-field-label">Item Card Size</label>
+      <div class="settings-grid-3">
+        <button type="button" class="seg-btn" id="cardSizeCompact" onclick="setCardSizeMode('compact')">Compact</button>
+        <button type="button" class="seg-btn" id="cardSizeNormal" onclick="setCardSizeMode('normal')">Standard</button>
+        <button type="button" class="seg-btn" id="cardSizeLarge" onclick="setCardSizeMode('large')">Large</button>
+      </div>
+      <label class="edit-field-label">Text Size</label>
+      <div class="settings-grid-3">
+        <button type="button" class="seg-btn" id="fontSizeNormal" onclick="setFontSizeMode('normal')">Normal</button>
+        <button type="button" class="seg-btn" id="fontSizeLarge" onclick="setFontSizeMode('large')">Large</button>
+        <button type="button" class="seg-btn" id="fontSizeXlarge" onclick="setFontSizeMode('xlarge')">Extra Large</button>
+      </div>
+      <label class="edit-field-label">Sound & Vibration</label>
+      <div class="settings-grid-2">
+        <button type="button" class="seg-btn" id="soundToggleBtn" onclick="toggleSoundSetting()">🔊 Sound: ON</button>
+        <button type="button" class="seg-btn" id="vibeToggleBtn" onclick="toggleVibeSetting()">📳 Vibrate: ON</button>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" style="background:#0f172a;" onclick="closeSettingsSubModal('setLookModal')">Done</button>
+      </div>
+    </div>
+  </div>
+  <!-- ==================== PART 15B: STALL DATA & DIALOG MODALS HTML ==================== -->
+  <div class="modal-overlay" id="setDataModal" onclick="if(event.target===this) closeSettingsSubModal('setDataModal')">
+    <div class="modal-box">
+      <div class="modal-title">🏪 Stall Info & Backup</div>
+      <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-top:8px;" onclick="openCustomPrompt('Set Stall Name', 'Stall / Business Name', 'text', appSettings.stallName, 'stallName')">✏️ Stall Name (<span id="stallNameDisplay">Not Set</span>)</button>
+      <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-top:8px;" onclick="openCustomPrompt('Starting Cash Box', 'Starting Loose Change (₱)', 'decimal', appSettings.startingCash || '', 'startingCash')">💵 Starting Cash Box (<span id="startingCashDisplay">₱0.00</span>)</button>
+      <button class="btn" style="background:#334155; width:100%; padding:11px; font-size:13px; margin-top:8px;" onclick="openCustomPrompt('Quick Cash Bills', 'Bills separated by commas (leave blank to hide)', 'text', (appSettings.quickBills || new Array()).join(', '), 'quickBills')">💰 Edit Quick Cash Bills</button>
+      <button class="btn btn-copy" style="margin-top:10px;" onclick="exportMenuBackup()">Copy Menu Backup Code</button>
+      <button class="btn" style="background:#0d9488; width:100%; margin-top:8px; padding:13px; font-size:14px;" onclick="openImportModal()">Import Menu Backup</button>
+      <button class="btn" style="background:#64748b; width:100%; margin-top:8px; padding:13px; font-size:14px;" onclick="askRestoreDefaultMenu()">Reset Menu to Defaults</button>
+      <div class="modal-actions">
+        <button class="btn" style="background:#0f172a;" onclick="closeSettingsSubModal('setDataModal')">Done</button>
+      </div>
+    </div>
+  </div>
   <div class="modal-overlay" id="namePriceModal" onclick="if(event.target===this) closeNamePriceModal()">
     <div class="modal-box">
       <div class="modal-title" id="namePriceModalTitle">Add Item</div>
@@ -1019,6 +1064,14 @@
       saveMenuData(); renderMenu(); showToast('✓ Available Again');
     }
 
+    function togglePinItem(event, catIdx, itemIndex) {
+      event.stopPropagation();
+      const item = menuData.at(catIdx).items.at(itemIndex);
+      item.pinned = !item.pinned;
+      saveMenuData(); renderMenu();
+      showToast(item.pinned ? '⭐ Pinned to Top in Simple Mode' : 'Unpinned');
+    }
+
     function triggerSoldOutAction(catIdx, itemIndex) {
       const item = menuData.at(catIdx).items.at(itemIndex);
       const isCombo = !!(item.isCombo || item.isMixMatch);
@@ -1059,11 +1112,17 @@
       tabsEl.appendChild(customScrollBtn);
 
       const isSimple = appSettings.opMode === 'simple';
-      const renderList = new Array();
+      let renderList = new Array();
       if (isSimple) {
+        const pinnedItems = new Array();
+        const regularItems = new Array();
         menuData.forEach((cat, cIdx) => {
-          (cat.items || new Array()).forEach((it, iIdx) => renderList.push({ item: it, catIdx: cIdx, itemIndex: iIdx }));
+          (cat.items || new Array()).forEach((it, iIdx) => {
+            const obj = { item: it, catIdx: cIdx, itemIndex: iIdx };
+            if (it.pinned) pinnedItems.push(obj); else regularItems.push(obj);
+          });
         });
+        renderList = pinnedItems.concat(regularItems);
       } else {
         const currentCat = menuData.at(activeCatIndex);
         if (currentCat) {
@@ -1077,6 +1136,7 @@
         const itemIndex = entry.itemIndex;
         const isCombo = !!(item.isCombo || item.isMixMatch);
         const isSoldOut = !!item.soldOut;
+        const isPinned = !!item.pinned;
         const qtyInCart = getItemCartQty(item.name);
         const safeName = item.name.replace(/'/g, "\\'");
         const visualHtml = item.photo
@@ -1091,7 +1151,9 @@
         const card = document.createElement('div');
         card.className = 'menu-card-item' + (isSoldOut ? ' is-soldout' : '');
         card.innerHTML =
+          '<button type="button" class="star-pin-btn' + (isPinned ? ' pinned' : '') + '" onclick="togglePinItem(event, ' + catIdx + ', ' + itemIndex + ')" title="Pin Best-Seller">' + (isPinned ? '⭐' : '☆') + '</button>' +
           '<span class="delete-badge" onclick="askDeleteMenuItem(event, ' + catIdx + ', ' + itemIndex + ')">×</span>' +
+          (isSimple && isPinned && !isEditMode && !isSoldOut ? '<span class="simple-star-tag">⭐</span>' : '') +
           (isSoldOut && !isEditMode ? '<button type="button" class="soldout-clear-btn" onclick="clearSoldOutBadge(event, ' + catIdx + ', ' + itemIndex + ')" title="Restore">×</button>' : '') +
           (isSoldOut ? '<div class="soldout-overlay-tag">🚫 NOT AVAILABLE</div>' : '') +
           '<div class="card-top-body">' +
@@ -1483,7 +1545,7 @@
       if (!newName) return showToast('Enter an item name');
       if (!tempItemIsCombo && (isNaN(newPrice) || newPrice < 0)) return showToast('Enter a valid price');
       menuData.at(editingItemCatIdx).items[editingItemIdx] = {
-        name: newName, price: newPrice, icon: newIcon, photo: tempItemPhoto, isCombo: tempItemIsCombo, soldOut: !!oldItem.soldOut, addons: tempItemAddons
+        name: newName, price: newPrice, icon: newIcon, photo: tempItemPhoto, isCombo: tempItemIsCombo, soldOut: !!oldItem.soldOut, pinned: !!oldItem.pinned, addons: tempItemAddons
       };
       saveMenuData(); closeItemEditorModal(); renderMenu();
     }
@@ -1690,20 +1752,26 @@
 
     function openHubScreen() {
       closeCartSheet();
-      new Array('history', 'setMode', 'setLook', 'setData').forEach(sec => {
-        const btn = document.getElementById(sec + 'AccBtn');
-        const body = document.getElementById(sec + 'AccBody');
-        const arrow = document.getElementById(sec + 'Arrow');
-        if (btn) btn.classList.remove('open');
-        if (body) body.classList.remove('open');
-        if (arrow) arrow.innerText = '▼';
-      });
+      const btn = document.getElementById('historyAccBtn');
+      const body = document.getElementById('historyAccBody');
+      const arrow = document.getElementById('historyArrow');
+      if (btn) btn.classList.remove('open');
+      if (body) body.classList.remove('open');
+      if (arrow) arrow.innerText = '▼';
       applyAllSettingsUI();
       renderHistory();
       document.getElementById('hubScreen').classList.add('open');
       resetDrawerScroll('hubDrawerBody');
     }
     function closeHubScreen() { document.getElementById('hubScreen').classList.remove('open'); }
+
+    function openSettingsSubModal(id) {
+      applyAllSettingsUI();
+      document.getElementById(id).classList.add('open');
+    }
+    function closeSettingsSubModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
 
     function openSoldTodayScreen() {
       renderHistory();
@@ -1917,19 +1985,24 @@
       const total = getOrderSum();
       const now = Date.now();
       const time = new Date(now).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      const noteInput = document.getElementById('cartOrderNoteInput');
+      const orderNote = noteInput ? noteInput.value.trim() : '';
+
       const grouped = {};
       currentOrder.forEach(item => grouped[item.name] = (grouped[item.name] || 0) + 1);
-      const summary = Object.entries(grouped).map(p => p.at(1) + 'x ' + p.at(0)).join(', ');
+      const itemsText = Object.entries(grouped).map(p => p.at(1) + 'x ' + p.at(0)).join(', ');
+      const summary = orderNote ? '[' + orderNote + '] ' + itemsText : itemsText;
       const prepLines = Object.entries(grouped).map(p => ({ text: p.at(1) + 'x ' + p.at(0), prepped: false }));
 
       salesHistory.unshift({ time: time, summary: summary, total: total, items: grouped });
       localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
 
-      orderQueue.unshift({ id: now + Math.random(), time: time, createdAt: now, summary: summary, lines: prepLines, total: total, done: false });
+      orderQueue.unshift({ id: now + Math.random(), time: time, note: orderNote, createdAt: now, summary: summary, lines: prepLines, total: total, done: false });
       localStorage.setItem('miniPosQueuePH', JSON.stringify(orderQueue));
 
       currentOrder = new Array();
       selectedCashBill = 0;
+      if (noteInput) noteInput.value = '';
       closeCartSheet();
       renderOrder(); renderMenu(); renderQueue(); renderHistory();
       triggerFeedback(true);
@@ -1992,6 +2065,7 @@
       container.innerHTML = sortedQueue.map(q => {
         const realIdx = orderQueue.indexOf(q);
         const lines = q.lines || new Array({ text: q.summary, prepped: q.done });
+        const noteTag = q.note ? ' • <span style="color:#b45309;">' + q.note + '</span>' : '';
         const bulletsHtml = '<ul class="queue-bullet-list">' + lines.map((ln, lIdx) =>
           '<li class="queue-bullet-item' + (ln.prepped ? ' prepped' : '') + '" onclick="toggleQueueBullet(' + realIdx + ', ' + lIdx + ')">' +
             '<span>' + (ln.prepped ? '☑' : '⬜') + '</span><span>' + ln.text + '</span>' +
@@ -1999,7 +2073,7 @@
         ).join('') + '</ul>';
 
         return '<div class="queue-card' + (q.done ? ' completed' : '') + '">' +
-          '<div class="queue-top"><span>🕒 ' + q.time + (q.done ? ' • Completed' : ' • Preparing') + '</span><span>₱' + q.total.toFixed(2) + '</span></div>' +
+          '<div class="queue-top"><span>🕒 ' + q.time + noteTag + (q.done ? ' • Completed' : '') + '</span><span>₱' + q.total.toFixed(2) + '</span></div>' +
           bulletsHtml +
           (q.done ? '' : '<button type="button" class="btn-mark-done" onclick="markQueueOrderDone(' + realIdx + ')">✓ Mark Complete</button>') +
         '</div>';
@@ -2128,8 +2202,8 @@
       const logTopTotalEl = document.getElementById('todaysLogTopTotal');
       const logTopCountEl = document.getElementById('todaysLogTopCount');
       const tallyFeedEl = document.getElementById('simpleTallyFeedList');
-      const cashBoxEl = document.getElementById('expectedCashBoxLine');
       const bannerCountEl = document.getElementById('bannerOrderCount');
+      const countEl = document.getElementById('orderCount');
       const restockEl = document.getElementById('restockSummary');
       const histBtnLabel = document.getElementById('historyBtnLabel');
       const histContainer = document.getElementById('pastHistoryContainer');
@@ -2148,9 +2222,7 @@
       totalEl.innerText = '₱' + dailySum.toFixed(2);
       if (logTopTotalEl) logTopTotalEl.innerText = '₱' + dailySum.toFixed(2);
       if (logTopCountEl) logTopCountEl.innerText = salesHistory.length;
-
-      const startCash = appSettings.startingCash || 0;
-      cashBoxEl.innerText = startCash > 0 ? 'Cash Box: ₱' + (startCash + dailySum).toFixed(2) : '';
+      if (countEl) countEl.innerText = salesHistory.length;
 
       bannerCountEl.innerText = salesHistory.length + (salesHistory.length === 1 ? ' order logged today' : ' orders logged today');
 
