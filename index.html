@@ -13,7 +13,7 @@
     body.theme-dark { --bg: #0b1120; --card: #1e293b; --text: #f8fafc; --muted: #94a3b8; --border: #334155; --topbg: #020617; }
     body.theme-cream { --bg: #fef3c7; --card: #fffbeb; --text: #451a03; --muted: #92400e; --border: #fcd34d; --topbg: #451a03; }
     body.theme-mint { --bg: #d1fae5; --card: #ffffff; --text: #064e3b; --muted: #047857; --border: #6ee7b7; --topbg: #064e3b; }
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     body { margin: 0; padding: 0 14px calc(105px + env(safe-area-inset-bottom)); background: var(--bg); color: var(--text); transition: background-color 0.2s ease; }
     .sticky-top-zone { position: sticky; top: 0; z-index: 15; background: var(--topbg); color: #ffffff; padding-top: calc(10px + env(safe-area-inset-top)); padding-bottom: 10px; margin: 0 -14px 12px; padding-left: 14px; padding-right: 14px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 6px 18px rgba(15, 23, 42, 0.25); }
     .toast-banner { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.85); opacity: 0; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #ffffff; border: 1.5px solid rgba(74, 222, 128, 0.8); padding: 10px 20px; border-radius: 30px; font-size: 15px; font-weight: 800; z-index: 90; box-shadow: 0 6px 20px rgba(0,0,0,0.2); transition: all 0.16s ease; white-space: nowrap; pointer-events: none; }
@@ -139,6 +139,8 @@
     .del-sale-btn { background: #fee2e2; color: #dc2626; border: none; border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 800; margin-left: 8px; cursor: pointer; }
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
     .modal-overlay.open { display: flex; }
+    body:has(.modal-overlay.open) { overflow: hidden; }
+    .modal-overlay { overscroll-behavior: contain; }
     .modal-box { background: white; color: #0f172a; width: 100%; max-width: 380px; border-radius: 20px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.25); max-height: 88vh; overflow-y: auto; }
     .modal-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
     .btn-modal-back { background: #f1f5f9; color: #0f172a; border: none; border-radius: 10px; width: 36px; height: 36px; font-size: 18px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; }
@@ -1818,6 +1820,53 @@
       document.getElementById('pastDetailScreen').classList.add('open');
     }
 
+    function copyPastHistoryEntry(idx) {
+      const h = pastHistory.at(idx);
+      if (!h) return;
+      const headerTitle = appSettings.stallName ? appSettings.stallName + " — " : "";
+      let text = headerTitle + "Sales Report (" + h.label + ")\nTotal Earnings: ₱" + h.total.toFixed(2) + "\nTotal Orders: " + h.orderCount + "\n\n";
+      if (h.sortedItems && h.sortedItems.length > 0) {
+        text += "--- ITEMS SOLD (HIGHEST TO LOWEST) ---\n";
+        h.sortedItems.forEach(pair => text += pair.at(1) + "x " + pair.at(0) + "\n");
+        text += "\n--- ORDER LOG ---\n";
+      }
+      (h.sales || new Array()).forEach(s => text += "[" + s.time + "] ₱" + s.total.toFixed(2) + " - " + s.summary + "\n");
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert("Copied report for " + h.label + "!");
+        }).catch(() => {
+          prompt("Copy this saved report:", text);
+        });
+      } else {
+        prompt("Copy this saved report:", text);
+      }
+    }
+
+    function deletePastHistoryEntry(idx) {
+      const target = pastHistory.at(idx);
+      if (!target) return;
+      if (confirm("Delete this saved report (" + target.label + ")?")) {
+        pastHistory.splice(idx, 1);
+        localStorage.setItem('miniPosPastHistoryPH', JSON.stringify(pastHistory));
+        renderHistory();
+        showToast('✓ Report Deleted');
+      }
+    }
+
+    function clearAllPastHistory() {
+      if (!pastHistory || pastHistory.length === 0) {
+        alert("History is already empty.");
+        return;
+      }
+      if (confirm("Delete all saved 7-day history reports?")) {
+        pastHistory = new Array();
+        localStorage.removeItem('miniPosPastHistoryPH');
+        renderHistory();
+        showToast('✓ All History Cleared');
+        alert("All past history cleared!");
+      }
+    }
+
     function renderHistory() {
       const logEl = document.getElementById('salesLog');
       const totalEl = document.getElementById('dailyTotal');
@@ -1881,8 +1930,7 @@
       const sortedItems = getRestockCounts();
       if (sortedItems.length > 0) {
         text += "--- ITEMS SOLD TODAY (HIGHEST TO LOWEST) ---\n";
-        sortedItems.forEach(([name, qty]) => text += qty + "x " + name + "\n");
-        text += "\n--- ORDER LOG ---\n";
+       sortedItems.forEach(pair => text += pair.at(1) + "x " + pair.at(0) + "\n");
       }
       salesHistory.forEach(s => text += "[" + s.time + "] ₱" + s.total.toFixed(2) + " - " + s.summary + "\n");
       navigator.clipboard.writeText(text).then(() => alert("Today's report & item summary copied!"));
