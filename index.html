@@ -16,9 +16,9 @@
     body.theme-mint { --bg: #d1fae5; --card: #ffffff; --text: #064e3b; --muted: #047857; --border: #6ee7b7; --topbg: #064e3b; }
     /* ==================== PART 02: BODY & STICKY TOP ==================== */
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-    html, body { overscroll-behavior-y: none; }
-    body { margin: 0; padding: 0 12px calc(92px + env(safe-area-inset-bottom)); background: var(--bg); color: var(--text); transition: background-color 0.2s ease; }
-    body:has(.modal-overlay.open), body:has(.full-screen-drawer.open), body:has(.bottom-sheet-overlay.open) { overflow: hidden; }
+    html, body { height: 100dvh; overflow: hidden; overscroll-behavior: none; margin: 0; padding: 0; }
+    body { display: flex; flex-direction: column; background: var(--bg); color: var(--text); transition: background-color 0.2s ease; }
+    #kioskSection { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: auto; padding: 0 12px calc(92px + env(safe-area-inset-bottom)); }
     body.font-large .food-name { font-size: 16px; }
     body.font-large .food-price { font-size: 16px; }
     body.font-large .order-item, body.font-large .queue-bullet-item { font-size: 16px; }
@@ -79,14 +79,14 @@
     .card-top-body { padding: 10px 10px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; width: 100%; position: relative; }
     body.menu-text-only .card-top-body { padding: 14px 10px 10px; }
     body.menu-text-only .visual-wrap { display: none; }
-    body.simple-tally { padding-top: calc(10px + env(safe-area-inset-top)); }
-    body.simple-tally:has(.edit-mode), body.simple-tally:has(.soldout-mode) { padding-top: 0; padding-bottom: 24px !important; }
+    body.simple-tally #kioskSection { padding-top: calc(10px + env(safe-area-inset-top)); }
+    body.simple-tally:has(.edit-mode) #kioskSection, body.simple-tally:has(.soldout-mode) #kioskSection { padding-top: 0; padding-bottom: 24px !important; }
     body.simple-tally .food-footer-bar { display: none; }
     body.simple-tally .card-top-body { padding: 12px 10px; }
-    body.simple-tally.tally-lines-3 { padding-bottom: calc(205px + env(safe-area-inset-bottom)); }
-    body.simple-tally.tally-lines-5 { padding-bottom: calc(265px + env(safe-area-inset-bottom)); }
-    body.simple-tally.tally-lines-7 { padding-bottom: calc(325px + env(safe-area-inset-bottom)); }
-    body.simple-tally.tally-top.tally-lines-3, body.simple-tally.tally-top.tally-lines-5, body.simple-tally.tally-top.tally-lines-7 { padding-bottom: calc(74px + env(safe-area-inset-bottom)); }
+    body.simple-tally.tally-lines-3 #kioskSection { padding-bottom: calc(205px + env(safe-area-inset-bottom)); }
+    body.simple-tally.tally-lines-5 #kioskSection { padding-bottom: calc(265px + env(safe-area-inset-bottom)); }
+    body.simple-tally.tally-lines-7 #kioskSection { padding-bottom: calc(325px + env(safe-area-inset-bottom)); }
+    body.simple-tally.tally-top.tally-lines-3 #kioskSection, body.simple-tally.tally-top.tally-lines-5 #kioskSection, body.simple-tally.tally-top.tally-lines-7 #kioskSection { padding-bottom: calc(74px + env(safe-area-inset-bottom)); }
     .simple-tally-dock { display: none; position: fixed; left: 0; right: 0; bottom: calc(62px + env(safe-area-inset-bottom)); background: var(--card); border-top: 2px solid var(--border); box-shadow: 0 -4px 14px rgba(15, 23, 42, 0.14); z-index: 25; flex-direction: column; padding: 6px 12px 8px; }
     body.simple-tally .simple-tally-dock { display: flex; }
     body.simple-tally:has(.edit-mode) .simple-tally-dock, body.simple-tally:has(.soldout-mode) .simple-tally-dock { display: none !important; }
@@ -140,7 +140,7 @@
     /* ==================== PART 06: BOTTOM BAR & SLIDE SHEETS ==================== */
     .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; color: white; padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px rgba(0,0,0,0.28); display: flex; align-items: center; justify-content: space-between; gap: 10px; z-index: 35; }
     body:has(.edit-mode) .bottom-bar, body:has(.soldout-mode) .bottom-bar { display: none !important; }
-    body:has(.edit-mode), body:has(.soldout-mode) { padding-bottom: 24px !important; }
+    body:has(.edit-mode) #kioskSection, body:has(.soldout-mode) #kioskSection { padding-bottom: 24px !important; }
     .btn-hub-icon { background: rgba(255,255,255,0.14); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.25); border-radius: 14px; width: 48px; height: 48px; font-size: 21px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .bottom-right-group { display: flex; align-items: center; gap: 8px; flex: 1; justify-content: flex-end; }
     .btn-queue-pill { background: rgba(255,255,255,0.14); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.25); border-radius: 14px; padding: 0 14px; height: 48px; font-size: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
@@ -434,6 +434,11 @@
       <div class="hub-section-divider">⚙️ App & Menu Settings</div>
 
       <div class="card-box">
+        <label class="edit-field-label" style="margin-top:0;">Checkout Mode</label>
+        <div class="settings-grid-2" style="margin-bottom:10px;">
+          <button type="button" class="seg-btn" id="opModePosBtn" onclick="setOperatingMode('pos')">🧾 Standard POS</button>
+          <button type="button" class="seg-btn" id="opModeSimpleBtn" onclick="setOperatingMode('simple')">⚡ Simple Tally</button>
+        </div>
         <div class="settings-grid-2">
           <button class="btn" style="background:#f59e0b; padding:12px 8px; font-size:13px;" onclick="startEditMenuFromHub()">✏️ Edit Menu</button>
           <button class="btn" style="background:#dc2626; padding:12px 8px; font-size:13px;" onclick="startSoldOutFromHub()">🚫 Not Available</button>
@@ -441,7 +446,7 @@
       </div>
 
       <button class="report-accordion-btn" onclick="openSettingsSubModal('setModeModal')">
-        <span>⚡ Mode, Screen Layout & Header Size</span>
+        <span>📱 Screen Layout, Header Size & Queue Timer</span>
         <span>▶</span>
       </button>
 
@@ -540,12 +545,7 @@
   <!-- ==================== PART 15A: SETTINGS SUB-MODALS HTML ==================== -->
   <div class="modal-overlay" id="setModeModal" onclick="if(event.target===this) closeSettingsSubModal('setModeModal')">
     <div class="modal-box">
-      <div class="modal-title">⚡ Mode, Layout & Header</div>
-      <label class="edit-field-label">Checkout Mode</label>
-      <div class="settings-grid-2">
-        <button type="button" class="seg-btn" id="opModePosBtn" onclick="setOperatingMode('pos')">🧾 Standard POS</button>
-        <button type="button" class="seg-btn" id="opModeSimpleBtn" onclick="setOperatingMode('simple')">⚡ Simple Tally</button>
-      </div>
+      <div class="modal-title">📱 Layout, Header & Timer</div>
       <label class="edit-field-label">Screen Layout</label>
       <div class="settings-grid-3">
         <button type="button" class="seg-btn" id="layoutPhoneBtn" onclick="setScreenLayout('phone')">📱 Phone</button>
@@ -879,8 +879,13 @@
     function setFontSizeMode(sz) { appSettings.fontSize = sz; saveSettings(); applyAllSettingsUI(); }
     function setScreenLayout(ly) { appSettings.screenLayout = ly; saveSettings(); applyAllSettingsUI(); }
     function setOperatingMode(md) {
-      appSettings.opMode = md; saveSettings(); applyAllSettingsUI();
-      closeCartSheet(); renderMenu();
+      appSettings.opMode = md;
+      saveSettings();
+      applyAllSettingsUI();
+      closeCartSheet();
+      closeHubScreen();
+      renderMenu();
+      showToast(md === 'simple' ? '⚡ Simple Tally Mode' : '🧾 Standard POS Mode');
     }
     function setQueueTimer(mins) { appSettings.queueMins = mins; saveSettings(); applyAllSettingsUI(); renderQueue(); }
     function toggleSoundSetting() { appSettings.soundOn = !appSettings.soundOn; saveSettings(); applyAllSettingsUI(); triggerFeedback(false); }
@@ -1234,7 +1239,8 @@
     function selectCategoryTab(idx) {
       activeCatIndex = idx;
       renderMenu();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const sec = document.getElementById('kioskSection');
+      if (sec) sec.scrollTo({ top: 0, behavior: 'smooth' });
     }
     // ==================== PART 22: POPUP OPEN & VISUAL MATCH ====================
     function findVisualForChoice(choiceObj) {
