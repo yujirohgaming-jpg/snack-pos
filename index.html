@@ -5,15 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Gonzales Snacks">
   <link rel="apple-touch-icon" href="./icon.png">
   <title>Gonzales Snack Bar</title>
   <style>
-    :root { --primary: #c8102e; --accent: #ffb81c; --success: #16a34a; --danger: #dc2626; --bg: #f6f4f0; --card: #ffffff; --text: #1c1917; --muted: #78716c; --border: #e7e5e4; --topbg: #1c1917; }
-    body.theme-dark { --bg: #0c0a09; --card: #1c1917; --text: #fafaf9; --muted: #a8a29e; --border: #292524; --topbg: #090807; }
-    body.theme-cream { --bg: #fef7e6; --card: #fffdf7; --text: #451a03; --muted: #92400e; --border: #fde68a; --topbg: #451a03; }
-    body.theme-mint { --bg: #ecfdf5; --card: #ffffff; --text: #064e3b; --muted: #047857; --border: #a7f3d0; --topbg: #064e3b; }
+    :root { --primary: #c8102e; --accent: #ffb81c; --success: #16a34a; --danger: #dc2626; --bg: #f6f4f0; --card: #ffffff; --text: #1c1917; --muted: #78716c; --border: #e7e5e4; --topbg: #1c1917; --cardfoot: #1c1917; }
+    html { background: var(--topbg); }
+    body.theme-dark { --bg: #0c0a09; --card: #1c1917; --text: #fafaf9; --muted: #a8a29e; --border: #292524; --topbg: #090807; --cardfoot: #090807; }
+    body.theme-cream { --bg: #fef7e6; --card: #fffdf7; --text: #451a03; --muted: #92400e; --border: #fde68a; --topbg: #451a03; --cardfoot: #451a03; }
+    body.theme-mint { --bg: #ecfdf5; --card: #ffffff; --text: #064e3b; --muted: #047857; --border: #a7f3d0; --topbg: #064e3b; --cardfoot: #064e3b; }
     /* ==================== PART 02: BODY & STICKY TOP ==================== */
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     html, body { height: 100dvh; overflow: hidden; overscroll-behavior: none; margin: 0; padding: 0; }
@@ -53,20 +54,30 @@
     .top-edit-tools { display: none; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 6px; }
     .edit-mode .top-edit-tools { display: grid; }
     .btn-top-ed { padding: 8px 4px; border: none; border-radius: 999px; font-size: 11px; font-weight: 800; color: white; cursor: pointer; text-align: center; }
+
+    /* Category Bar Dock Positions: Bottom, Left, Right */
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-bottom .sticky-top-zone { order: 2; border-radius: 18px 18px 0 0; padding-top: 8px; padding-bottom: calc(74px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 14px rgba(28, 25, 23, 0.18); }
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-bottom #kioskSection { order: 1; padding-top: calc(10px + env(safe-area-inset-top)); padding-bottom: 14px; }
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right { flex-direction: row; padding-top: env(safe-area-inset-top); }
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right { flex-direction: row-reverse; }
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .sticky-top-zone, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .sticky-top-zone { width: 92px; padding: 8px 6px calc(76px + env(safe-area-inset-bottom)); border-radius: 0; overflow-y: auto; display: flex; flex-direction: column; }
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .cat-bar-row, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .cat-bar-row { flex-direction: column; flex: 1; }
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .category-tabs, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .category-tabs { flex-direction: column; width: 100%; overflow-y: auto; overflow-x: hidden; gap: 7px; }
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .cat-tab-wrap, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .cat-tab-wrap { width: 100%; border-radius: 14px; justify-content: center; }
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .cat-tab-btn, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .cat-tab-btn { white-space: normal; text-align: center; padding: 10px 4px; font-size: 11px; line-height: 1.2; width: 100%; }
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .btn-custom-scroll, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .btn-custom-scroll { width: 100%; border-radius: 14px; padding: 10px 4px; font-size: 11px; }
     /* ==================== PART 04: MENU GRID & NOT AVAILABLE ==================== */
     .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     body.layout-tablet .menu-grid { grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 14px; }
     @media (min-width: 768px) { body.layout-auto .menu-grid { grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 14px; } }
     body.card-compact .menu-grid { gap: 9px; }
-    body.card-compact .food-photo { height: 76px; }
+    body.card-compact .has-photo-card .visual-wrap { height: 105px; }
     body.card-compact .food-icon { height: 50px; font-size: 36px; }
-    body.card-compact .food-name { padding: 6px 8px 4px; }
     body.card-compact .food-footer-bar { padding: 6px 8px; }
-    body.card-large .food-photo { height: 142px; }
+    body.card-large .has-photo-card .visual-wrap { height: 175px; }
     body.card-large .food-icon { height: 86px; font-size: 52px; }
-    body.card-large .food-name { padding: 10px 12px 8px; }
     body.card-large .food-footer-bar { padding: 10px 12px; }
-    .menu-card-item { position: relative; background: var(--card); border: 1px solid rgba(28, 25, 23, 0.06); border-radius: 22px; overflow: hidden; text-align: center; cursor: pointer; box-shadow: 0 6px 18px rgba(28, 25, 23, 0.07), 0 1px 3px rgba(28, 25, 23, 0.04); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.14s ease, box-shadow 0.2s ease; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+    .menu-card-item { position: relative; background: var(--card); border: 1px solid rgba(28, 25, 23, 0.08); border-radius: 22px; overflow: hidden; text-align: center; cursor: pointer; box-shadow: 0 6px 18px rgba(28, 25, 23, 0.08), 0 1px 3px rgba(28, 25, 23, 0.04); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.14s ease, box-shadow 0.2s ease; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
     .menu-card-item:active { transform: scale(0.96); box-shadow: 0 2px 8px rgba(28, 25, 23, 0.08); }
     .menu-card-item.just-added { box-shadow: 0 0 0 3px #16a34a, 0 8px 20px rgba(22, 163, 74, 0.22); }
     .menu-card-item.is-soldout { background: #e7e5e4; border-color: #d6d3d1; cursor: default; box-shadow: none; }
@@ -75,48 +86,68 @@
     .menu-card-item.is-soldout .card-top-body, .menu-card-item.is-soldout .food-footer-bar { filter: grayscale(100%); opacity: 0.4; pointer-events: none; }
     .soldout-overlay-tag { position: absolute; top: 44%; left: 50%; transform: translate(-50%, -50%); background: rgba(28, 25, 23, 0.92); color: #ffffff; border: 2px solid #f87171; padding: 5px 11px; border-radius: 999px; font-size: 11px; font-weight: 900; letter-spacing: 0.4px; z-index: 6; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.3); pointer-events: none; }
     .soldout-clear-btn { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 50%; background: #dc2626; color: #ffffff; border: 2px solid #ffffff; font-size: 15px; font-weight: 900; line-height: 22px; text-align: center; cursor: pointer; z-index: 8; padding: 0; pointer-events: auto; }
-    /* ==================== PART 05: CARD DETAILS & FOOTERS ==================== */
+    /* ==================== PART 05A: SIMPLE MODE CURRENT TAPS DOCK ==================== */
     .card-top-body { padding: 0 0 8px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; width: 100%; position: relative; }
-    body.menu-text-only .card-top-body { padding: 14px 10px 10px; justify-content: center; }
+    .has-photo-card .card-top-body { padding: 0; }
+    body.menu-text-only .card-top-body { padding: 14px 10px 10px !important; justify-content: center; }
     body.menu-text-only .visual-wrap { display: none; }
     body.simple-tally #kioskSection { padding-top: calc(10px + env(safe-area-inset-top)); padding-bottom: calc(165px + env(safe-area-inset-bottom)); }
     body.simple-tally.edit-mode #kioskSection, body.simple-tally.soldout-mode #kioskSection { padding-top: 10px; padding-bottom: 24px !important; }
     body.simple-tally .food-footer-bar { display: none; }
     body.simple-tally .card-top-body { padding: 0 0 10px; }
-    body.simple-tally.menu-text-only .card-top-body { padding: 14px 10px; }
+    body.simple-tally .has-photo-card .card-top-body { padding: 0; }
+    body.simple-tally.menu-text-only .card-top-body { padding: 14px 10px !important; }
     .simple-mini-cart { display: none; position: fixed; left: 0; right: 0; bottom: calc(66px + env(safe-area-inset-bottom)); background: #1c1917; color: #fafaf9; border-top: 1px solid rgba(255,255,255,0.12); box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.25); z-index: 25; flex-direction: column; padding: 7px 12px 8px; }
     body.simple-tally .simple-mini-cart { display: flex; }
     body.simple-tally.edit-mode .simple-mini-cart, body.simple-tally.soldout-mode .simple-mini-cart { display: none !important; }
+    body.simple-tally:not(.edit-mode):not(.soldout-mode).taps-pos-top .simple-mini-cart { position: relative; top: auto; bottom: auto; flex-shrink: 0; border-top: none; border-bottom: 1px solid rgba(255,255,255,0.14); border-bottom-left-radius: 18px; border-bottom-right-radius: 18px; padding-top: calc(8px + env(safe-area-inset-top)); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2); }
+    body.simple-tally:not(.edit-mode):not(.soldout-mode).taps-pos-top #kioskSection { padding-top: 10px; padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+    body.simple-tally:not(.edit-mode):not(.soldout-mode).taps-pos-left, body.simple-tally:not(.edit-mode):not(.soldout-mode).taps-pos-right { flex-direction: row; padding-top: env(safe-area-inset-top); }
+    body.simple-tally:not(.edit-mode):not(.soldout-mode).taps-pos-right { flex-direction: row-reverse; }
+    body.simple-tally:not(.edit-mode):not(.soldout-mode).taps-pos-left .simple-mini-cart, body.simple-tally:not(.edit-mode):not(.soldout-mode).taps-pos-right .simple-mini-cart { position: relative; left: auto; right: auto; bottom: auto; width: 38%; max-width: 260px; min-width: 145px; flex-shrink: 0; border-top: none; border-left: 1px solid rgba(255,255,255,0.14); padding: 10px 10px calc(76px + env(safe-area-inset-bottom)); box-shadow: -4px 0 18px rgba(0,0,0,0.2); }
+    body.simple-tally:not(.edit-mode):not(.soldout-mode).taps-pos-left .simple-mini-cart { border-left: none; border-right: 1px solid rgba(255,255,255,0.14); box-shadow: 4px 0 18px rgba(0,0,0,0.2); }
+    body.simple-tally:not(.edit-mode):not(.soldout-mode).taps-pos-left .mini-cart-scroll, body.simple-tally:not(.edit-mode):not(.soldout-mode).taps-pos-right .mini-cart-scroll { max-height: none; flex: 1; gap: 5px; }
+    body.simple-tally:not(.edit-mode):not(.soldout-mode).taps-pos-left #kioskSection, body.simple-tally:not(.edit-mode):not(.soldout-mode).taps-pos-right #kioskSection { padding-top: 10px; padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
     .edit-mode .custom-tally-card, .soldout-mode .custom-tally-card { display: none !important; }
-    .mini-cart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .mini-cart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
     .mini-cart-title { font-size: 10px; font-weight: 900; color: #ffb81c; text-transform: uppercase; letter-spacing: 0.5px; }
     .btn-mini-clear { background: rgba(220, 38, 38, 0.25); color: #fca5a5; border: 1px solid rgba(248, 113, 113, 0.4); border-radius: 999px; padding: 2px 9px; font-size: 10px; font-weight: 800; cursor: pointer; }
     .mini-cart-scroll { max-height: 76px; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 3px; }
-    .mini-cart-line { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; padding: 2px 6px; background: rgba(255,255,255,0.07); border-radius: 6px; gap: 6px; }
+    .mini-cart-line { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; padding: 4px 7px; background: rgba(255,255,255,0.08); border-radius: 7px; gap: 6px; }
     .mini-cart-line-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .mini-cart-line-amt { color: #4ade80; font-weight: 800; flex-shrink: 0; }
     .custom-tally-card { border: 2px dashed #ffb81c !important; background: #fffbeb !important; justify-content: center; }
     body.theme-dark .custom-tally-card { background: #1c1917 !important; }
+    /* ==================== PART 05B: FULL-BLEED PHOTO CARDS & FOOTERS ==================== */
     .text-only-controls { display: none; width: 100%; justify-content: space-between; align-items: center; margin-bottom: 4px; }
     body.menu-text-only .text-only-controls { display: flex; }
     .visual-wrap { position: relative; width: 100%; margin-bottom: 6px; }
+    .has-photo-card .visual-wrap { margin-bottom: 0; height: 138px; overflow: hidden; }
     .card-minus-btn { position: absolute; top: 8px; left: 8px; width: 28px; height: 28px; border-radius: 50%; background: #dc2626; color: #ffffff; border: 2px solid #ffffff; font-size: 18px; font-weight: 900; line-height: 22px; text-align: center; cursor: pointer; z-index: 5; box-shadow: 0 3px 8px rgba(220, 38, 38, 0.45); padding: 0; }
     .text-only-controls .card-minus-btn, .text-only-controls .in-cart-pill { position: static; }
     .edit-mode .card-minus-btn, .soldout-mode .card-minus-btn { display: none; }
     .in-cart-pill { position: absolute; top: 8px; right: 8px; font-size: 11px; font-weight: 900; color: #ffffff; background: #16a34a; padding: 3px 9px; border-radius: 999px; z-index: 3; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
     .edit-mode .in-cart-pill, .soldout-mode .in-cart-pill { display: none; }
     .food-icon { font-size: 46px; line-height: 1; margin: 10px 0 2px; height: 68px; display: flex; align-items: center; justify-content: center; pointer-events: none; }
-    .food-photo { width: 100%; height: 108px; object-fit: cover; border-radius: 0; display: block; border-bottom: 1px solid rgba(0,0,0,0.05); pointer-events: none; -webkit-touch-callout: none; user-select: none; }
+    .food-photo { width: 100%; height: 100%; object-fit: cover; border-radius: 0; display: block; pointer-events: none; -webkit-touch-callout: none; user-select: none; }
+    .photo-scrim { display: none; }
+    .has-photo-card .photo-scrim { display: block; position: absolute; left: 0; right: 0; bottom: 0; height: 65%; background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.35) 55%, transparent 100%); pointer-events: none; z-index: 1; }
+    body.menu-text-only .photo-scrim { display: none; }
     .combo-badge { display: inline-block; font-size: 10px; font-weight: 800; color: #7e22ce; background: #f3e8ff; border: 1px solid #e9d5ff; padding: 2px 9px; border-radius: 999px; margin-bottom: 3px; }
+    .has-photo-card .combo-badge { position: absolute; top: 8px; left: 8px; z-index: 2; background: rgba(126, 34, 206, 0.92); color: #ffffff; border-color: rgba(255,255,255,0.4); }
+    body.menu-text-only .has-photo-card .combo-badge { position: static; background: #f3e8ff; color: #7e22ce; }
     .food-name { font-weight: 800; font-size: 14px; color: var(--text); line-height: 1.25; padding: 2px 10px 0; }
-    .food-footer-bar { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 11px 9px; background: transparent; border-top: 1px solid rgba(28, 25, 23, 0.06); gap: 4px; }
-    body.theme-dark .food-footer-bar { background: transparent; border-top-color: rgba(255,255,255,0.08); }
-    .food-footer-bar.combo-footer { background: rgba(243, 232, 255, 0.45); border-top-color: #e9d5ff; }
-    .food-price { font-size: 15px; font-weight: 900; color: #c8102e; }
-    body.theme-dark .food-price { color: #ffb81c; }
-    .food-tap-hint { font-size: 11px; font-weight: 800; color: #7e22ce; }
-    .btn-options-pill { background: #fffbeb; color: #92400e; border: 1.5px solid #fcd34d; border-radius: 999px; padding: 4px 9px; font-size: 10px; font-weight: 900; white-space: nowrap; }
-    .btn-options-pill.combo-pill { background: #7e22ce; color: #ffffff; border-color: #6b21a8; }
+    .has-photo-card .food-name { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 8px 9px; color: #ffffff; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 2px 6px rgba(0,0,0,0.9); }
+    body.photo-text-gold .has-photo-card .food-name { color: #ffb81c; }
+    body.photo-text-dark .has-photo-card .food-name { color: #1c1917; text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 0 2px 6px rgba(255,255,255,0.95); }
+    body.photo-text-dark .has-photo-card .photo-scrim { background: linear-gradient(to top, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.3) 55%, transparent 100%); }
+    body.menu-text-only .has-photo-card .food-name { position: static; color: var(--text); text-shadow: none; padding: 2px 10px 0; }
+    .food-footer-bar { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 10px; background: var(--cardfoot); color: #ffffff; gap: 4px; }
+    .food-footer-bar.combo-footer { background: #3b0764; }
+    .food-price { font-size: 14px; font-weight: 900; color: #ffb81c; }
+    .food-tap-hint { font-size: 11px; font-weight: 800; color: #e9d5ff; }
+    .btn-options-pill { background: rgba(255,255,255,0.16); color: #ffffff; border: 1px solid rgba(255,255,255,0.28); border-radius: 999px; padding: 4px 9px; font-size: 10px; font-weight: 800; white-space: nowrap; }
+    .btn-options-pill.combo-pill { background: #9333ea; color: #ffffff; border-color: #c084fc; }
     .edit-mode .menu-card-item { border: 2px solid #ffb81c; padding-top: 24px; }
     .star-pin-btn { display: none; position: absolute; top: 6px; left: 6px; background: #f5f5f4; color: #78716c; border: 2px solid #d6d3d1; width: 26px; height: 26px; border-radius: 50%; font-size: 13px; line-height: 20px; text-align: center; cursor: pointer; z-index: 9; padding: 0; }
     .star-pin-btn.pinned { background: #fef08a; color: #b45309; border-color: #f59e0b; }
@@ -148,7 +179,9 @@
     body.simple-tally .btn-simple-confirm { display: flex; }
     .bottom-sheet-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: calc(66px + env(safe-area-inset-bottom)); background: rgba(0,0,0,0.55); z-index: 30; align-items: flex-end; justify-content: center; overscroll-behavior: contain; }
     .bottom-sheet-overlay.open { display: flex; }
-    .bottom-sheet-card { background: var(--card); color: var(--text); width: 100%; max-width: 540px; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 14px 16px 16px; box-shadow: 0 -8px 28px rgba(0,0,0,0.28); max-height: 76vh; display: flex; flex-direction: column; animation: sheetRise 0.18s ease-out; }
+    body.layout-tablet .bottom-sheet-overlay { justify-content: flex-end; padding-right: 12px; }
+    @media (min-width: 768px) { body.layout-auto .bottom-sheet-overlay { justify-content: flex-end; padding-right: 12px; } }
+    .bottom-sheet-card { background: var(--card); color: var(--text); width: 100%; max-width: 440px; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 14px 16px 16px; box-shadow: 0 -8px 28px rgba(0,0,0,0.28); max-height: 76vh; display: flex; flex-direction: column; animation: sheetRise 0.18s ease-out; }
     @keyframes sheetRise { from { transform: translateY(30px); opacity: 0.6; } to { transform: translateY(0); opacity: 1; } }
     .sheet-head-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
     .sheet-head-row h3 { margin: 0; font-size: 16px; font-weight: 900; }
@@ -288,15 +321,15 @@
       <div class="category-tabs" id="categoryTabs"></div>
     </div>
   </div>
-  <div id="kioskSection">
-    <div class="menu-grid" id="menuGrid"></div>
-  </div>
   <div class="simple-mini-cart" id="simpleMiniCart">
     <div class="mini-cart-head">
       <span class="mini-cart-title">🧾 Current Taps (<span id="miniCartCount">0</span>)</span>
       <button type="button" class="btn-mini-clear" id="miniCartClearBtn" onclick="clearSimpleOrderDirect()" style="display:none;">Clear</button>
     </div>
     <div class="mini-cart-scroll" id="simpleMiniCartList"></div>
+  </div>
+  <div id="kioskSection">
+    <div class="menu-grid" id="menuGrid"></div>
   </div>
   <div class="bottom-bar">
     <button class="btn-hub-icon" onclick="openHubScreen()" title="Stall Hub & Settings">☰</button>
@@ -537,12 +570,26 @@
   <!-- ==================== PART 15A: SETTINGS SUB-MODALS HTML ==================== -->
   <div class="modal-overlay" id="setModeModal" onclick="if(event.target===this) closeSettingsSubModal('setModeModal')">
     <div class="modal-box">
-      <div class="modal-title">📱 Layout, Header & Timer</div>
+      <div class="modal-title">📱 Layout, Positions & Timer</div>
       <label class="edit-field-label">Screen Layout</label>
       <div class="settings-grid-3">
         <button type="button" class="seg-btn" id="layoutPhoneBtn" onclick="setScreenLayout('phone')">📱 Phone</button>
         <button type="button" class="seg-btn" id="layoutTabletBtn" onclick="setScreenLayout('tablet')">💻 Tablet/PC</button>
         <button type="button" class="seg-btn" id="layoutAutoBtn" onclick="setScreenLayout('auto')">✨ Auto</button>
+      </div>
+      <label class="edit-field-label">POS Category Bar Position</label>
+      <div class="settings-grid-4">
+        <button type="button" class="seg-btn" id="catPosTop" onclick="setCatBarPos('top')">Top</button>
+        <button type="button" class="seg-btn" id="catPosBottom" onclick="setCatBarPos('bottom')">Bottom</button>
+        <button type="button" class="seg-btn" id="catPosLeft" onclick="setCatBarPos('left')">Left</button>
+        <button type="button" class="seg-btn" id="catPosRight" onclick="setCatBarPos('right')">Right</button>
+      </div>
+      <label class="edit-field-label">Simple Mode Current Taps Position</label>
+      <div class="settings-grid-4">
+        <button type="button" class="seg-btn" id="tapsPosBottom" onclick="setTapsBarPos('bottom')">Bottom</button>
+        <button type="button" class="seg-btn" id="tapsPosTop" onclick="setTapsBarPos('top')">Top</button>
+        <button type="button" class="seg-btn" id="tapsPosLeft" onclick="setTapsBarPos('left')">Left</button>
+        <button type="button" class="seg-btn" id="tapsPosRight" onclick="setTapsBarPos('right')">Right</button>
       </div>
       <label class="edit-field-label">Top Category Bar Size (POS Mode)</label>
       <div class="settings-grid-2">
@@ -566,10 +613,16 @@
       <div class="modal-title">🎨 Theme, Display & Size</div>
       <label class="edit-field-label">App Background Theme</label>
       <div class="settings-grid-2">
-        <button type="button" class="seg-btn" style="background:#e2e8f0; color:#0f172a;" onclick="setAppTheme('light')">☀️ Classic Light</button>
-        <button type="button" class="seg-btn" style="background:#0f172a; color:#f8fafc;" onclick="setAppTheme('dark')">🌙 Dark Mode</button>
-        <button type="button" class="seg-btn" style="background:#fef3c7; color:#451a03;" onclick="setAppTheme('cream')">🍦 Warm Cream</button>
-        <button type="button" class="seg-btn" style="background:#d1fae5; color:#064e3b;" onclick="setAppTheme('mint')">🌿 Fresh Mint</button>
+        <button type="button" class="seg-btn" id="themeBtnLight" style="background:#f6f4f0; color:#1c1917;" onclick="setAppTheme('light')">☀️ Classic Light</button>
+        <button type="button" class="seg-btn" id="themeBtnDark" style="background:#1c1917; color:#fafaf9;" onclick="setAppTheme('dark')">🌙 Dark Mode</button>
+        <button type="button" class="seg-btn" id="themeBtnCream" style="background:#fef3c7; color:#451a03;" onclick="setAppTheme('cream')">🍦 Warm Cream</button>
+        <button type="button" class="seg-btn" id="themeBtnMint" style="background:#d1fae5; color:#064e3b;" onclick="setAppTheme('mint')">🌿 Fresh Mint</button>
+      </div>
+      <label class="edit-field-label">Photo Overlay Text Color</label>
+      <div class="settings-grid-3">
+        <button type="button" class="seg-btn" id="photoTxtWhite" onclick="setPhotoTextColor('white')">White</button>
+        <button type="button" class="seg-btn" id="photoTxtGold" onclick="setPhotoTextColor('gold')">Gold</button>
+        <button type="button" class="seg-btn" id="photoTxtDark" onclick="setPhotoTextColor('dark')">Dark</button>
       </div>
       <label class="edit-field-label">Menu Cards</label>
       <div class="settings-grid-2">
@@ -772,7 +825,7 @@
     function formatDisplayDate(dateKey) {
       return parseDateKeyLocal(dateKey).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     }
-    // ==================== PART 19: SETTINGS & ROLLOVER ====================
+    // ==================== PART 19A: AUDIO & SETTINGS UI ====================
     let sharedAudioCtx = null;
     function unlockIosAudio() {
       try {
@@ -814,7 +867,43 @@
 
     function applyAllSettingsUI() {
       document.body.classList.remove('theme-dark', 'theme-cream', 'theme-mint');
-      if (appSettings.theme && appSettings.theme !== 'light') document.body.classList.add('theme-' + appSettings.theme);
+      const curTheme = appSettings.theme || 'light';
+      if (curTheme !== 'light') document.body.classList.add('theme-' + curTheme);
+      const themeLabels = { light: '☀️ Classic Light', dark: '🌙 Dark Mode', cream: '🍦 Warm Cream', mint: '🌿 Fresh Mint' };
+      new Array('light', 'dark', 'cream', 'mint').forEach(t => {
+        const el = document.getElementById('themeBtn' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (el) {
+          const isAct = curTheme === t;
+          el.classList.toggle('active', isAct);
+          el.style.border = isAct ? '3px solid #c8102e' : '1.5px solid #cbd5e1';
+          el.style.boxShadow = isAct ? '0 0 0 2px #ffb81c' : 'none';
+          el.innerText = (isAct ? '✓ ' : '') + themeLabels[t];
+        }
+      });
+
+      document.body.classList.remove('cat-pos-bottom', 'cat-pos-left', 'cat-pos-right');
+      const cPos = appSettings.catPos || 'top';
+      if (cPos !== 'top') document.body.classList.add('cat-pos-' + cPos);
+      new Array('top', 'bottom', 'left', 'right').forEach(p => {
+        const el = document.getElementById('catPos' + p.charAt(0).toUpperCase() + p.slice(1));
+        if (el) el.classList.toggle('active', cPos === p);
+      });
+
+      document.body.classList.remove('taps-pos-top', 'taps-pos-left', 'taps-pos-right');
+      const tPos = appSettings.tapsPos || 'bottom';
+      if (tPos !== 'bottom') document.body.classList.add('taps-pos-' + tPos);
+      new Array('bottom', 'top', 'left', 'right').forEach(p => {
+        const el = document.getElementById('tapsPos' + p.charAt(0).toUpperCase() + p.slice(1));
+        if (el) el.classList.toggle('active', tPos === p);
+      });
+
+      document.body.classList.remove('photo-text-gold', 'photo-text-dark');
+      const pTxt = appSettings.photoTextColor || 'white';
+      if (pTxt !== 'white') document.body.classList.add('photo-text-' + pTxt);
+      new Array('white', 'gold', 'dark').forEach(c => {
+        const el = document.getElementById('photoTxt' + c.charAt(0).toUpperCase() + c.slice(1));
+        if (el) el.classList.toggle('active', pTxt === c);
+      });
 
       document.body.classList.toggle('header-large', appSettings.headerSize === 'large');
       document.getElementById('headerCompactBtn').classList.toggle('active', appSettings.headerSize !== 'large');
@@ -826,7 +915,7 @@
       document.getElementById('cardSizeCompact').classList.toggle('active', appSettings.cardSize === 'compact');
       document.getElementById('cardSizeNormal').classList.toggle('active', !appSettings.cardSize || appSettings.cardSize === 'normal');
       document.getElementById('cardSizeLarge').classList.toggle('active', appSettings.cardSize === 'large');
-
+    // ==================== PART 19B: SETTINGS SETTERS & ROLLOVER ====================
       document.body.classList.toggle('menu-text-only', appSettings.menuView === 'text');
       document.getElementById('menuViewPhotoBtn').classList.toggle('active', appSettings.menuView === 'photo');
       document.getElementById('menuViewTextBtn').classList.toggle('active', appSettings.menuView === 'text');
@@ -864,6 +953,9 @@
     }
 
     function setAppTheme(t) { appSettings.theme = t; saveSettings(); applyAllSettingsUI(); }
+    function setCatBarPos(p) { appSettings.catPos = p; saveSettings(); applyAllSettingsUI(); }
+    function setTapsBarPos(p) { appSettings.tapsPos = p; saveSettings(); applyAllSettingsUI(); }
+    function setPhotoTextColor(c) { appSettings.photoTextColor = c; saveSettings(); applyAllSettingsUI(); }
     function setHeaderSizeMode(sz) { appSettings.headerSize = sz; saveSettings(); applyAllSettingsUI(); }
     function setCardSizeMode(sz) { appSettings.cardSize = sz; saveSettings(); applyAllSettingsUI(); }
     function setMenuViewMode(m) { appSettings.menuView = m; saveSettings(); applyAllSettingsUI(); }
@@ -1151,10 +1243,11 @@
         const isCombo = !!(item.isCombo || item.isMixMatch);
         const isSoldOut = !!item.soldOut;
         const isPinned = !!item.pinned;
+        const hasPhoto = !!item.photo;
         const qtyInCart = getItemCartQty(item.name);
         const safeName = item.name.replace(/'/g, "\\'");
-        const visualHtml = item.photo
-          ? '<img class="food-photo" src="' + item.photo + '" alt="">'
+        const visualHtml = hasPhoto
+          ? '<img class="food-photo" src="' + item.photo + '" alt=""><div class="photo-scrim"></div>'
           : '<div class="food-icon">' + (item.icon || (isCombo ? '🥤' : '🍽️')) + '</div>';
 
         const leftFooterHtml = isCombo
@@ -1163,7 +1256,7 @@
         const pillLabel = isEditMode ? 'Edit' : (isSoldOutMode ? 'Stock' : (isCombo ? 'Choose' : '+ Qty / Add-on'));
 
         const card = document.createElement('div');
-        card.className = 'menu-card-item' + (isSoldOut ? ' is-soldout' : '');
+        card.className = 'menu-card-item' + (hasPhoto ? ' has-photo-card' : '') + (isSoldOut ? ' is-soldout' : '');
         card.innerHTML =
           '<button type="button" class="star-pin-btn' + (isPinned ? ' pinned' : '') + '" onclick="togglePinItem(event, ' + catIdx + ', ' + itemIndex + ')" title="Pin Best-Seller">' + (isPinned ? '⭐' : '☆') + '</button>' +
           '<span class="delete-badge" onclick="askDeleteMenuItem(event, ' + catIdx + ', ' + itemIndex + ')">×</span>' +
@@ -1306,150 +1399,87 @@
       if (nextVal <= 0) delete comboQtyMap[idx]; else comboQtyMap[idx] = nextVal;
       renderAddonChoices();
     }
-    // ==================== PART 23: POPUP GRID & COMBO STOCK ====================
+    // ==================== PART 23: POPUP CHOICES & CONFIRM ====================
     function renderAddonChoices() {
-      const container = document.getElementById('addonChoicesContainer');
-      const confirmBtn = document.getElementById('confirmAddonBtn');
-      const itemAddons = pendingItem.addons || new Array();
+      const container = document.getElementById('addonChoicesList');
       const isCombo = !!(pendingItem.isCombo || pendingItem.isMixMatch);
-      const usePhotoGrid = appSettings.popupView === 'photo';
+      const isTextOnly = appSettings.popupView === 'text';
+      container.className = isTextOnly ? 'addon-grid text-only-popup' : 'addon-grid';
+      container.innerHTML = '';
 
-      if (isCombo) {
-        if (itemAddons.length === 0) {
-          container.innerHTML = '<div style="text-align:center; font-size:13px; color:#64748b; margin-bottom:10px;">No combo pairings added yet.</div>';
-        } else if (usePhotoGrid) {
-          container.innerHTML = '<div class="popup-cards-grid">' + itemAddons.map((choice, idx) => {
-            const q = comboQtyMap[idx] || 0;
-            const vis = findVisualForChoice(choice);
-            const visHtml = vis.photo
-              ? '<img class="popup-choice-img" src="' + vis.photo + '" alt="">'
-              : '<div class="popup-choice-icon">' + vis.icon + '</div>';
-            return '<div class="popup-card-choice' + (q > 0 ? ' has-qty' : '') + (choice.soldOut ? ' choice-soldout' : '') + '" onclick="changeComboChoiceQty(' + idx + ', 1)">' +
-                   (q > 0 ? '<span class="combo-qty-badge" style="position:absolute; top:6px; right:6px;">' + q + 'x</span>' : '') +
-                   (q > 0 ? '<button type="button" class="combo-minus-btn" style="position:absolute; top:6px; left:6px;" onclick="changeComboChoiceQty(' + idx + ', -1, event)">−</button>' : '') +
-                   visHtml +
-                   '<div style="font-weight:800; font-size:13px; line-height:1.2;">' + choice.name + '</div>' +
-                   '<div style="font-weight:900; font-size:13px; color:#6b21a8; margin-top:4px;">' + (choice.soldOut ? 'NOT AVAILABLE' : '₱' + choice.price.toFixed(2)) + '</div>' +
-                 '</div>';
-          }).join('') + '</div>';
+      (pendingItem.addons || new Array()).forEach((addon, idx) => {
+        const isChoiceSoldOut = !!addon.soldOut;
+        const vis = findVisualForChoice(addon);
+        const visualTag = vis.photo ? '<img class="addon-card-photo" src="' + vis.photo + '" alt="">' : '<div class="addon-card-icon">' + vis.icon + '</div>';
+        const badgeTag = isChoiceSoldOut ? '<span class="soldout-mini-tag">Not Available</span>' : '';
+        const card = document.createElement('div');
+
+        if (isCombo) {
+          const qty = comboQtyMap[idx] || 0;
+          card.className = 'addon-card' + (qty > 0 ? ' selected' : '') + (isChoiceSoldOut ? ' is-soldout-choice' : '');
+          card.innerHTML = badgeTag + visualTag + '<div class="addon-card-name">' + addon.name + '</div><div class="addon-card-price">₱' + addon.price.toFixed(2) + '</div>' +
+            (isChoiceSoldOut ? '' : '<div class="combo-qty-bar"><button type="button" class="combo-mini-btn" onclick="changeComboChoiceQty(' + idx + ', -1, event)">−</button><span class="combo-mini-val">' + qty + '</span><button type="button" class="combo-mini-btn" onclick="changeComboChoiceQty(' + idx + ', 1, event)">+</button></div>');
+          if (!isChoiceSoldOut) card.onclick = () => changeComboChoiceQty(idx, 1, null);
         } else {
-          container.innerHTML = itemAddons.map((choice, idx) => {
-            const q = comboQtyMap[idx] || 0;
-            return '<div class="combo-choice-row' + (q > 0 ? ' has-qty' : '') + (choice.soldOut ? ' choice-soldout' : '') + '" onclick="changeComboChoiceQty(' + idx + ', 1)">' +
-                   '<div class="combo-row-left">' +
-                     (q > 0 ? '<span class="combo-qty-badge">' + q + 'x</span>' : '') +
-                     '<span>' + choice.name + '</span>' +
-                   '</div>' +
-                   '<div class="combo-row-right">' +
-                     '<span>' + (choice.soldOut ? 'NOT AVAILABLE' : '₱' + choice.price.toFixed(2)) + '</span>' +
-                     (q > 0 ? '<button type="button" class="combo-minus-btn" onclick="changeComboChoiceQty(' + idx + ', -1, event)">−</button>' : '') +
-                   '</div></div>';
-          }).join('');
+          const isSel = selectedAddonIndexes.indexOf(idx) !== -1;
+          card.className = 'addon-card' + (isSel ? ' selected' : '') + (isChoiceSoldOut ? ' is-soldout-choice' : '');
+          card.innerHTML = badgeTag + visualTag + '<div class="addon-card-name">' + addon.name + '</div><div class="addon-card-price">' + (addon.price > 0 ? '+₱' + addon.price.toFixed(2) : 'Free') + '</div>';
+          if (!isChoiceSoldOut) {
+            card.onclick = () => {
+              const pos = selectedAddonIndexes.indexOf(idx);
+              if (pos === -1) selectedAddonIndexes.push(idx); else selectedAddonIndexes.splice(pos, 1);
+              renderAddonChoices();
+            };
+          }
         }
-        let comboTotal = 0; let comboCount = 0;
-        Object.entries(comboQtyMap).forEach(pair => {
-          const idx = pair.at(0); const q = pair.at(1);
-          comboTotal += itemAddons.at(idx).price * q; comboCount += q;
+        container.appendChild(card);
+      });
+
+      const confirmBtn = document.getElementById('confirmAddonBtn');
+      if (isCombo) {
+        let totalPairs = 0; let comboSum = 0;
+        Object.keys(comboQtyMap).forEach(k => {
+          const q = comboQtyMap[k]; const choice = pendingItem.addons.at(parseInt(k, 10));
+          if (choice && q > 0) { totalPairs += q; comboSum += choice.price * q; }
         });
-        if (comboCount === 0) { confirmBtn.disabled = true; confirmBtn.innerText = 'Select item(s) to add'; }
-        else { confirmBtn.disabled = false; confirmBtn.innerText = 'Add to Order (₱' + comboTotal.toFixed(2) + ')'; }
-        return;
-      }
-
-      confirmBtn.disabled = false;
-      if (itemAddons.length === 0) {
-        container.innerHTML = '<div style="text-align:center; font-size:13px; color:#64748b; margin-bottom:10px;">Select quantity below:</div>';
-      } else if (usePhotoGrid) {
-        container.innerHTML = '<div class="popup-cards-grid">' + itemAddons.map((addon, idx) => {
-          const isSel = selectedAddonIndexes.indexOf(idx) > -1;
-          const vis = findVisualForChoice(addon);
-          const visHtml = vis.photo
-            ? '<img class="popup-choice-img" src="' + vis.photo + '" alt="">'
-            : '<div class="popup-choice-icon">' + vis.icon + '</div>';
-          return '<div class="popup-card-choice' + (isSel ? ' selected' : '') + '" onclick="toggleAddonChoice(' + idx + ')">' +
-                 visHtml +
-                 '<div style="font-weight:800; font-size:13px; line-height:1.2;">' + (isSel ? '✓ ' : '') + addon.name + '</div>' +
-                 '<div style="font-weight:900; font-size:13px; color:#1d4ed8; margin-top:4px;">+₱' + addon.price.toFixed(2) + '</div>' +
-               '</div>';
-        }).join('') + '</div>';
+        confirmBtn.disabled = totalPairs === 0;
+        confirmBtn.innerText = totalPairs === 0 ? 'Select a Pairing Above' : 'Add ' + totalPairs + ' Combo(s) — ₱' + comboSum.toFixed(2);
       } else {
-        container.innerHTML = itemAddons.map((addon, idx) => {
-          const isSel = selectedAddonIndexes.indexOf(idx) > -1;
-          return '<button class="addon-choice-btn' + (isSel ? ' selected' : '') + '" onclick="toggleAddonChoice(' + idx + ')">' +
-                 '<span>' + (isSel ? '✓ ' : '+ ') + addon.name + '</span>' +
-                 '<span>+₱' + addon.price.toFixed(2) + '</span></button>';
-        }).join('');
+        let unitPrice = pendingItem.price;
+        selectedAddonIndexes.forEach(i => { unitPrice += pendingItem.addons.at(i).price; });
+        confirmBtn.disabled = false;
+        confirmBtn.innerText = 'Add ' + pendingModalQty + 'x to Order — ₱' + (unitPrice * pendingModalQty).toFixed(2);
       }
-      let unitTotal = pendingItem.price;
-      selectedAddonIndexes.forEach(idx => { unitTotal += itemAddons.at(idx).price; });
-      confirmBtn.innerText = 'Add to Order (₱' + (unitTotal * pendingModalQty).toFixed(2) + ')';
     }
 
-    function toggleAddonChoice(idx) {
-      const pos = selectedAddonIndexes.indexOf(idx);
-      if (pos > -1) selectedAddonIndexes.splice(pos, 1); else selectedAddonIndexes.push(idx);
-      renderAddonChoices();
-    }
-    function closeAddonModal() { document.getElementById('addonModal').classList.remove('open'); pendingItem = null; }
-
-    function confirmAddWithAddons() {
+    function confirmAddonSelection() {
       if (!pendingItem) return;
-      const itemAddons = pendingItem.addons || new Array();
       const isCombo = !!(pendingItem.isCombo || pendingItem.isMixMatch);
       if (isCombo) {
-        let addedAny = 0;
-        Object.entries(comboQtyMap).forEach(pair => {
-          const choice = itemAddons.at(pair.at(0)); const q = pair.at(1);
+        let addedCount = 0;
+        Object.keys(comboQtyMap).forEach(k => {
+          const q = comboQtyMap[k]; const choice = pendingItem.addons.at(parseInt(k, 10));
           if (choice && q > 0) {
-            for (let i = 0; i < q; i++) { currentOrder.push({ name: pendingItem.name + ' + ' + choice.name, price: choice.price }); addedAny++; }
+            for (let i = 0; i < q; i++) currentOrder.push({ name: pendingItem.name + ' + ' + choice.name, price: choice.price });
+            addedCount += q;
           }
         });
-        if (addedAny === 0) return;
-        renderOrder(); triggerFeedback(false); showToast('✓ Added ' + addedAny + 'x Combo');
-        closeAddonModal(); renderMenu();
+        if (addedCount === 0) return;
+        renderOrder(); renderMenu(); triggerFeedback(false);
+        closeAddonModal();
         return;
       }
       let finalName = pendingItem.name; let finalPrice = pendingItem.price;
       if (selectedAddonIndexes.length > 0) {
-        finalName += ' + ' + selectedAddonIndexes.map(idx => itemAddons.at(idx).name).join(' + ');
-        selectedAddonIndexes.forEach(idx => { finalPrice += itemAddons.at(idx).price; });
+        const addonNames = selectedAddonIndexes.map(i => pendingItem.addons.at(i).name);
+        selectedAddonIndexes.forEach(i => { finalPrice += pendingItem.addons.at(i).price; });
+        finalName += ' (' + addonNames.join(', ') + ')';
       }
       addItem({ name: finalName, price: finalPrice }, pendingModalQty);
-      closeAddonModal(); renderMenu();
+      renderMenu(); closeAddonModal();
     }
 
-    let soldOutComboCatIdx = 0;
-    function openSoldOutComboModal(catIdx, itemIndex) {
-      soldOutComboCatIdx = catIdx; soldOutComboItemIdx = itemIndex;
-      const item = menuData.at(catIdx).items.at(itemIndex);
-      document.getElementById('soldOutComboTitle').innerText = item.name + ' Stock';
-      renderSoldOutComboList();
-      document.getElementById('soldOutComboModal').classList.add('open');
-    }
-    function closeSoldOutComboModal() { document.getElementById('soldOutComboModal').classList.remove('open'); }
-    function renderSoldOutComboList() {
-      const item = menuData.at(soldOutComboCatIdx).items.at(soldOutComboItemIdx);
-      document.getElementById('soldOutComboList').innerHTML = (item.addons || new Array()).map((c, idx) =>
-        '<button type="button" class="addon-choice-btn' + (c.soldOut ? ' selected' : '') + '" style="' + (c.soldOut ? 'background:#fee2e2; border-color:#dc2626; color:#991b1b;' : '') + '" onclick="toggleComboPairingSoldOut(' + idx + ')">' +
-          '<span>' + (c.soldOut ? '🚫 ' : '✓ ') + c.name + '</span>' +
-          '<span>' + (c.soldOut ? 'NOT AVAILABLE' : 'Available') + '</span>' +
-        '</button>'
-      ).join('');
-      const wholeBtn = document.getElementById('toggleWholeComboSoldOutBtn');
-      wholeBtn.innerText = item.soldOut ? '✓ Restore Whole Combo' : '🚫 Mark Whole Combo Not Available';
-      wholeBtn.style.background = item.soldOut ? '#16a34a' : '#dc2626';
-    }
-    function toggleComboPairingSoldOut(choiceIdx) {
-      const item = menuData.at(soldOutComboCatIdx).items.at(soldOutComboItemIdx);
-      item.addons.at(choiceIdx).soldOut = !item.addons.at(choiceIdx).soldOut;
-      saveMenuData(); renderSoldOutComboList(); renderMenu();
-    }
-    function toggleWholeComboSoldOut() {
-      const item = menuData.at(soldOutComboCatIdx).items.at(soldOutComboItemIdx);
-      item.soldOut = !item.soldOut;
-      saveMenuData(); closeSoldOutComboModal(); renderMenu();
-      showToast(item.soldOut ? '🚫 Combo Not Available' : '✓ Combo Restored');
-    }
+    function closeAddonModal() { document.getElementById('addonModal').classList.remove('open'); pendingItem = null; }
     // ==================== PART 24: ITEM & PAIRING PHOTO EDITOR ====================
     let editingItemCatIdx = 0;
     function openItemEditorModal(catIdx, itemIndex) {
@@ -1844,7 +1874,6 @@
       }
       renderOrder();
       triggerFeedback(false);
-      showToast(count > 1 ? '✓ Added ' + count + 'x' : '✓ Added');
     }
 
     function changeGroupedCartQty(targetName, targetPrice, delta) {
