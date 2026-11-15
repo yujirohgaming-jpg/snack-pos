@@ -5,48 +5,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Gonzales Snacks">
   <link rel="apple-touch-icon" href="./icon.png">
   <title>Gonzales Snack Bar</title>
   <style>
-    :root { --primary: #c8102e; --accent: #ffb81c; --success: #16a34a; --danger: #dc2626; --bg: #f6f4f0; --card: #ffffff; --text: #1c1917; --muted: #78716c; --border: #e7e5e4; --topbg: #1c1917; --cardfoot: #1c1917; }
-    html { background: var(--topbg); }
-    body.theme-dark { --bg: #0c0a09; --card: #1c1917; --text: #fafaf9; --muted: #a8a29e; --border: #292524; --topbg: #090807; --cardfoot: #090807; }
-    body.theme-cream { --bg: #fef7e6; --card: #fffdf7; --text: #451a03; --muted: #92400e; --border: #fde68a; --topbg: #451a03; --cardfoot: #451a03; }
-    body.theme-mint { --bg: #ecfdf5; --card: #ffffff; --text: #064e3b; --muted: #047857; --border: #a7f3d0; --topbg: #064e3b; --cardfoot: #064e3b; }
-    /* ==================== PART 02: BODY & STICKY TOP ==================== */
+    :root { --primary: #c8102e; --accent: #ffb81c; --success: #16a34a; --danger: #dc2626; --bg: #f6f4f0; --card: #ffffff; --text: #1c1917; --muted: #78716c; --border: #e7e5e4; --topbg: transparent; --cardfoot: #1c1917; }
+    html, body { background: var(--bg); }
+    body.theme-dark { --bg: #0c0a09; --card: #1c1917; --text: #fafaf9; --muted: #a8a29e; --border: #292524; --topbg: transparent; --cardfoot: #090807; }
+    body.theme-cream { --bg: #fef7e6; --card: #fffdf7; --text: #451a03; --muted: #92400e; --border: #fde68a; --topbg: transparent; --cardfoot: #451a03; }
+    body.theme-mint { --bg: #ecfdf5; --card: #ffffff; --text: #064e3b; --muted: #047857; --border: #a7f3d0; --topbg: transparent; --cardfoot: #064e3b; }
+    /* ==================== PART 02: BODY & FLOATING TOP ==================== */
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     html, body { height: 100dvh; overflow: hidden; overscroll-behavior: none; margin: 0; padding: 0; }
     body { display: flex; flex-direction: column; background: var(--bg); color: var(--text); transition: background-color 0.2s ease; }
-    #kioskSection { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: auto; padding: 10px 12px calc(92px + env(safe-area-inset-bottom)); }
+    #kioskSection { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: auto; padding: 6px 12px calc(96px + env(safe-area-inset-bottom)); background: transparent; }
     body.font-large .food-name { font-size: 16px; }
     body.font-large .food-price { font-size: 16px; }
     body.font-large .order-item, body.font-large .queue-bullet-item { font-size: 16px; }
     body.font-xlarge .food-name { font-size: 18px; }
     body.font-xlarge .food-price { font-size: 18px; }
     body.font-xlarge .order-item, body.font-xlarge .queue-bullet-item { font-size: 18px; }
-    .sticky-top-zone { flex-shrink: 0; z-index: 15; background: var(--topbg); color: #ffffff; padding-top: calc(8px + env(safe-area-inset-top)); padding-bottom: 8px; padding-left: 12px; padding-right: 12px; border-bottom-left-radius: 18px; border-bottom-right-radius: 18px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25); }
-    .toast-banner { position: fixed; top: 45%; left: 50%; transform: translate(-50%, -50%) scale(0.85); opacity: 0; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #ffffff; border: 1.5px solid rgba(74, 222, 128, 0.8); padding: 10px 20px; border-radius: 30px; font-size: 15px; font-weight: 800; z-index: 95; box-shadow: 0 6px 20px rgba(0,0,0,0.22); transition: all 0.16s ease; white-space: nowrap; pointer-events: none; }
-    .toast-banner.show { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    /* ==================== PART 03: CATEGORY TABS & MODES ==================== */
+    .sticky-top-zone { flex-shrink: 0; z-index: 15; background: transparent; color: var(--text); padding-top: calc(8px + env(safe-area-inset-top)); padding-bottom: 6px; padding-left: 12px; padding-right: 12px; }
+    .toast-banner { position: fixed; bottom: calc(84px + env(safe-area-inset-bottom)); left: 50%; transform: translate(-50%, 10px) scale(0.92); opacity: 0; background: rgba(28, 25, 23, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.18); padding: 7px 16px; border-radius: 999px; font-size: 12px; font-weight: 800; z-index: 95; box-shadow: 0 6px 18px rgba(0,0,0,0.2); transition: all 0.16s ease; white-space: nowrap; pointer-events: none; }
+    .toast-banner.show { transform: translate(-50%, 0) scale(1); opacity: 1; }
+    /* ==================== PART 03: FLOATING PILL TABS & MODES ==================== */
     body.simple-tally .sticky-top-zone { display: none; }
     body.simple-tally.edit-mode .sticky-top-zone, body.simple-tally.soldout-mode .sticky-top-zone { display: block; }
     body.simple-tally.edit-mode .cat-bar-row, body.simple-tally.soldout-mode .cat-bar-row { display: none; }
     body.simple-tally.edit-mode .top-edit-tools { grid-template-columns: repeat(3, 1fr); }
     body.simple-tally .btn-add-cat-tool { display: none; }
     body.header-large .cat-tab-btn { padding: 11px 18px; font-size: 14px; }
-    body.header-large .btn-custom-scroll { padding: 11px 16px; font-size: 14px; }
     body.header-large .cat-inline-ctrl { padding: 11px 9px; font-size: 13px; }
     .cat-bar-row { display: flex; align-items: center; gap: 6px; }
-    .category-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 3px 2px; scrollbar-width: none; flex: 1; align-items: center; }
+    .category-tabs { display: flex; gap: 10px; overflow-x: auto; padding: 8px 6px; scrollbar-width: none; flex: 1; align-items: center; }
     .category-tabs::-webkit-scrollbar { display: none; }
-    .cat-tab-wrap { flex: 0 0 auto; display: flex; align-items: center; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 999px; overflow: hidden; transition: all 0.16s ease; }
-    .cat-tab-wrap.active { background: #c8102e; border-color: #ffb81c; box-shadow: 0 4px 14px rgba(200, 16, 46, 0.45); }
-    .cat-tab-btn { background: transparent; border: none; color: #ffffff; padding: 8px 15px; font-size: 13px; font-weight: 800; letter-spacing: 0.2px; cursor: pointer; white-space: nowrap; }
-    .cat-inline-ctrl { display: none; background: rgba(0,0,0,0.28); color: #ffffff; border: none; padding: 8px 8px; font-size: 11px; font-weight: 900; cursor: pointer; }
+    .cat-tab-wrap { flex: 0 0 auto; display: flex; align-items: center; background: #1c1917; color: #ffffff; border: none; border-radius: 999px; overflow: hidden; transform: scale(0.9); opacity: 0.68; box-shadow: 0 2px 6px rgba(28, 25, 23, 0.12); transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease, box-shadow 0.38s ease; }
+    body.theme-dark .cat-tab-wrap { background: #292524; }
+    body.theme-cream .cat-tab-wrap { background: #451a03; }
+    body.theme-mint .cat-tab-wrap { background: #064e3b; }
+    .cat-tab-wrap.active { transform: scale(1.1); opacity: 1; box-shadow: 0 6px 16px rgba(28, 25, 23, 0.26); }
+    .cat-tab-btn { background: transparent; border: none; color: #ffffff; padding: 8px 16px; font-size: 13px; font-weight: 800; letter-spacing: 0.2px; cursor: pointer; white-space: nowrap; }
+    .cat-inline-ctrl { display: none; background: rgba(255,255,255,0.16); color: #ffffff; border: none; padding: 8px 8px; font-size: 11px; font-weight: 900; cursor: pointer; }
     .edit-mode .cat-tab-wrap.active .cat-inline-ctrl { display: inline-block; }
-    .btn-custom-scroll { flex: 0 0 auto; background: #ffb81c; color: #1c1917; border: none; border-radius: 999px; padding: 8px 14px; font-size: 13px; font-weight: 900; cursor: pointer; white-space: nowrap; box-shadow: 0 3px 10px rgba(255, 184, 28, 0.3); }
     .mode-banner { display: none; justify-content: space-between; align-items: center; background: #ffb81c; color: #1c1917; border-radius: 12px; padding: 7px 12px; margin-bottom: 6px; font-size: 12px; font-weight: 900; gap: 8px; }
     .edit-mode .mode-banner.edit-banner { display: flex; }
     .soldout-mode .mode-banner.soldout-banner { display: flex; background: #dc2626; color: #ffffff; }
@@ -56,16 +57,15 @@
     .btn-top-ed { padding: 8px 4px; border: none; border-radius: 999px; font-size: 11px; font-weight: 800; color: white; cursor: pointer; text-align: center; }
 
     /* Category Bar Dock Positions: Bottom, Left, Right */
-    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-bottom .sticky-top-zone { order: 2; border-radius: 18px 18px 0 0; padding-top: 8px; padding-bottom: calc(74px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 14px rgba(28, 25, 23, 0.18); }
-    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-bottom #kioskSection { order: 1; padding-top: calc(10px + env(safe-area-inset-top)); padding-bottom: 14px; }
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-bottom .sticky-top-zone { order: 2; padding-top: 4px; padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-bottom #kioskSection { order: 1; padding-top: calc(10px + env(safe-area-inset-top)); padding-bottom: 10px; }
     body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right { flex-direction: row; padding-top: env(safe-area-inset-top); }
     body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right { flex-direction: row-reverse; }
-    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .sticky-top-zone, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .sticky-top-zone { width: 92px; padding: 8px 6px calc(76px + env(safe-area-inset-bottom)); border-radius: 0; overflow-y: auto; display: flex; flex-direction: column; }
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .sticky-top-zone, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .sticky-top-zone { width: 94px; padding: 8px 6px calc(76px + env(safe-area-inset-bottom)); overflow-y: auto; display: flex; flex-direction: column; }
     body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .cat-bar-row, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .cat-bar-row { flex-direction: column; flex: 1; }
-    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .category-tabs, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .category-tabs { flex-direction: column; width: 100%; overflow-y: auto; overflow-x: hidden; gap: 7px; }
+    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .category-tabs, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .category-tabs { flex-direction: column; width: 100%; overflow-y: auto; overflow-x: hidden; gap: 8px; }
     body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .cat-tab-wrap, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .cat-tab-wrap { width: 100%; border-radius: 14px; justify-content: center; }
     body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .cat-tab-btn, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .cat-tab-btn { white-space: normal; text-align: center; padding: 10px 4px; font-size: 11px; line-height: 1.2; width: 100%; }
-    body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .btn-custom-scroll, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .btn-custom-scroll { width: 100%; border-radius: 14px; padding: 10px 4px; font-size: 11px; }
     /* ==================== PART 04: MENU GRID & NOT AVAILABLE ==================== */
     .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     body.layout-tablet .menu-grid { grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 14px; }
@@ -118,11 +118,11 @@
     .mini-cart-line-amt { color: #4ade80; font-weight: 800; flex-shrink: 0; }
     .custom-tally-card { border: 2px dashed #ffb81c !important; background: #fffbeb !important; justify-content: center; }
     body.theme-dark .custom-tally-card { background: #1c1917 !important; }
-    /* ==================== PART 05B: FULL-BLEED PHOTO CARDS & FOOTERS ==================== */
+    /* ==================== PART 05B: PHOTO CARDS & WHITE PRICE FOOTERS ==================== */
     .text-only-controls { display: none; width: 100%; justify-content: space-between; align-items: center; margin-bottom: 4px; }
     body.menu-text-only .text-only-controls { display: flex; }
-    .visual-wrap { position: relative; width: 100%; margin-bottom: 6px; }
-    .has-photo-card .visual-wrap { margin-bottom: 0; height: 138px; overflow: hidden; }
+    .visual-wrap { position: relative; width: 100%; margin-bottom: 4px; display: flex; justify-content: center; }
+    .has-photo-card .visual-wrap { margin-bottom: 0; height: 138px; overflow: hidden; display: block; }
     .card-minus-btn { position: absolute; top: 8px; left: 8px; width: 28px; height: 28px; border-radius: 50%; background: #dc2626; color: #ffffff; border: 2px solid #ffffff; font-size: 18px; font-weight: 900; line-height: 22px; text-align: center; cursor: pointer; z-index: 5; box-shadow: 0 3px 8px rgba(220, 38, 38, 0.45); padding: 0; }
     .text-only-controls .card-minus-btn, .text-only-controls .in-cart-pill { position: static; }
     .edit-mode .card-minus-btn, .soldout-mode .card-minus-btn { display: none; }
@@ -144,9 +144,9 @@
     body.menu-text-only .has-photo-card .food-name { position: static; color: var(--text); text-shadow: none; padding: 2px 10px 0; }
     .food-footer-bar { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 10px; background: var(--cardfoot); color: #ffffff; gap: 4px; }
     .food-footer-bar.combo-footer { background: #3b0764; }
-    .food-price { font-size: 14px; font-weight: 900; color: #ffb81c; }
+    .food-price { font-size: 14px; font-weight: 900; color: #ffffff; }
     .food-tap-hint { font-size: 11px; font-weight: 800; color: #e9d5ff; }
-    .btn-options-pill { background: rgba(255,255,255,0.16); color: #ffffff; border: 1px solid rgba(255,255,255,0.28); border-radius: 999px; padding: 4px 9px; font-size: 10px; font-weight: 800; white-space: nowrap; }
+    .btn-options-pill { background: rgba(255,255,255,0.16); color: #ffffff; border: 1px solid rgba(255,255,255,0.28); border-radius: 999px; padding: 4px 10px; font-size: 10px; font-weight: 800; white-space: nowrap; }
     .btn-options-pill.combo-pill { background: #9333ea; color: #ffffff; border-color: #c084fc; }
     .edit-mode .menu-card-item { border: 2px solid #ffb81c; padding-top: 24px; }
     .star-pin-btn { display: none; position: absolute; top: 6px; left: 6px; background: #f5f5f4; color: #78716c; border: 2px solid #d6d3d1; width: 26px; height: 26px; border-radius: 50%; font-size: 13px; line-height: 20px; text-align: center; cursor: pointer; z-index: 9; padding: 0; }
@@ -158,24 +158,27 @@
     .reorder-row { display: none; justify-content: center; gap: 8px; padding: 6px; background: #fef3c7; width: 100%; }
     .edit-mode .reorder-row { display: flex; }
     .move-btn { background: #ffffff; border: 1px solid #d97706; color: #92400e; border-radius: 999px; padding: 3px 14px; font-size: 12px; font-weight: 800; cursor: pointer; }
-    /* ==================== PART 06: BOTTOM BAR & SLIDE SHEETS ==================== */
-    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #1c1917; color: white; padding: 9px 12px calc(9px + env(safe-area-inset-bottom)); box-shadow: 0 -6px 22px rgba(28, 25, 23, 0.25); display: flex; align-items: center; justify-content: space-between; gap: 10px; z-index: 35; border-top: 1px solid rgba(255,255,255,0.08); }
+    /* ==================== PART 06: SEAMLESS BOTTOM BAR & SLIDE SHEETS ==================== */
+    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); color: var(--text); padding: 9px 12px calc(9px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 18px rgba(28, 25, 23, 0.08); display: flex; align-items: center; justify-content: space-between; gap: 10px; z-index: 35; border-top: 1px solid var(--border); }
     body.edit-mode .bottom-bar, body.soldout-mode .bottom-bar { display: none !important; }
     body.edit-mode #kioskSection, body.soldout-mode #kioskSection { padding-bottom: 24px !important; }
-    .btn-hub-icon { background: rgba(255,255,255,0.12); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 14px; width: 48px; height: 48px; font-size: 21px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .btn-hub-icon { background: #f5f5f4; color: #1c1917; border: 1.5px solid #e7e5e4; border-radius: 14px; width: 48px; height: 48px; font-size: 21px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    body.theme-dark .btn-hub-icon { background: #292524; color: #fafaf9; border-color: #44403c; }
     .bottom-right-group { display: flex; align-items: center; gap: 8px; flex: 1; justify-content: flex-end; }
-    .btn-queue-pill { background: rgba(255,255,255,0.12); color: #ffffff; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 14px; padding: 0 14px; height: 48px; font-size: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
-    .btn-queue-pill.has-pending { background: #ffb81c; border-color: #fde047; color: #1c1917; font-weight: 900; }
-    .btn-main-checkout { background: #c8102e; color: #ffffff; border: none; border-radius: 14px; padding: 0 20px; height: 48px; font-size: 14px; font-weight: 900; cursor: pointer; white-space: nowrap; min-width: 122px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; box-shadow: 0 4px 14px rgba(200, 16, 46, 0.4); transition: all 0.15s ease; }
-    .btn-main-checkout .cart-btn-amt { font-size: 13px; color: #ffb81c; font-weight: 900; margin-top: 1px; }
-    .btn-main-checkout.is-pay-state { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); box-shadow: 0 4px 14px rgba(22, 163, 74, 0.45); letter-spacing: 0.6px; font-size: 17px; }
-    .btn-main-checkout:disabled { background: #44403c !important; color: #a8a29e !important; box-shadow: none !important; cursor: not-allowed; }
-    .btn-main-checkout:disabled .cart-btn-amt { color: #d6d3d1; }
-    body.simple-tally #queueBarBtn, body.simple-tally #mainCartPayBtn { display: none; }
-    .btn-simple-confirm { display: none; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: none; border-radius: 14px; padding: 0 20px; height: 48px; font-size: 15px; font-weight: 900; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; min-width: 130px; box-shadow: 0 4px 14px rgba(22, 163, 74, 0.4); }
+    .btn-queue-pill { display: flex; background: rgba(120, 113, 108, 0.12); color: var(--muted); border: 1.5px solid var(--border); border-radius: 14px; padding: 0 14px; height: 48px; font-size: 13px; font-weight: 800; cursor: pointer; align-items: center; justify-content: center; gap: 5px; white-space: nowrap; opacity: 0.72; transition: all 0.2s ease; }
+    .btn-queue-pill.has-pending { background: #fef3c7; color: #92400e; border-color: #fcd34d; font-size: 14px; font-weight: 900; opacity: 1; box-shadow: 0 3px 10px rgba(245, 158, 11, 0.18); }
+    .btn-main-checkout { background: #c8102e; color: #ffffff; border: none; border-radius: 14px; padding: 0 20px; height: 48px; font-size: 14px; font-weight: 900; cursor: pointer; white-space: nowrap; min-width: 122px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; box-shadow: 0 4px 14px rgba(200, 16, 46, 0.32); transition: all 0.15s ease; }
+    .btn-main-checkout .cart-btn-amt { font-size: 13px; color: #fde047; font-weight: 900; margin-top: 1px; }
+    .btn-main-checkout.is-pay-state { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); box-shadow: 0 4px 14px rgba(22, 163, 74, 0.38); letter-spacing: 0.6px; font-size: 17px; }
+    .btn-main-checkout:disabled { background: #e7e5e4 !important; color: #a8a29e !important; box-shadow: none !important; cursor: not-allowed; }
+    .btn-main-checkout:disabled .cart-btn-amt { color: #a8a29e; }
+    body.theme-dark .btn-main-checkout:disabled { background: #292524 !important; color: #78716c !important; }
+    body.simple-tally #queueBarBtn, body.simple-tally #mainCartPayBtn { display: none !important; }
+    .btn-simple-confirm { display: none; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: none; border-radius: 14px; padding: 0 20px; height: 48px; font-size: 15px; font-weight: 900; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; min-width: 130px; box-shadow: 0 4px 14px rgba(22, 163, 74, 0.38); }
     .btn-simple-confirm .cart-btn-amt { font-size: 12px; color: #fde047; font-weight: 900; margin-top: 1px; }
-    .btn-simple-confirm:disabled { background: #44403c !important; color: #a8a29e !important; box-shadow: none !important; cursor: not-allowed; }
-    .btn-simple-confirm:disabled .cart-btn-amt { color: #d6d3d1; }
+    .btn-simple-confirm:disabled { background: #e7e5e4 !important; color: #a8a29e !important; box-shadow: none !important; cursor: not-allowed; }
+    .btn-simple-confirm:disabled .cart-btn-amt { color: #a8a29e; }
+    body.theme-dark .btn-simple-confirm:disabled { background: #292524 !important; color: #78716c !important; }
     body.simple-tally .btn-simple-confirm { display: flex; }
     .bottom-sheet-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: calc(66px + env(safe-area-inset-bottom)); background: rgba(0,0,0,0.55); z-index: 30; align-items: flex-end; justify-content: center; overscroll-behavior: contain; }
     .bottom-sheet-overlay.open { display: flex; }
@@ -242,61 +245,60 @@
     .queue-bullet-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 8px; font-size: 14px; font-weight: 800; color: #1e293b; cursor: pointer; margin-bottom: 4px; background: #f8fafc; }
     .queue-bullet-item.prepped { text-decoration: line-through; color: #94a3b8; background: #f1f5f9; }
     .btn-mark-done { width: 100%; background: #16a34a; color: white; border: none; border-radius: 10px; padding: 10px; font-size: 14px; font-weight: 800; cursor: pointer; }
-    /* ==================== PART 08: SETTINGS, LOGS & MODALS CSS ==================== */
-    .history-card { background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 11px 12px; margin-bottom: 8px; color: #0f172a; cursor: pointer; }
-    .history-head { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 14px; }
-    .settings-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .settings-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-    .settings-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .seg-btn { padding: 10px 6px; border-radius: 11px; border: 2px solid var(--border); background: #f8fafc; color: #0f172a; font-size: 12px; font-weight: 800; cursor: pointer; text-align: center; }
-    .seg-btn.active { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; }
-    .log-item { background: #f8fafc; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; border: 1px solid #e2e8f0; border-left: 4px solid var(--success); color: #0f172a; }
-    .log-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; margin-bottom: 4px; }
-    .log-details { color: #475569; font-size: 13px; }
-    .del-sale-btn { background: #fee2e2; color: #dc2626; border: none; border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 800; margin-left: 8px; cursor: pointer; }
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.62); z-index: 60; align-items: center; justify-content: center; padding: 16px; overscroll-behavior: contain; }
+    /* ==================== PART 08: MODALS, ADD-ONS & FORMS ==================== */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.65); z-index: 60; align-items: center; justify-content: center; padding: 16px; overscroll-behavior: contain; }
     .modal-overlay.open { display: flex; }
-    .modal-box { background: white; color: #0f172a; width: 100%; max-width: 380px; border-radius: 20px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.28); max-height: 88vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-    .modal-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-    .btn-modal-back { background: #f1f5f9; color: #0f172a; border: none; border-radius: 10px; width: 36px; height: 36px; font-size: 18px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .modal-title { font-size: 18px; font-weight: 900; margin: 0; text-align: center; flex: 1; }
-    .modal-sub { font-size: 14px; color: #64748b; text-align: center; margin-bottom: 14px; font-weight: 600; }
-    .popup-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-    .popup-card-choice { position: relative; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 14px; padding: 8px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
-    .popup-card-choice.selected { background: #eff6ff; border-color: #2563eb; }
-    .popup-card-choice.has-qty { background: #f3e8ff; border-color: #9333ea; }
-    .popup-card-choice.choice-soldout { opacity: 0.42; filter: grayscale(100%); cursor: default; }
-    .popup-choice-img { width: 100%; height: 68px; object-fit: cover; border-radius: 10px; margin-bottom: 5px; pointer-events: none; }
-    .popup-choice-icon { font-size: 32px; height: 50px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; pointer-events: none; }
-    .addon-choice-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px 14px; margin-bottom: 8px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 14px; font-weight: 700; color: #1e293b; cursor: pointer; }
-    .addon-choice-btn.selected { background: #eff6ff; border-color: #2563eb; color: #1e40af; }
-    .addon-choice-btn.choice-soldout { opacity: 0.42; filter: grayscale(100%); cursor: default; }
-    .combo-choice-row { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 11px 12px; margin-bottom: 8px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; gap: 8px; }
-    .combo-choice-row.has-qty { background: #f3e8ff; border-color: #9333ea; }
-    .combo-choice-row.choice-soldout { opacity: 0.42; filter: grayscale(100%); cursor: default; }
-    .combo-row-left { display: flex; align-items: center; gap: 8px; flex: 1; font-size: 14px; font-weight: 800; color: #1e293b; }
-    .combo-qty-badge { background: #9333ea; color: white; font-size: 11px; font-weight: 900; padding: 2px 7px; border-radius: 8px; }
-    .combo-row-right { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; color: #6b21a8; }
-    .combo-minus-btn { width: 26px; height: 26px; border-radius: 50%; background: #dc2626; color: white; border: none; font-size: 16px; font-weight: 900; line-height: 24px; text-align: center; cursor: pointer; padding: 0; }
-    .qty-stepper-box { display: flex; align-items: center; justify-content: space-between; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 4px 6px; flex: 0.65; }
-    .qty-step-btn { width: 34px; height: 34px; border-radius: 10px; border: none; background: #ffffff; color: #0f172a; font-size: 20px; font-weight: 900; cursor: pointer; }
-    .qty-step-val { font-size: 17px; font-weight: 900; color: #0f172a; min-width: 24px; text-align: center; }
-    .edit-field-label { font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; margin: 10px 0 4px; display: block; }
-    .edit-text-input { width: 100%; padding: 10px; font-size: 15px; font-weight: 700; border: 1.5px solid #cbd5e1; border-radius: 10px; }
-    .visual-picker-box { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 10px; }
-    .visual-preview-row { display: flex; align-items: center; gap: 10px; }
-    .visual-preview-box { width: 54px; height: 54px; background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 30px; overflow: hidden; flex-shrink: 0; }
-    .visual-preview-box img { width: 100%; height: 100%; object-fit: cover; }
-    .emoji-grid { display: none; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 8px; }
-    .emoji-grid.open { display: grid; }
-    .emoji-pick-btn { background: white; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 18px; padding: 5px 0; cursor: pointer; }
-    .photo-upload-row { display: flex; gap: 6px; margin-top: 8px; }
-    .btn-photo-up { flex: 1; background: #2563eb; color: white; border: none; border-radius: 8px; padding: 8px; font-size: 11px; font-weight: 800; cursor: pointer; text-align: center; }
-    .btn-photo-clear { background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; padding: 8px 10px; font-size: 11px; font-weight: 800; cursor: pointer; }
-    .backup-textarea { width: 100%; height: 110px; padding: 10px; font-size: 12px; font-family: monospace; border: 1.5px solid #cbd5e1; border-radius: 10px; margin-top: 6px; }
-    .item-addon-row { display: flex; justify-content: space-between; align-items: center; background: #fffbeb; border: 1px solid #fde68a; padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
-    .btn-sm-pill { border: none; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 4px; }
-    .modal-actions { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
+    .modal-box { background: var(--card); color: var(--text); border-radius: 22px; width: 100%; max-width: 420px; max-height: 85vh; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 18px; box-shadow: 0 12px 32px rgba(0,0,0,0.3); position: relative; z-index: 61; }
+    .modal-title { font-size: 18px; font-weight: 900; margin: 0 0 4px; }
+    .modal-sub { font-size: 13px; color: var(--muted); font-weight: 700; margin-bottom: 10px; }
+    .addon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .addon-grid.text-only-popup .addon-card-photo, .addon-grid.text-only-popup .addon-card-icon { display: none; }
+    .addon-card { position: relative; background: var(--bg); border: 2px solid var(--border); border-radius: 14px; padding: 10px 8px; text-align: center; cursor: pointer; pointer-events: auto; user-select: none; -webkit-user-select: none; transition: transform 0.1s ease, border-color 0.15s ease, background-color 0.15s ease; }
+    .addon-card:active { transform: scale(0.96); }
+    .addon-card.selected { border-color: #16a34a; background: #dcfce7; color: #064e3b; box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.25); }
+    body.theme-dark .addon-card.selected { background: #064e3b; color: #ecfdf5; border-color: #4ade80; }
+    .addon-card.is-soldout-choice { opacity: 0.45; cursor: not-allowed; }
+    .addon-card-photo { width: 100%; height: 68px; object-fit: cover; border-radius: 10px; margin-bottom: 6px; pointer-events: none; }
+    .addon-card-icon { font-size: 30px; line-height: 1; margin: 4px 0 6px; pointer-events: none; }
+    .addon-card-name { font-size: 13px; font-weight: 800; line-height: 1.2; pointer-events: none; }
+    .addon-card-price { font-size: 12px; font-weight: 900; color: var(--primary); margin-top: 3px; pointer-events: none; }
+    .addon-card.selected .addon-card-price { color: #15803d; }
+    body.theme-dark .addon-card.selected .addon-card-price { color: #86efac; }
+    .soldout-mini-tag { position: absolute; top: 4px; right: 4px; background: #dc2626; color: white; font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 6px; pointer-events: none; }
+    .combo-qty-bar { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 6px; }
+    .combo-mini-btn { width: 28px; height: 28px; border-radius: 8px; border: none; background: #1c1917; color: white; font-size: 16px; font-weight: 900; cursor: pointer; }
+    .combo-mini-val { font-size: 14px; font-weight: 900; min-width: 16px; }
+    .customize-bottom-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .qty-stepper-ctrls { display: flex; align-items: center; gap: 10px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 14px; padding: 4px 8px; height: 50px; }
+    .qty-step-btn { width: 34px; height: 36px; border-radius: 10px; border: none; background: var(--card); color: var(--text); font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .qty-step-val { font-size: 17px; font-weight: 900; min-width: 22px; text-align: center; }
+    .btn-add-stacked { flex: 1; height: 50px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: none; border-radius: 14px; font-size: 14px; font-weight: 900; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35); }
+    .btn-add-stacked .add-btn-amt { font-size: 13px; color: #fde047; font-weight: 900; margin-top: 1px; }
+    .btn-add-stacked:disabled { background: #94a3b8 !important; box-shadow: none !important; cursor: not-allowed; }
+    .btn-add-stacked:disabled .add-btn-amt { color: #e2e8f0; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 14px; }
+    .edit-field-label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--muted); margin: 10px 0 4px; letter-spacing: 0.4px; }
+    .edit-text-input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 14px; font-weight: 700; background: var(--bg); color: var(--text); }
+    .settings-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .settings-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+    .settings-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .seg-btn { padding: 9px 6px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); font-size: 12px; font-weight: 800; cursor: pointer; text-align: center; }
+    .seg-btn.active { background: #2563eb; color: #ffffff; border-color: #1d4ed8; }
+    .btn-sm-pill { border: none; border-radius: 8px; padding: 5px 9px; font-size: 11px; font-weight: 800; cursor: pointer; }
+    .item-addon-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 6px; font-size: 13px; font-weight: 700; }
+    .emoji-quick-grid { display: none; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 8px; padding: 8px; background: var(--bg); border-radius: 12px; }
+    .emoji-quick-grid.open { display: grid; }
+    .emoji-pick-btn { font-size: 22px; padding: 6px; border: none; background: transparent; cursor: pointer; border-radius: 8px; }
+    .log-item { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 11px 13px; margin-bottom: 8px; }
+    .log-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 13px; margin-bottom: 4px; }
+    .log-details { font-size: 13px; color: var(--muted); font-weight: 600; line-height: 1.35; }
+    .del-sale-btn { background: #fee2e2; color: #dc2626; border: none; border-radius: 6px; padding: 2px 8px; font-size: 13px; font-weight: 900; cursor: pointer; margin-left: 8px; }
+    .history-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; margin-bottom: 7px; cursor: pointer; }
+    .history-head { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 800; }
+    .edit-preview-row { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
+    .edit-preview-box { width: 64px; height: 64px; border-radius: 14px; background: var(--bg); border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 32px; overflow: hidden; flex-shrink: 0; }
+    .edit-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+    .btn-photo-action { background: #334155; color: white; border: none; border-radius: 10px; padding: 8px 11px; font-size: 12px; font-weight: 800; cursor: pointer; }
   </style>
 </head>
 <!-- ==================== PART 09: MAIN SCREEN & BOTTOM BAR HTML ==================== -->
@@ -334,14 +336,14 @@
   <div class="bottom-bar">
     <button class="btn-hub-icon" onclick="openHubScreen()" title="Stall Hub & Settings">☰</button>
     <div class="bottom-right-group">
-      <button class="btn-queue-pill" id="queueBarBtn" onclick="openQueueScreen()">🍳 Queue (<span id="queuePendingCount">0</span>)</button>
+      <button class="btn-queue-pill" id="queueBarBtn" onclick="openQueueScreen()">Queue (<span id="queuePendingCount">0</span>)</button>
       <button class="btn-main-checkout" id="mainCartPayBtn" onclick="handleMainCheckoutBtn()" disabled>
         <span>Cart (0)</span>
-        <span class="cart-btn-amt">₱0.00</span>
+        <span class="cart-btn-amt">₱0</span>
       </button>
       <button class="btn-simple-confirm" id="simpleConfirmBtn" onclick="confirmSimpleOrder()" disabled>
         <span>Confirm</span>
-        <span class="cart-btn-amt">₱0.00</span>
+        <span class="cart-btn-amt">₱0</span>
       </button>
     </div>
   </div>
@@ -486,37 +488,44 @@
       </button>
     </div>
   </div>
-  <!-- ==================== PART 13: ADD-ON & COMBO MODALS HTML ==================== -->
+  <!-- ==================== PART 13: CUSTOMIZE & STOCK POPUP MODALS HTML ==================== -->
   <div class="modal-overlay" id="addonModal" onclick="if(event.target===this) closeAddonModal()">
     <div class="modal-box">
-      <div class="modal-top-row">
-        <button type="button" class="btn-modal-back" onclick="closeAddonModal()">←</button>
-        <div class="modal-title" id="addonModalItemName">Item Name</div>
-        <div style="width:36px;"></div>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+        <div>
+          <div class="modal-title" id="addonModalItemName">Item</div>
+          <div class="modal-sub" id="addonModalBasePrice">Base Price: ₱0</div>
+        </div>
+        <button type="button" onclick="closeAddonModal()" style="background:var(--bg); border:1px solid var(--border); color:var(--muted); width:30px; height:30px; border-radius:50%; font-size:16px; font-weight:900; cursor:pointer; flex-shrink:0;">×</button>
       </div>
-      <div class="modal-sub" id="addonModalBasePrice">Base Price: ₱0.00</div>
-      <div id="addonChoicesContainer"></div>
-      <div class="modal-actions" id="addonModalFooter">
-        <div class="qty-stepper-box" id="regularQtyStepper">
+      <div id="addonChoicesList" style="margin-top:6px;"></div>
+      <div id="oneTimeCustomWrap" style="margin-top:10px; padding-top:8px; border-top:1px dashed var(--border);">
+        <label class="edit-field-label" style="margin-top:0;">One-Time Request / Extra (Optional)</label>
+        <div style="display:flex; gap:6px;">
+          <input type="text" class="edit-text-input" id="oneTimeReqName" placeholder="e.g., 2x Cheese, No Chili" style="flex:1.6; margin-top:4px;" oninput="renderAddonChoices()">
+          <input type="number" inputmode="decimal" class="edit-text-input" id="oneTimeReqPrice" placeholder="+₱0" style="flex:0.8; margin-top:4px;" oninput="renderAddonChoices()">
+        </div>
+      </div>
+      <div class="customize-bottom-bar" id="addonModalFooter">
+        <div class="qty-stepper-ctrls" id="regularQtyStepper">
           <button type="button" class="qty-step-btn" onclick="changeModalQty(-1)">−</button>
           <span class="qty-step-val" id="modalQtyValue">1</span>
           <button type="button" class="qty-step-btn" onclick="changeModalQty(1)">+</button>
         </div>
-        <button class="btn" style="background:#16a34a;" id="confirmAddonBtn" onclick="confirmAddWithAddons()">Add to Order (₱0.00)</button>
+        <button type="button" class="btn-add-stacked" id="confirmAddonBtn" onclick="confirmAddonSelection()">
+          <span>Add to Cart</span>
+          <span class="add-btn-amt">₱0</span>
+        </button>
       </div>
     </div>
   </div>
   <div class="modal-overlay" id="soldOutComboModal" onclick="if(event.target===this) closeSoldOutComboModal()">
     <div class="modal-box">
-      <div class="modal-top-row">
-        <button type="button" class="btn-modal-back" onclick="closeSoldOutComboModal()">←</button>
-        <div class="modal-title" id="soldOutComboTitle">Combo Stock</div>
-        <div style="width:36px;"></div>
-      </div>
-      <div class="modal-sub">Tap a pairing to toggle Not Available, or mark the whole combo out:</div>
-      <div id="soldOutComboList"></div>
+      <div class="modal-title" id="soldOutComboTitle">Not Available Stock</div>
+      <div class="modal-sub">Tap the whole combo or individual pairings below:</div>
+      <div id="soldOutComboList" style="margin-top:10px;"></div>
       <div class="modal-actions">
-        <button class="btn" style="background:#dc2626;" id="toggleWholeComboSoldOutBtn" onclick="toggleWholeComboSoldOut()">Mark Whole Combo Not Available</button>
+        <button class="btn" style="background:#0f172a;" onclick="closeSoldOutComboModal()">Done</button>
       </div>
     </div>
   </div>
@@ -726,104 +735,72 @@
   <!-- ==================== PART 16: SCRIPT START ==================== -->
   <script>
     const QUICK_EMOJIS = new Array('🍔','🥪','🍟','🌭','🥟','🌯','🍜','🍢','🧀','🍳','🍗','🥤','🧋','🍽️');
-    // ==================== PART 17: DEFAULT FACTORY MENU ====================
-    const DEFAULT_MENU = new Array(
-      {
-        title: "Snacks & Street Food",
-        items: new Array(
-          { name: "Lumpiang Toge (2pcs)", price: 20.00, icon: "🌯", photo: "", isCombo: false, soldOut: false, addons: new Array() },
-          { name: "Lumpiang Shanghai (4pcs)", price: 25.00, icon: "🌯", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Snack in a Cup", price: 20.00 }) },
-          { name: "Steamed Siomai (4pcs)", price: 25.00, icon: "🥟", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Snack in a Cup", price: 20.00 }) },
-          { name: "Fried Siomai (4pcs)", price: 25.00, icon: "🥟", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Snack in a Cup", price: 20.00 }) },
-          { name: "Fried Dumplings (4pcs)", price: 25.00, icon: "🥟", photo: "", isCombo: false, soldOut: false, addons: new Array() },
-          { name: "Kikiam", price: 20.00, icon: "🌭", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Snack in a Cup", price: 20.00 }) },
-          { name: "Fish balls", price: 20.00, icon: "🍢", photo: "", isCombo: false, soldOut: false, addons: new Array() },
-          { name: "Squid balls", price: 20.00, icon: "🍢", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Snack in a Cup", price: 20.00 }) },
-          { name: "Hotdog on Stick", price: 20.00, icon: "🌭", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Snack in a Cup", price: 20.00 }) },
-          { name: "Hungarian Sausage", price: 35.00, icon: "🌭", photo: "", isCombo: false, soldOut: false, addons: new Array() },
-          { name: "Cheese Sticks", price: 20.00, icon: "🧀", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Snack in a Cup", price: 20.00 }) },
-          { name: "Fries (Cheese)", price: 20.00, icon: "🍟", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Snack in a Cup", price: 20.00 }) },
-          { name: "Fries (Sour Cream)", price: 20.00, icon: "🍟", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Snack in a Cup", price: 20.00 }) },
-          { name: "Fries (BBQ)", price: 20.00, icon: "🍟", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Snack in a Cup", price: 20.00 }) }
-        )
-      },
-      {
-        title: "Sandwiches",
-        items: new Array(
-          { name: "Burger", price: 30.00, icon: "🍔", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }) },
-          { name: "Cheeseburger", price: 35.00, icon: "🍔", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }) },
-          { name: "Egg Sandwich", price: 25.00, icon: "🥪", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Extra Cheese", price: 10.00 }) },
-          { name: "Ham Sandwich", price: 25.00, icon: "🥪", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Extra Cheese", price: 10.00 }, { name: "Extra Egg", price: 15.00 }) },
-          { name: "Ham & Cheese Sandwich", price: 30.00, icon: "🥪", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Extra Egg", price: 15.00 }) },
-          { name: "Ham & Egg Sandwich", price: 35.00, icon: "🥪", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Extra Cheese", price: 10.00 }) }
-        )
-      },
-      {
-        title: "Pancit",
-        items: new Array(
-          { name: "Pancit Canton", price: 30.00, icon: "🍜", photo: "", isCombo: false, soldOut: false, addons: new Array({ name: "Extra Egg", price: 15.00 }) },
-          { name: "Pancit Canton w/ Egg", price: 45.00, icon: "🍜", photo: "", isCombo: false, soldOut: false, addons: new Array() }
-        )
-      }
-    );
-    // ==================== PART 18: STATE VARIABLES ====================
-    let menuData = JSON.parse(localStorage.getItem('miniPosMenuPH_v4')) || JSON.parse(JSON.stringify(DEFAULT_MENU));
-    let currentOrder = new Array();
-    let salesHistory = JSON.parse(localStorage.getItem('miniPosSalesPH')) || new Array();
-    let pastHistory = JSON.parse(localStorage.getItem('miniPosPastHistoryPH')) || new Array();
-    let orderQueue = JSON.parse(localStorage.getItem('miniPosQueuePH')) || new Array();
-    let savedDayKey = localStorage.getItem('miniPosCurrentDatePH') || getTodayDateKey();
-
-    let appSettings = Object.assign({
-      theme: 'light',
-      menuView: 'photo',
-      popupView: 'photo',
-      fontSize: 'normal',
-      opMode: 'pos',
-      screenLayout: 'auto',
-      tallyLines: 3,
-      queueMins: 30,
-      stallName: '',
-      startingCash: 0,
-      quickBills: new Array(50, 100, 200, 500, 1000),
-      soundOn: true,
-      vibeOn: true
-    }, JSON.parse(localStorage.getItem('miniPosSettingsPH') || '{}'));
-
-    let isEditMode = false;
-    let isSoldOutMode = false;
-    let activeCatIndex = 0;
-    let pendingItem = null;
-    let selectedAddonIndexes = new Array();
-    let comboQtyMap = {};
-    let pendingModalQty = 1;
-    let selectedCashBill = 0;
-    let editingItemIdx = null;
-    let soldOutComboItemIdx = null;
-    let tempItemAddons = new Array();
-    let tempItemPhoto = "";
-    let tempItemIsCombo = false;
-    let editingAddonChoiceIdx = -1;
-    let editingAddonPhotoIdx = null;
-    let newComboTempPairs = new Array();
-    let namePriceMode = '';
-    let singlePromptMode = '';
-    let pendingConfirmFn = null;
-    let toastTimer = null;
-    let longPressTimer = null;
-    let longPressTriggered = false;
-
-    function saveSettings() { localStorage.setItem('miniPosSettingsPH', JSON.stringify(appSettings)); }
+    // ==================== PART 17: SETTINGS & STORAGE INIT ====================
     function getTodayDateKey() {
       const d = new Date();
       return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
     }
-    function parseDateKeyLocal(dateKey) {
-      const p = dateKey.split('-');
-      return new Date(parseInt(p.at(0), 10), parseInt(p.at(1), 10) - 1, parseInt(p.at(2), 10));
+
+    let appSettings = {
+      theme: 'light',
+      headerSize: 'compact',
+      cardSize: 'normal',
+      photoTextColor: 'white',
+      menuView: 'photo',
+      popupView: 'photo',
+      fontSize: 'normal',
+      screenLayout: 'auto',
+      opMode: 'pos',
+      catPos: 'top',
+      tapsPos: 'bottom',
+      queueMins: 30,
+      stallName: '',
+      startingCash: 0,
+      quickBills: new Array(20, 50, 100, 200, 500, 1000),
+      soundOn: true,
+      vibeOn: true
+    };
+    try {
+      const savedSet = JSON.parse(localStorage.getItem('miniPosSettingsPH'));
+      if (savedSet) appSettings = Object.assign(appSettings, savedSet);
+    } catch (e) {}
+
+    function saveSettings() {
+      localStorage.setItem('miniPosSettingsPH', JSON.stringify(appSettings));
     }
+
+    let menuData = JSON.parse(localStorage.getItem('miniPosMenuPH_v4')) || JSON.parse(JSON.stringify(DEFAULT_MENU));
+    let salesHistory = JSON.parse(localStorage.getItem('miniPosSalesPH')) || new Array();
+    let orderQueue = JSON.parse(localStorage.getItem('miniPosQueuePH')) || new Array();
+    let pastHistory = JSON.parse(localStorage.getItem('miniPosPastHistoryPH')) || new Array();
+    let savedDayKey = localStorage.getItem('miniPosCurrentDatePH') || getTodayDateKey();
+    // ==================== PART 18: VARIABLES & DATE HELPERS ====================
+    let activeCatIndex = 0; let currentOrder = new Array(); let isEditMode = false; let isSoldOutMode = false;
+    let pendingItem = null; let selectedAddonIndexes = new Array(); let comboQtyMap = {}; let pendingModalQty = 1;
+    let selectedCashBill = 0;
+    let editingItemIdx = null; let editingAddonIdx = null; let editingAddonPhotoIdx = null;
+    let tempItemAddons = new Array(); let tempItemPhoto = ''; let tempItemIsCombo = false;
+    let newComboPairsTemp = new Array();
+    let customPromptMode = ''; let namePriceMode = ''; let pendingConfirmCallback = null;
+    let toastTimer = null; let longPressTimer = null; let longPressTriggered = false;
+
+    function fmtPeso(val) {
+      const n = Number(val) || 0;
+      return '₱' + (Number.isInteger(n) ? n.toString() : n.toFixed(2));
+    }
+
+    function getTodayDateKey() {
+      const d = new Date();
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+
+    function parseDateKeyLocal(dateKey) {
+      const parts = dateKey.split('-');
+      return new Date(parseInt(parts.at(0), 10), parseInt(parts.at(1), 10) - 1, parseInt(parts.at(2), 10));
+    }
+
     function formatDisplayDate(dateKey) {
-      return parseDateKeyLocal(dateKey).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      return parseDateKeyLocal(dateKey).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
     // ==================== PART 19A: AUDIO & SETTINGS UI ====================
     let sharedAudioCtx = null;
@@ -1147,16 +1124,17 @@
 
     function getItemCartQty(itemName) {
       let count = 0;
-      currentOrder.forEach(o => { if (o.name === itemName || o.name.startsWith(itemName + ' + ')) count++; });
+      currentOrder.forEach(o => { if (o.name === itemName || o.name.startsWith(itemName + ' + ') || o.name.startsWith(itemName + ' (')) count++; });
       return count;
     }
 
     function removeLastMatchingItem(event, itemName) {
       event.stopPropagation();
       for (let i = currentOrder.length - 1; i >= 0; i--) {
-        if (currentOrder.at(i).name === itemName || currentOrder.at(i).name.startsWith(itemName + ' + ')) {
+        const n = currentOrder.at(i).name;
+        if (n === itemName || n.startsWith(itemName + ' + ') || n.startsWith(itemName + ' (')) {
           currentOrder.splice(i, 1);
-          renderOrder(); renderMenu(); triggerFeedback(false); showToast('− Removed');
+          renderOrder(); renderMenu(); triggerFeedback(false);
           return;
         }
       }
@@ -1210,13 +1188,6 @@
         tabsEl.appendChild(wrap);
       });
 
-      const customScrollBtn = document.createElement('button');
-      customScrollBtn.type = 'button';
-      customScrollBtn.className = 'btn-custom-scroll';
-      customScrollBtn.innerText = '+ Custom';
-      customScrollBtn.onclick = openCustomOrderModal;
-      tabsEl.appendChild(customScrollBtn);
-
       const isSimple = appSettings.opMode === 'simple';
       let renderList = new Array();
       if (isSimple) {
@@ -1252,11 +1223,11 @@
 
         const leftFooterHtml = isCombo
           ? '<span class="food-tap-hint">Tap to Choose</span>'
-          : '<span class="food-price">₱' + item.price.toFixed(2) + '</span>';
-        const pillLabel = isEditMode ? 'Edit' : (isSoldOutMode ? 'Stock' : (isCombo ? 'Choose' : '+ Qty / Add-on'));
+          : '<span class="food-price">' + fmtPeso(item.price) + '</span>';
+        const pillLabel = isEditMode ? 'Edit' : (isSoldOutMode ? 'Stock' : (isCombo ? 'Choose' : 'Customize'));
 
         const card = document.createElement('div');
-        card.className = 'menu-card-item' + (hasPhoto ? ' has-photo-card' : '') + (isSoldOut ? ' is-soldout' : '');
+        card.className = 'menu-card-item' + (hasPhoto ? ' has-photo-card' : '') + (qtyInCart > 0 && !isEditMode && !isSoldOutMode ? ' in-cart-card' : '') + (isSoldOut ? ' is-soldout' : '');
         card.innerHTML =
           '<button type="button" class="star-pin-btn' + (isPinned ? ' pinned' : '') + '" onclick="togglePinItem(event, ' + catIdx + ', ' + itemIndex + ')" title="Pin Best-Seller">' + (isPinned ? '⭐' : '☆') + '</button>' +
           '<span class="delete-badge" onclick="askDeleteMenuItem(event, ' + catIdx + ', ' + itemIndex + ')">×</span>' +
@@ -1377,8 +1348,13 @@
       document.getElementById('addonModalItemName').innerText = item.name;
       document.getElementById('addonModalBasePrice').innerText = isCombo
         ? 'Tap item(s) below to pair with ' + item.name
-        : 'Base Price: ₱' + item.price.toFixed(2);
+        : 'Base Price: ' + fmtPeso(item.price);
       document.getElementById('regularQtyStepper').style.display = isCombo ? 'none' : 'flex';
+      document.getElementById('oneTimeCustomWrap').style.display = isCombo ? 'none' : 'block';
+      const reqNameEl = document.getElementById('oneTimeReqName');
+      const reqPriceEl = document.getElementById('oneTimeReqPrice');
+      if (reqNameEl) reqNameEl.value = '';
+      if (reqPriceEl) reqPriceEl.value = '';
       document.getElementById('addonModalFooter').style.display = 'flex';
       document.getElementById('modalQtyValue').innerText = '1';
       renderAddonChoices();
@@ -1400,6 +1376,15 @@
       renderAddonChoices();
     }
     // ==================== PART 23: POPUP CHOICES & CONFIRM ====================
+    function toggleRegularAddon(idx) {
+      if (!pendingItem || !pendingItem.addons || !pendingItem.addons.at(idx)) return;
+      if (pendingItem.addons.at(idx).soldOut) return;
+      const pos = selectedAddonIndexes.indexOf(idx);
+      if (pos === -1) selectedAddonIndexes.push(idx);
+      else selectedAddonIndexes.splice(pos, 1);
+      renderAddonChoices();
+    }
+
     function renderAddonChoices() {
       const container = document.getElementById('addonChoicesList');
       const isCombo = !!(pendingItem.isCombo || pendingItem.isMixMatch);
@@ -1417,20 +1402,15 @@
         if (isCombo) {
           const qty = comboQtyMap[idx] || 0;
           card.className = 'addon-card' + (qty > 0 ? ' selected' : '') + (isChoiceSoldOut ? ' is-soldout-choice' : '');
-          card.innerHTML = badgeTag + visualTag + '<div class="addon-card-name">' + addon.name + '</div><div class="addon-card-price">₱' + addon.price.toFixed(2) + '</div>' +
+          card.innerHTML = badgeTag + visualTag + '<div class="addon-card-name">' + addon.name + '</div><div class="addon-card-price">' + fmtPeso(addon.price) + '</div>' +
             (isChoiceSoldOut ? '' : '<div class="combo-qty-bar"><button type="button" class="combo-mini-btn" onclick="changeComboChoiceQty(' + idx + ', -1, event)">−</button><span class="combo-mini-val">' + qty + '</span><button type="button" class="combo-mini-btn" onclick="changeComboChoiceQty(' + idx + ', 1, event)">+</button></div>');
-          if (!isChoiceSoldOut) card.onclick = () => changeComboChoiceQty(idx, 1, null);
+          if (!isChoiceSoldOut) card.setAttribute('onclick', 'changeComboChoiceQty(' + idx + ', 1, null)');
         } else {
           const isSel = selectedAddonIndexes.indexOf(idx) !== -1;
           card.className = 'addon-card' + (isSel ? ' selected' : '') + (isChoiceSoldOut ? ' is-soldout-choice' : '');
-          card.innerHTML = badgeTag + visualTag + '<div class="addon-card-name">' + addon.name + '</div><div class="addon-card-price">' + (addon.price > 0 ? '+₱' + addon.price.toFixed(2) : 'Free') + '</div>';
-          if (!isChoiceSoldOut) {
-            card.onclick = () => {
-              const pos = selectedAddonIndexes.indexOf(idx);
-              if (pos === -1) selectedAddonIndexes.push(idx); else selectedAddonIndexes.splice(pos, 1);
-              renderAddonChoices();
-            };
-          }
+          const checkPrefix = isSel ? '✓ ' : '';
+          card.innerHTML = badgeTag + visualTag + '<div class="addon-card-name">' + checkPrefix + addon.name + '</div><div class="addon-card-price">' + (addon.price > 0 ? '+' + fmtPeso(addon.price) : 'Free') + '</div>';
+          if (!isChoiceSoldOut) card.setAttribute('onclick', 'toggleRegularAddon(' + idx + ')');
         }
         container.appendChild(card);
       });
@@ -1443,12 +1423,16 @@
           if (choice && q > 0) { totalPairs += q; comboSum += choice.price * q; }
         });
         confirmBtn.disabled = totalPairs === 0;
-        confirmBtn.innerText = totalPairs === 0 ? 'Select a Pairing Above' : 'Add ' + totalPairs + ' Combo(s) — ₱' + comboSum.toFixed(2);
+        confirmBtn.innerHTML = totalPairs === 0
+          ? '<span>Choose Pairing</span>'
+          : '<span>Add to Cart (' + totalPairs + ')</span><span class="add-btn-amt">' + fmtPeso(comboSum) + '</span>';
       } else {
         let unitPrice = pendingItem.price;
         selectedAddonIndexes.forEach(i => { unitPrice += pendingItem.addons.at(i).price; });
+        const extraPrice = parseFloat((document.getElementById('oneTimeReqPrice') || {}).value) || 0;
+        if (extraPrice > 0) unitPrice += extraPrice;
         confirmBtn.disabled = false;
-        confirmBtn.innerText = 'Add ' + pendingModalQty + 'x to Order — ₱' + (unitPrice * pendingModalQty).toFixed(2);
+        confirmBtn.innerHTML = '<span>Add to Cart</span><span class="add-btn-amt">' + fmtPeso(unitPrice * pendingModalQty) + '</span>';
       }
     }
 
@@ -1470,11 +1454,17 @@
         return;
       }
       let finalName = pendingItem.name; let finalPrice = pendingItem.price;
-      if (selectedAddonIndexes.length > 0) {
-        const addonNames = selectedAddonIndexes.map(i => pendingItem.addons.at(i).name);
-        selectedAddonIndexes.forEach(i => { finalPrice += pendingItem.addons.at(i).price; });
-        finalName += ' (' + addonNames.join(', ') + ')';
+      const extrasList = selectedAddonIndexes.map(i => pendingItem.addons.at(i).name);
+      selectedAddonIndexes.forEach(i => { finalPrice += pendingItem.addons.at(i).price; });
+
+      const reqName = ((document.getElementById('oneTimeReqName') || {}).value || '').trim();
+      const reqPrice = parseFloat((document.getElementById('oneTimeReqPrice') || {}).value) || 0;
+      if (reqName || reqPrice > 0) {
+        extrasList.push(reqName || 'Extra');
+        if (reqPrice > 0) finalPrice += reqPrice;
       }
+      if (extrasList.length > 0) finalName += ' (' + extrasList.join(', ') + ')';
+
       addItem({ name: finalName, price: finalPrice }, pendingModalQty);
       renderMenu(); closeAddonModal();
     }
@@ -1852,7 +1842,7 @@
         btn.innerHTML = '<span>PAY</span>';
         btn.classList.add('is-pay-state');
       } else {
-        btn.innerHTML = '<span>Cart (' + count + ')</span><span class="cart-btn-amt">₱' + total.toFixed(2) + '</span>';
+        btn.innerHTML = '<span>Cart (' + count + ')</span><span class="cart-btn-amt">' + fmtPeso(total) + '</span>';
         btn.classList.remove('is-pay-state');
       }
     }
@@ -1922,7 +1912,7 @@
       renderMenu();
       renderHistory();
       triggerFeedback(true);
-      showToast('✓ Logged ₱' + total.toFixed(2));
+      showToast('✓ Logged ' + fmtPeso(total));
     }
 
     function askClearOrder() {
@@ -1971,11 +1961,11 @@
 
       updateMainCheckoutButton();
       const total = getOrderSum();
-      totalEl.innerText = '₱' + total.toFixed(2);
+      totalEl.innerText = fmtPeso(total);
 
       if (simpleBtn) {
         simpleBtn.disabled = currentOrder.length === 0;
-        simpleBtn.innerHTML = '<span>Confirm</span><span class="cart-btn-amt">₱' + total.toFixed(2) + '</span>';
+        simpleBtn.innerHTML = '<span>Confirm</span><span class="cart-btn-amt">' + fmtPeso(total) + '</span>';
       }
       if (miniCount) miniCount.innerText = currentOrder.length;
       if (miniClear) miniClear.style.display = currentOrder.length > 0 ? 'inline-block' : 'none';
@@ -1992,11 +1982,11 @@
         const diff = selectedCashBill - total;
         if (diff < 0) {
           changeLbl.innerText = 'Short (Cash ₱' + selectedCashBill + '):';
-          changeVal.innerText = 'Short ₱' + Math.abs(diff).toFixed(2);
+          changeVal.innerText = 'Short ' + fmtPeso(Math.abs(diff));
           changeVal.style.color = '#c8102e';
         } else {
           changeLbl.innerText = 'Change (from ₱' + selectedCashBill + '):';
-          changeVal.innerText = '₱' + diff.toFixed(2);
+          changeVal.innerText = fmtPeso(diff);
           changeVal.style.color = '#c8102e';
         }
       } else {
@@ -2018,7 +2008,7 @@
         miniList.innerHTML = groupedList.map(entry =>
           '<div class="mini-cart-line">' +
             '<span class="mini-cart-line-name"><strong style="color:#ffb81c;">' + entry.qty + 'x</strong> ' + entry.name + '</span>' +
-            '<span class="mini-cart-line-amt">₱' + (entry.price * entry.qty).toFixed(2) + '</span>' +
+            '<span class="mini-cart-line-amt">' + fmtPeso(entry.price * entry.qty) + '</span>' +
           '</div>'
         ).join('');
       }
@@ -2029,7 +2019,7 @@
         return '<div class="order-item">' +
           '<div class="order-item-info"><span class="order-qty-tag">' + entry.qty + 'x</span> ' + entry.name + '</div>' +
           '<div class="order-item-right">' +
-            '<span>₱' + lineTotal.toFixed(2) + '</span>' +
+            '<span>' + fmtPeso(lineTotal) + '</span>' +
             '<button type="button" class="cart-step-btn cart-step-minus" onclick="changeGroupedCartQty(\'' + safeName + '\', ' + entry.price + ', -1)">−</button>' +
             '<button type="button" class="cart-step-btn cart-step-plus" onclick="changeGroupedCartQty(\'' + safeName + '\', ' + entry.price + ', 1)">+</button>' +
           '</div></div>';
