@@ -286,7 +286,7 @@
     .seg-btn.active { background: #2563eb; color: #ffffff; border-color: #1d4ed8; }
     .btn-sm-pill { border: none; border-radius: 8px; padding: 5px 9px; font-size: 11px; font-weight: 800; cursor: pointer; }
     .item-addon-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 6px; font-size: 13px; font-weight: 700; }
-    .emoji-quick-grid { display: none; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 8px; padding: 8px; background: var(--bg); border-radius: 12px; }
+    .emoji-quick-grid { display: none; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 8px; padding: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; }
     .emoji-quick-grid.open { display: grid; }
     .emoji-pick-btn { font-size: 22px; padding: 6px; border: none; background: transparent; cursor: pointer; border-radius: 8px; }
     .log-item { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 11px 13px; margin-bottom: 8px; }
@@ -296,9 +296,11 @@
     .history-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; margin-bottom: 7px; cursor: pointer; }
     .history-head { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 800; }
     .edit-preview-row { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
-    .edit-preview-box { width: 64px; height: 64px; border-radius: 14px; background: var(--bg); border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 32px; overflow: hidden; flex-shrink: 0; }
+    .edit-preview-box { width: 68px; height: 68px; border-radius: 16px; background: var(--bg); border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 34px; overflow: hidden; flex-shrink: 0; }
     .edit-preview-box img { width: 100%; height: 100%; object-fit: cover; }
-    .btn-photo-action { background: #334155; color: white; border: none; border-radius: 10px; padding: 8px 11px; font-size: 12px; font-weight: 800; cursor: pointer; }
+    .edit-photo-btns { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .btn-photo-action { display: inline-flex; align-items: center; justify-content: center; gap: 5px; background: #2563eb; color: #ffffff; border: none; border-radius: 10px; padding: 9px 12px; font-size: 12px; font-weight: 800; cursor: pointer; width: 100%; }
+    .btn-photo-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 5px; background: var(--bg); color: var(--text); border: 1.5px solid var(--border); border-radius: 10px; padding: 8px 10px; font-size: 12px; font-weight: 800; cursor: pointer; flex: 1; }
   </style>
 </head>
 <!-- ==================== PART 09: MAIN SCREEN & BOTTOM BAR HTML ==================== -->
@@ -529,50 +531,38 @@
       </div>
     </div>
   </div>
-  <!-- ==================== PART 14: ITEM EDITOR & IMPORT MODALS HTML ==================== -->
+  <!-- ==================== PART 14: EDIT ITEM & PHOTO MODAL HTML ==================== -->
   <div class="modal-overlay" id="itemEditorModal" onclick="if(event.target===this) closeItemEditorModal()">
     <div class="modal-box">
-      <div class="modal-title" id="itemEditorModalTitle">Edit Item, Icon & Photo</div>
+      <div class="modal-title" id="itemEditorModalTitle">Edit Item & Photo</div>
+      <label class="edit-field-label">Item Photo or Emoji Icon</label>
+      <div class="edit-preview-row">
+        <div class="edit-preview-box" id="visualPreviewBox">🍽️</div>
+        <div class="edit-photo-btns">
+          <button type="button" class="btn-photo-action" onclick="document.getElementById('itemPhotoInput').click()">📷 Upload Photo</button>
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="btn-photo-secondary" onclick="toggleEmojiGrid()">😀 Emoji</button>
+            <button type="button" class="btn-photo-secondary" onclick="clearItemPhoto()">✕ No Pic</button>
+          </div>
+        </div>
+      </div>
+      <input type="file" id="itemPhotoInput" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event)">
+      <input type="file" id="addonChoicePhotoInput" accept="image/*" style="display:none;" onchange="handleAddonChoicePhotoUpload(event)">
+      <div class="emoji-quick-grid" id="emojiQuickGrid">
+        <input type="text" class="edit-text-input" id="editItemEmojiInput" placeholder="Type emoji..." oninput="onEmojiInput()" style="grid-column: 1 / -1; margin-bottom:4px; text-align:center; font-size:18px;">
+      </div>
       <label class="edit-field-label">Item Name</label>
       <input type="text" class="edit-text-input" id="editItemNameInput">
       <div id="editBasePriceWrap">
         <label class="edit-field-label">Base Price (₱)</label>
         <input type="number" inputmode="decimal" class="edit-text-input" id="editItemPriceInput">
       </div>
-      <label class="edit-field-label">Item Icon or Food Photo</label>
-      <div class="visual-picker-box">
-        <div class="visual-preview-row">
-          <div class="visual-preview-box" id="visualPreviewBox">🍽️</div>
-          <input type="text" class="edit-text-input" id="editItemEmojiInput" placeholder="Emoji" oninput="onEmojiInput()">
-          <button type="button" class="btn-sm-pill" style="background:#e2e8f0; color:#0f172a; padding:8px;" onclick="toggleEmojiGrid()">😀 Pick</button>
-        </div>
-        <div class="emoji-grid" id="emojiQuickGrid"></div>
-        <div class="photo-upload-row">
-          <label class="btn-photo-up">
-            📷 Upload Photo
-            <input type="file" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event)">
-          </label>
-          <button type="button" class="btn-photo-clear" onclick="clearItemPhoto()">Remove Photo</button>
-        </div>
-      </div>
       <label class="edit-field-label" id="itemEditorChoicesLabel" style="margin-top:14px;">Add-ons for This Item Only</label>
       <div id="itemSpecificAddonsList"></div>
-      <button class="btn" id="itemEditorAddChoiceBtn" style="background:#d97706; width:100%; padding:10px; font-size:13px; margin-top:4px;" onclick="openAddonChoiceForm(-1)">+ Add Add-on Option</button>
-      <input type="file" id="addonChoicePhotoInput" accept="image/*" style="display:none;" onchange="handleAddonChoicePhotoUpload(event)">
+      <button type="button" class="btn" id="itemEditorAddChoiceBtn" style="background:#3b82f6; width:100%; padding:10px; font-size:13px;" onclick="openAddonChoiceForm(null)">+ Add Add-on Option</button>
       <div class="modal-actions">
         <button class="btn" style="background:#94a3b8;" onclick="closeItemEditorModal()">Cancel</button>
-        <button class="btn" style="background:#16a34a;" onclick="saveItemEditorChanges()">Save Item</button>
-      </div>
-    </div>
-  </div>
-  <div class="modal-overlay" id="importModal" onclick="if(event.target===this) closeImportModal()">
-    <div class="modal-box">
-      <div class="modal-title">Import Menu Backup</div>
-      <div class="modal-sub">Paste the menu backup code sent from the other phone below:</div>
-      <textarea class="backup-textarea" id="importTextarea" placeholder="Paste menu backup text here..."></textarea>
-      <div class="modal-actions">
-        <button class="btn" style="background:#94a3b8;" onclick="closeImportModal()">Cancel</button>
-        <button class="btn" style="background:#0d9488;" onclick="confirmImportBackup()">Load Menu</button>
+        <button class="btn" style="background:#16a34a;" onclick="saveItemEditorChanges()">Save Changes</button>
       </div>
     </div>
   </div>
@@ -1470,200 +1460,181 @@
     }
 
     function closeAddonModal() { document.getElementById('addonModal').classList.remove('open'); pendingItem = null; }
-    // ==================== PART 24: ITEM & PAIRING PHOTO EDITOR ====================
-    let editingItemCatIdx = 0;
+    // ==================== PART 24: ITEM & PHOTO EDITOR ====================
     function openItemEditorModal(catIdx, itemIndex) {
-      editingItemCatIdx = catIdx; editingItemIdx = itemIndex;
+      activeCatIndex = catIdx;
+      editingItemIdx = itemIndex;
       const item = menuData.at(catIdx).items.at(itemIndex);
       tempItemIsCombo = !!(item.isCombo || item.isMixMatch);
-      document.getElementById('itemEditorModalTitle').innerText = tempItemIsCombo ? 'Edit Combo Item' : 'Edit Item, Icon & Photo';
+      document.getElementById('itemEditorModalTitle').innerText = tempItemIsCombo ? 'Edit Combo & Pairings' : 'Edit Item & Photo';
       document.getElementById('editBasePriceWrap').style.display = tempItemIsCombo ? 'none' : 'block';
-      document.getElementById('itemEditorChoicesLabel').innerText = tempItemIsCombo ? 'Combo Pairings & Full Combo Prices' : 'Add-ons for This Item Only';
-      document.getElementById('itemEditorAddChoiceBtn').innerText = tempItemIsCombo ? '+ Add Combo Pairing' : '+ Add Add-on Option';
+      document.getElementById('itemEditorChoicesLabel').innerText = tempItemIsCombo ? 'Paired Items & Combo Prices' : 'Add-ons for This Item Only';
+      document.getElementById('itemEditorAddChoiceBtn').innerText = tempItemIsCombo ? '+ Add Paired Item' : '+ Add Add-on Option';
 
       document.getElementById('editItemNameInput').value = item.name;
-      document.getElementById('editItemPriceInput').value = item.price || '';
-      document.getElementById('editItemEmojiInput').value = item.icon || '🍽️';
+      document.getElementById('editItemPriceInput').value = item.price;
       tempItemPhoto = item.photo || '';
       tempItemAddons = JSON.parse(JSON.stringify(item.addons || new Array()));
 
       const quickGrid = document.getElementById('emojiQuickGrid');
       quickGrid.classList.remove('open');
-      quickGrid.innerHTML = QUICK_EMOJIS.map(em => '<button type="button" class="emoji-pick-btn" onclick="selectQuickEmoji(\'' + em + '\')">' + em + '</button>').join('');
-      updateVisualPreview(); renderItemSpecificAddonsList();
+      quickGrid.innerHTML =
+        '<input type="text" class="edit-text-input" id="editItemEmojiInput" placeholder="Type emoji..." oninput="onEmojiInput()" style="grid-column: 1 / -1; margin-bottom:4px; text-align:center; font-size:18px;">' +
+        QUICK_EMOJIS.map(em => '<button type="button" class="emoji-pick-btn" onclick="pickQuickEmoji(\'' + em + '\')">' + em + '</button>').join('');
+
+      document.getElementById('editItemEmojiInput').value = item.icon || (tempItemIsCombo ? '🥤' : '🍽️');
+
+      updateVisualPreview();
+      renderItemSpecificAddons();
       document.getElementById('itemEditorModal').classList.add('open');
     }
 
-    function toggleEmojiGrid() { document.getElementById('emojiQuickGrid').classList.toggle('open'); }
-    function selectQuickEmoji(em) { tempItemPhoto = ''; document.getElementById('editItemEmojiInput').value = em; document.getElementById('emojiQuickGrid').classList.remove('open'); updateVisualPreview(); }
-    function onEmojiInput() { tempItemPhoto = ''; updateVisualPreview(); }
-    function clearItemPhoto() { tempItemPhoto = ''; updateVisualPreview(); }
+    function toggleEmojiGrid() {
+      const quickGrid = document.getElementById('emojiQuickGrid');
+      if (quickGrid) quickGrid.classList.toggle('open');
+    }
+
+    function pickQuickEmoji(em) {
+      document.getElementById('editItemEmojiInput').value = em;
+      tempItemPhoto = '';
+      updateVisualPreview();
+    }
+
+    function onEmojiInput() {
+      tempItemPhoto = '';
+      updateVisualPreview();
+    }
+
+    function clearItemPhoto() {
+      tempItemPhoto = '';
+      updateVisualPreview();
+    }
+
     function updateVisualPreview() {
       const box = document.getElementById('visualPreviewBox');
-      box.innerHTML = tempItemPhoto ? '<img src="' + tempItemPhoto + '" alt="">' : (document.getElementById('editItemEmojiInput').value.trim() || '🍽️');
+      if (tempItemPhoto) {
+        box.innerHTML = '<img src="' + tempItemPhoto + '" alt="">';
+      } else {
+        const emInput = document.getElementById('editItemEmojiInput');
+        box.innerHTML = (emInput && emInput.value.trim()) || (tempItemIsCombo ? '🥤' : '🍽️');
+      }
     }
 
-    function handlePhotoUpload(event) {
-      const file = event.target.files.item(0);
+    function compressImageFile(file, callback) {
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const maxSize = 260;
+          let w = img.width; let h = img.height;
+          if (w > h) { if (w > maxSize) { h *= maxSize / w; w = maxSize; } }
+          else { if (h > maxSize) { w *= maxSize / h; h = maxSize; } }
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          callback(canvas.toDataURL('image/jpeg', 0.72));
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handlePhotoUpload(e) {
+      const file = e.target.files.at(0);
       if (!file) return;
-      const img = new Image(); const objectUrl = URL.createObjectURL(file);
-      img.onload = function() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 240; canvas.height = 180;
-        const ctx = canvas.getContext('2d');
-        const ratio = Math.max(canvas.width / img.width, canvas.height / img.height);
-        ctx.drawImage(img, (canvas.width - img.width * ratio) / 2, (canvas.height - img.height * ratio) / 2, img.width * ratio, img.height * ratio);
-        tempItemPhoto = canvas.toDataURL('image/jpeg', 0.78);
-        URL.revokeObjectURL(objectUrl); updateVisualPreview();
-      };
-      img.src = objectUrl; event.target.value = '';
+      compressImageFile(file, dataUrl => {
+        tempItemPhoto = dataUrl;
+        updateVisualPreview();
+        e.target.value = '';
+      });
     }
 
-    function triggerAddonChoicePhoto(idx) { editingAddonPhotoIdx = idx; document.getElementById('addonChoicePhotoInput').click(); }
-    function handleAddonChoicePhotoUpload(event) {
-      const file = event.target.files.item(0);
+    function triggerAddonChoicePhoto(idx) {
+      editingAddonPhotoIdx = idx;
+      document.getElementById('addonChoicePhotoInput').click();
+    }
+
+    function handleAddonChoicePhotoUpload(e) {
+      const file = e.target.files.at(0);
       if (!file || editingAddonPhotoIdx === null) return;
-      const img = new Image(); const objectUrl = URL.createObjectURL(file);
-      img.onload = function() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 240; canvas.height = 180;
-        const ctx = canvas.getContext('2d');
-        const ratio = Math.max(canvas.width / img.width, canvas.height / img.height);
-        ctx.drawImage(img, (canvas.width - img.width * ratio) / 2, (canvas.height - img.height * ratio) / 2, img.width * ratio, img.height * ratio);
-        tempItemAddons.at(editingAddonPhotoIdx).photo = canvas.toDataURL('image/jpeg', 0.78);
-        URL.revokeObjectURL(objectUrl); renderItemSpecificAddonsList();
-      };
-      img.src = objectUrl; event.target.value = '';
+      compressImageFile(file, dataUrl => {
+        tempItemAddons.at(editingAddonPhotoIdx).photo = dataUrl;
+        renderItemSpecificAddons();
+        e.target.value = '';
+        editingAddonPhotoIdx = null;
+      });
     }
-    function clearAddonChoicePhoto(idx) { tempItemAddons.at(idx).photo = ''; renderItemSpecificAddonsList(); }
 
-    function closeItemEditorModal() { document.getElementById('itemEditorModal').classList.remove('open'); }
-    function renderItemSpecificAddonsList() {
+    function clearAddonChoicePhoto(idx) {
+      tempItemAddons.at(idx).photo = '';
+      renderItemSpecificAddons();
+    }
+    // ==================== PART 25: ITEM ADD-ONS EDITOR & SAVE ====================
+    function renderItemSpecificAddons() {
       const list = document.getElementById('itemSpecificAddonsList');
+      list.innerHTML = '';
       if (tempItemAddons.length === 0) {
-        list.innerHTML = tempItemIsCombo ? '<div style="font-size:13px; color:#64748b; margin-bottom:8px;">No combo pairings yet.</div>' : '<div style="font-size:13px; color:#64748b; margin-bottom:8px;">No add-ons yet.</div>';
+        list.innerHTML = '<div style="font-size:12px; color:#9ca3af; margin-bottom:8px;">No options added yet.</div>';
         return;
       }
-      list.innerHTML = tempItemAddons.map((addon, idx) => {
-        const priceLabel = tempItemIsCombo ? '₱' + addon.price.toFixed(2) : '+₱' + addon.price.toFixed(2);
-        const thumbHtml = addon.photo ? '<img src="' + addon.photo + '" style="width:28px; height:28px; border-radius:6px; object-fit:cover; margin-right:6px;">' : '';
-        const clearBtn = addon.photo ? '<button type="button" class="btn-sm-pill" style="background:#e2e8f0; color:#334155;" onclick="clearAddonChoicePhoto(' + idx + ')">No Pic</button>' : '';
-        return '<div class="item-addon-row">' +
-          '<span style="display:flex; align-items:center;">' + thumbHtml + addon.name + ' (' + priceLabel + ')</span>' +
-          '<div style="display:flex; align-items:center; gap:2px;">' +
-            '<button type="button" class="btn-sm-pill" style="background:#dbeafe; color:#1d4ed8;" onclick="triggerAddonChoicePhoto(' + idx + ')">📷</button>' +
-            clearBtn +
-            '<button type="button" class="btn-sm-pill" style="background:#fef3c7; color:#92400e;" onclick="openAddonChoiceForm(' + idx + ')">Edit</button>' +
-            '<button type="button" class="btn-sm-pill" style="background:#fee2e2; color:#dc2626;" onclick="deleteSpecificAddon(' + idx + ')">×</button>' +
-          '</div></div>';
-      }).join('');
+      tempItemAddons.forEach((ad, idx) => {
+        const photoThumb = ad.photo ? '<img src="' + ad.photo + '" style="width:26px; height:26px; object-fit:cover; border-radius:6px; vertical-align:middle; margin-right:6px;">' : '';
+        const priceLabel = tempItemIsCombo ? fmtPeso(ad.price) : (ad.price > 0 ? '+' + fmtPeso(ad.price) : 'Free');
+        const row = document.createElement('div');
+        row.className = 'item-addon-row';
+        row.innerHTML =
+          '<span style="display:flex; align-items:center;">' + photoThumb + '<span>' + ad.name + ' (' + priceLabel + ')</span></span>' +
+          '<div style="display:flex; gap:4px;">' +
+            '<button type="button" class="btn-sm-pill" style="background:#0ea5e9; color:white;" onclick="triggerAddonChoicePhoto(' + idx + ')">📷</button>' +
+            (ad.photo ? '<button type="button" class="btn-sm-pill" style="background:#94a3b8; color:white;" onclick="clearAddonChoicePhoto(' + idx + ')">✕Pic</button>' : '') +
+            '<button type="button" class="btn-sm-pill" style="background:#f59e0b; color:white;" onclick="openAddonChoiceForm(' + idx + ')">Edit</button>' +
+            '<button type="button" class="btn-sm-pill" style="background:#ef4444; color:white;" onclick="removeItemSpecificAddon(' + idx + ')">✕</button>' +
+          '</div>';
+        list.appendChild(row);
+      });
     }
-    function deleteSpecificAddon(idx) { tempItemAddons.splice(idx, 1); renderItemSpecificAddonsList(); }
+
+    function openAddonChoiceForm(idx) {
+      editingAddonIdx = idx;
+      const isEdit = idx !== null;
+      const existing = isEdit ? tempItemAddons.at(idx) : { name: '', price: '' };
+      document.getElementById('namePriceModalTitle').innerText = isEdit ? 'Edit Option' : (tempItemIsCombo ? 'Add Paired Item' : 'Add Add-on Option');
+      document.getElementById('namePriceNameLbl').innerText = tempItemIsCombo ? 'Paired Item Name (e.g., Fries)' : 'Add-on Name (e.g., Extra Cheese)';
+      document.getElementById('namePriceAmtLbl').innerText = tempItemIsCombo ? 'Full Combo Price (₱)' : 'Extra Charge (₱ — 0 if Free)';
+      document.getElementById('namePriceNameInput').value = existing.name;
+      document.getElementById('namePriceAmtInput').value = existing.price;
+      namePriceMode = 'addonChoice';
+      document.getElementById('namePriceModal').classList.add('open');
+    }
+
+    function removeItemSpecificAddon(idx) {
+      tempItemAddons.splice(idx, 1);
+      renderItemSpecificAddons();
+    }
 
     function saveItemEditorChanges() {
       const newName = document.getElementById('editItemNameInput').value.trim();
-      const newPrice = tempItemIsCombo ? 0 : parseFloat(document.getElementById('editItemPriceInput').value);
-      const newIcon = document.getElementById('editItemEmojiInput').value.trim() || '🍽️';
-      const oldItem = menuData.at(editingItemCatIdx).items.at(editingItemIdx);
-      if (!newName) return showToast('Enter an item name');
-      if (!tempItemIsCombo && (isNaN(newPrice) || newPrice < 0)) return showToast('Enter a valid price');
-      menuData.at(editingItemCatIdx).items[editingItemIdx] = {
-        name: newName, price: newPrice, icon: newIcon, photo: tempItemPhoto, isCombo: tempItemIsCombo, soldOut: !!oldItem.soldOut, pinned: !!oldItem.pinned, addons: tempItemAddons
-      };
-      saveMenuData(); closeItemEditorModal(); renderMenu();
-    }
-    // ==================== PART 25: COMBO BUILDER & BACKUP ====================
-    function openAddComboModal() {
-      newComboTempPairs = new Array();
-      document.getElementById('newComboMainInput').value = '';
-      document.getElementById('newComboPairName').value = '';
-      document.getElementById('newComboPairPrice').value = '';
-      renderNewComboPairsPreview();
-      document.getElementById('addComboModal').classList.add('open');
-      setTimeout(() => document.getElementById('newComboMainInput').focus(), 80);
+      if (!newName) return showToast('Enter item name');
+      const rawPrice = parseFloat(document.getElementById('editItemPriceInput').value);
+      const newPrice = tempItemIsCombo ? 0 : (isNaN(rawPrice) ? 0 : rawPrice);
+      const newEmoji = document.getElementById('editItemEmojiInput').value.trim() || (tempItemIsCombo ? '🥤' : '🍽️');
+
+      const targetItem = menuData.at(activeCatIndex).items.at(editingItemIdx);
+      targetItem.name = newName;
+      targetItem.price = newPrice;
+      targetItem.icon = newEmoji;
+      targetItem.photo = tempItemPhoto;
+      targetItem.addons = tempItemAddons;
+
+      saveMenuData();
+      closeItemEditorModal();
+      renderMenu();
+      showToast('✓ Item Saved');
     }
 
-    function closeAddComboModal() { document.getElementById('addComboModal').classList.remove('open'); }
-
-    function appendNewComboPair() {
-      const pName = document.getElementById('newComboPairName').value.trim();
-      const pPrice = parseFloat(document.getElementById('newComboPairPrice').value);
-      if (!pName) return showToast('Enter paired item name');
-      if (isNaN(pPrice) || pPrice < 0) return showToast('Enter valid combo price');
-      newComboTempPairs.push({ name: pName, price: pPrice, photo: '', soldOut: false });
-      document.getElementById('newComboPairName').value = '';
-      document.getElementById('newComboPairPrice').value = '';
-      renderNewComboPairsPreview();
-      document.getElementById('newComboPairName').focus();
-    }
-
-    function removeNewComboPair(idx) {
-      newComboTempPairs.splice(idx, 1);
-      renderNewComboPairsPreview();
-    }
-
-    function renderNewComboPairsPreview() {
-      const box = document.getElementById('newComboPairsPreview');
-      if (newComboTempPairs.length === 0) {
-        box.innerHTML = '<div style="font-size:12px; color:#64748b;">No pairings added yet. Type a pairing & price above and tap + Add.</div>';
-        return;
-      }
-      box.innerHTML = newComboTempPairs.map((c, idx) =>
-        '<div class="item-addon-row">' +
-          '<span>' + c.name + ' (₱' + c.price.toFixed(2) + ')</span>' +
-          '<button type="button" class="btn-sm-pill" style="background:#fee2e2; color:#dc2626;" onclick="removeNewComboPair(' + idx + ')">×</button>' +
-        '</div>'
-      ).join('');
-    }
-
-    function saveNewComboModal() {
-      const mainName = document.getElementById('newComboMainInput').value.trim();
-      if (!mainName) return showToast('Enter main combo name');
-      const pendingPairName = document.getElementById('newComboPairName').value.trim();
-      const pendingPairPrice = parseFloat(document.getElementById('newComboPairPrice').value);
-      if (pendingPairName && !isNaN(pendingPairPrice) && pendingPairPrice >= 0) {
-        newComboTempPairs.push({ name: pendingPairName, price: pendingPairPrice, photo: '', soldOut: false });
-      }
-      menuData.at(activeCatIndex).items.push({
-        name: mainName, price: 0, icon: "🥤", photo: "", isCombo: true, soldOut: false, addons: newComboTempPairs
-      });
-      saveMenuData(); closeAddComboModal(); renderMenu();
-      showToast('✓ Combo Saved');
-    }
-
-    function exportMenuBackup() {
-      const code = JSON.stringify(menuData);
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(code).then(() => {
-          showToast('✓ Backup Code Copied');
-        }).catch(() => {
-          openImportModalWithText(code);
-        });
-      } else {
-        openImportModalWithText(code);
-      }
-    }
-
-    function openImportModalWithText(prefill) {
-      document.getElementById('importTextarea').value = prefill || '';
-      document.getElementById('importModal').classList.add('open');
-    }
-
-    function openImportModal() { openImportModalWithText(''); }
-    function closeImportModal() { document.getElementById('importModal').classList.remove('open'); }
-
-    function confirmImportBackup() {
-      const raw = document.getElementById('importTextarea').value.trim();
-      if (!raw) return showToast('Paste backup code first');
-      try {
-        const parsed = JSON.parse(raw);
-        if (!Array.isArray(parsed)) throw new Error("Invalid format");
-        menuData = parsed; activeCatIndex = 0;
-        saveMenuData(); closeImportModal(); renderMenu();
-        showToast('✓ Menu Loaded');
-      } catch (e) {
-        showToast('Invalid backup code');
-      }
+    function closeItemEditorModal() {
+      document.getElementById('itemEditorModal').classList.remove('open');
+      editingItemIdx = null;
     }
     // ==================== PART 26: EDIT & STOCK MODES ====================
     function startEditMenuFromHub() {
