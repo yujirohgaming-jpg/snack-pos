@@ -764,9 +764,120 @@
       </div>
     </div>
   </div>
-  <!-- ==================== PART 16: SCRIPT START ==================== -->
+  <!-- ==================== PART 16: DEFAULT MENU & EMOJIS ==================== -->
   <script>
-    const QUICK_EMOJIS = new Array('🍔','🥪','🍟','🌭','🥟','🌯','🍜','🍢','🧀','🍳','🍗','🥤','🧋','🍽️');
+    const QUICK_EMOJIS = new Array(
+      '🍔', '🌭', '🍟', '🍗', '🍢', '🥟',
+      '🍜', '🍝', '🍚', '🌮', '🥪', '🍕',
+      '🥤', '🧋', '🧃', '☕', '🧊', '🍋',
+      '🍦', '🍧', '🍩', '🍪', '🍰', '🍽️'
+    );
+
+    const DEFAULT_MENU = new Array(
+      {
+        title: 'Snacks',
+        items: new Array(
+          {
+            name: 'Burger',
+            price: 35,
+            icon: '🍔',
+            photo: '',
+            addons: new Array(
+              { name: 'Extra Cheese', price: 10 },
+              { name: 'Extra Patty', price: 20 },
+              { name: 'Egg', price: 12 }
+            )
+          },
+          {
+            name: 'Hotdog Sandwich',
+            price: 30,
+            icon: '🌭',
+            photo: '',
+            addons: new Array(
+              { name: 'Extra Cheese', price: 10 },
+              { name: 'Special Sauce', price: 0 }
+            )
+          },
+          {
+            name: 'French Fries',
+            price: 25,
+            icon: '🍟',
+            photo: '',
+            addons: new Array(
+              { name: 'Cheese Powder', price: 0 },
+              { name: 'BBQ Powder', price: 0 },
+              { name: 'Sour Cream', price: 0 }
+            )
+          },
+          {
+            name: 'Fishball (10 pcs)',
+            price: 15,
+            icon: '🍢',
+            photo: '',
+            addons: new Array(
+              { name: 'Sweet Sauce', price: 0 },
+              { name: 'Spicy Sauce', price: 0 }
+            )
+          },
+          {
+            name: 'Kikiam (5 pcs)',
+            price: 15,
+            icon: '🥟',
+            photo: '',
+            addons: new Array(
+              { name: 'Sweet Sauce', price: 0 },
+              { name: 'Spicy Sauce', price: 0 }
+            )
+          }
+        )
+      },
+      {
+        title: 'Drinks',
+        items: new Array(
+          {
+            name: 'Iced Tea',
+            price: 20,
+            icon: '🥤',
+            photo: '',
+            addons: new Array(
+              { name: 'Upsize', price: 10 }
+            )
+          },
+          {
+            name: 'Blue Lemonade',
+            price: 20,
+            icon: '🧃',
+            photo: '',
+            addons: new Array(
+              { name: 'Upsize', price: 10 }
+            )
+          },
+          {
+            name: 'Bottled Water',
+            price: 15,
+            icon: '🧊',
+            photo: '',
+            addons: new Array()
+          }
+        )
+      },
+      {
+        title: 'Combos',
+        items: new Array(
+          {
+            name: 'Burger Combo',
+            price: 0,
+            icon: '🍔',
+            photo: '',
+            isCombo: true,
+            addons: new Array(
+              { name: 'Iced Tea', price: 50 },
+              { name: 'Fries + Iced Tea', price: 70 }
+            )
+          }
+        )
+      }
+    );
     // ==================== PART 17: SETTINGS & STORAGE INIT ====================
     function getTodayDateKey() {
       const d = new Date();
@@ -2400,11 +2511,32 @@
       copyTextSafe(jsonStr, '✓ Menu Backup Copied!');
     }
 
+    function ensureImportModalExists() {
+      let modal = document.getElementById('importMenuModal');
+      if (modal) return modal;
+      modal = document.createElement('div');
+      modal.id = 'importMenuModal';
+      modal.className = 'modal-overlay';
+      modal.setAttribute('onclick', 'if(event.target===this) closeImportModal()');
+      modal.innerHTML =
+        '<div class="modal-box">' +
+          '<div class="modal-title">📥 Import Menu Backup</div>' +
+          '<div class="modal-sub">Paste the copied menu backup code below:</div>' +
+          '<textarea id="importMenuJsonInput" class="edit-text-input" rows="5" placeholder="Paste menu backup text here..." style="resize:vertical; font-size:12px;"></textarea>' +
+          '<div class="modal-actions">' +
+            '<button type="button" class="btn" style="background:#94a3b8;" onclick="closeImportModal()">Cancel</button>' +
+            '<button type="button" class="btn" style="background:#16a34a;" onclick="confirmImportMenu()">Import Menu</button>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(modal);
+      return modal;
+    }
+
     function openImportModal() {
+      const modal = ensureImportModalExists();
       const box = document.getElementById('importMenuJsonInput');
       if (box) box.value = '';
-      const modal = document.getElementById('importMenuModal');
-      if (modal) modal.classList.add('open');
+      modal.classList.add('open');
     }
 
     function closeImportModal() {
