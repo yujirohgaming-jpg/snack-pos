@@ -15,6 +15,7 @@
     body.theme-dark { --bg: #0c0a09; --card: #1c1917; --text: #fafaf9; --muted: #a8a29e; --border: #292524; --topbg: transparent; --cardfoot: #090807; }
     body.theme-cream { --bg: #fef7e6; --card: #fffdf7; --text: #451a03; --muted: #92400e; --border: #fde68a; --topbg: transparent; --cardfoot: #451a03; }
     body.theme-mint { --bg: #ecfdf5; --card: #ffffff; --text: #064e3b; --muted: #047857; --border: #a7f3d0; --topbg: transparent; --cardfoot: #064e3b; }
+    body.theme-purple { --primary: #7e22ce; --accent: #f5d0fe; --bg: linear-gradient(165deg, #f5f3ff 0%, #ede9fe 52%, #fae8ff 100%); --card: #ffffff; --text: #2e1065; --muted: #6b21a8; --border: #e9d5ff; --topbg: transparent; --cardfoot: linear-gradient(135deg, #4c1d95 0%, #6b21a8 100%); }
     /* ==================== PART 02: BODY & FLOATING TOP ==================== */
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     html, body { height: 100dvh; overflow: hidden; overscroll-behavior: none; margin: 0; padding: 0; }
@@ -44,6 +45,11 @@
     body.theme-dark .cat-tab-wrap { background: #292524; }
     body.theme-cream .cat-tab-wrap { background: #451a03; }
     body.theme-mint .cat-tab-wrap { background: #064e3b; }
+    body.theme-purple .cat-tab-wrap { background: linear-gradient(135deg, #6b21a8 0%, #9333ea 100%); box-shadow: 0 3px 10px rgba(107, 33, 168, 0.22); }
+    body.theme-purple .cat-tab-wrap.active { box-shadow: 0 6px 18px rgba(126, 34, 206, 0.38); }
+    body.theme-purple .menu-card-item { box-shadow: 0 8px 20px rgba(88, 28, 135, 0.10), 0 2px 5px rgba(88, 28, 135, 0.05); border-color: rgba(168, 85, 247, 0.16); }
+    body.theme-purple .btn-main-checkout { background: linear-gradient(135deg, #7e22ce 0%, #a21caf 100%); box-shadow: 0 4px 14px rgba(126, 34, 206, 0.35); }
+    body.theme-purple .btn-hub-icon { background: #f3e8ff; color: #581c87; border-color: #e9d5ff; }
     .cat-tab-wrap.active { transform: scale(1.1); opacity: 1; box-shadow: 0 6px 16px rgba(28, 25, 23, 0.26); }
     .cat-tab-btn { background: transparent; border: none; color: #ffffff; padding: 8px 16px; font-size: 13px; font-weight: 800; letter-spacing: 0.2px; cursor: pointer; white-space: nowrap; }
     .cat-inline-ctrl { display: none; background: rgba(255,255,255,0.16); color: #ffffff; border: none; padding: 8px 8px; font-size: 11px; font-weight: 900; cursor: pointer; }
@@ -616,6 +622,7 @@
         <button type="button" class="seg-btn" id="themeBtnDark" style="background:#1c1917; color:#fafaf9;" onclick="setAppTheme('dark')">🌙 Dark Mode</button>
         <button type="button" class="seg-btn" id="themeBtnCream" style="background:#fef3c7; color:#451a03;" onclick="setAppTheme('cream')">🍦 Warm Cream</button>
         <button type="button" class="seg-btn" id="themeBtnMint" style="background:#d1fae5; color:#064e3b;" onclick="setAppTheme('mint')">🌿 Fresh Mint</button>
+        <button type="button" class="seg-btn" id="themeBtnPurple" style="background:linear-gradient(135deg,#f3e8ff,#fae8ff); color:#581c87; grid-column:1 / -1;" onclick="setAppTheme('purple')">💜 Royal Purple</button>
       </div>
       <label class="edit-field-label">Photo Overlay Text Color</label>
       <div class="settings-grid-3">
@@ -833,17 +840,17 @@
     }
 
     function applyAllSettingsUI() {
-      document.body.classList.remove('theme-dark', 'theme-cream', 'theme-mint');
+      document.body.classList.remove('theme-dark', 'theme-cream', 'theme-mint', 'theme-purple');
       const curTheme = appSettings.theme || 'light';
       if (curTheme !== 'light') document.body.classList.add('theme-' + curTheme);
-      const themeLabels = { light: '☀️ Classic Light', dark: '🌙 Dark Mode', cream: '🍦 Warm Cream', mint: '🌿 Fresh Mint' };
-      new Array('light', 'dark', 'cream', 'mint').forEach(t => {
+      const themeLabels = { light: '☀️ Classic Light', dark: '🌙 Dark Mode', cream: '🍦 Warm Cream', mint: '🌿 Fresh Mint', purple: '💜 Royal Purple' };
+      new Array('light', 'dark', 'cream', 'mint', 'purple').forEach(t => {
         const el = document.getElementById('themeBtn' + t.charAt(0).toUpperCase() + t.slice(1));
         if (el) {
           const isAct = curTheme === t;
           el.classList.toggle('active', isAct);
-          el.style.border = isAct ? '3px solid #c8102e' : '1.5px solid #cbd5e1';
-          el.style.boxShadow = isAct ? '0 0 0 2px #ffb81c' : 'none';
+          el.style.border = isAct ? '3px solid #7e22ce' : '1.5px solid #cbd5e1';
+          el.style.boxShadow = isAct ? '0 0 0 2px #f5d0fe' : 'none';
           el.innerText = (isAct ? '✓ ' : '') + themeLabels[t];
         }
       });
@@ -1526,13 +1533,14 @@
         const img = new Image();
         img.onload = function() {
           const canvas = document.createElement('canvas');
-          const maxSize = 260;
+          const maxSize = 320;
           let w = img.width; let h = img.height;
           if (w > h) { if (w > maxSize) { h *= maxSize / w; w = maxSize; } }
           else { if (h > maxSize) { w *= maxSize / h; h = maxSize; } }
           canvas.width = w; canvas.height = h;
-          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          callback(canvas.toDataURL('image/jpeg', 0.72));
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          callback(canvas.toDataURL('image/jpeg', 0.78));
         };
         img.src = ev.target.result;
       };
@@ -1540,12 +1548,13 @@
     }
 
     function handlePhotoUpload(e) {
-      const file = e.target.files.at(0);
+      const file = e.target.files && e.target.files[0];
       if (!file) return;
       compressImageFile(file, dataUrl => {
         tempItemPhoto = dataUrl;
         updateVisualPreview();
         e.target.value = '';
+        showToast('✓ Photo Ready');
       });
     }
 
@@ -1555,13 +1564,14 @@
     }
 
     function handleAddonChoicePhotoUpload(e) {
-      const file = e.target.files.at(0);
+      const file = e.target.files && e.target.files[0];
       if (!file || editingAddonPhotoIdx === null) return;
       compressImageFile(file, dataUrl => {
         tempItemAddons.at(editingAddonPhotoIdx).photo = dataUrl;
         renderItemSpecificAddons();
         e.target.value = '';
         editingAddonPhotoIdx = null;
+        showToast('✓ Option Photo Ready');
       });
     }
 
