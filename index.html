@@ -90,12 +90,15 @@
     body.layout-tablet .menu-grid { grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 14px; }
     @media (min-width: 768px) { body.layout-auto .menu-grid { grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 14px; } }
     body.card-compact .menu-grid { gap: 9px; }
-    body.card-compact .has-photo-card .visual-wrap { min-height: 105px; }
+    body.card-compact .has-photo-card .visual-wrap { height: 104px; min-height: 104px; }
     body.card-compact .food-icon { height: 50px; font-size: 36px; }
     body.card-compact .food-footer-bar { padding: 6px 8px; }
-    body.card-large .has-photo-card .visual-wrap { min-height: 175px; }
+    body.card-large .has-photo-card .visual-wrap { height: 168px; min-height: 168px; }
     body.card-large .food-icon { height: 86px; font-size: 52px; }
     body.card-large .food-footer-bar { padding: 10px 12px; }
+    body.card-tall .has-photo-card .visual-wrap { height: 205px; min-height: 205px; }
+    body.card-tall .food-icon { height: 108px; font-size: 58px; }
+    body.card-tall .food-footer-bar { padding: 10px 12px; }
     .menu-card-item { position: relative; background: linear-gradient(180deg, var(--card) 0%, rgba(250, 250, 249, 0.96) 100%); border: 2px solid rgba(28, 25, 23, 0.08); border-radius: 22px; overflow: hidden; text-align: center; cursor: pointer; box-shadow: 0 10px 24px -4px rgba(28, 25, 23, 0.1), 0 2px 6px -1px rgba(28, 25, 23, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.14s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
     body.theme-dark .menu-card-item { background: linear-gradient(180deg, #24201d 0%, #171412 100%); border-color: rgba(255, 255, 255, 0.08); box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.07); }
     .menu-card-item:active { transform: scale(0.95); box-shadow: 0 3px 10px rgba(28, 25, 23, 0.12); }
@@ -143,7 +146,7 @@
     .text-only-controls { display: none; width: 100%; justify-content: space-between; align-items: center; margin-bottom: 4px; }
     body.menu-text-only .text-only-controls { display: flex; }
     .visual-wrap { position: relative; width: 100%; margin-bottom: 4px; display: flex; justify-content: center; }
-    .has-photo-card .visual-wrap { margin-bottom: 0; flex: 1; min-height: 138px; overflow: hidden; display: block; }
+    .has-photo-card .visual-wrap { margin-bottom: 0; height: 136px; min-height: 136px; flex: 1; overflow: hidden; display: block; }
     .card-minus-btn { position: absolute; top: 8px; left: 8px; width: 28px; height: 28px; border-radius: 50%; background: #dc2626; color: #ffffff; border: 2px solid #ffffff; font-size: 18px; font-weight: 900; line-height: 22px; text-align: center; cursor: pointer; z-index: 5; box-shadow: 0 3px 8px rgba(220, 38, 38, 0.45); padding: 0; }
     .text-only-controls .card-minus-btn, .text-only-controls .in-cart-pill { position: static; }
     .edit-mode .card-minus-btn, .soldout-mode .card-minus-btn { display: none; }
@@ -670,10 +673,11 @@
         <button type="button" class="seg-btn" id="popupViewTextBtn" onclick="setPopupViewMode('text')">🔤 Text Only</button>
       </div>
       <label class="edit-field-label">Item Card Size</label>
-      <div class="settings-grid-3">
+      <div class="settings-grid-4">
         <button type="button" class="seg-btn" id="cardSizeCompact" onclick="setCardSizeMode('compact')">Compact</button>
         <button type="button" class="seg-btn" id="cardSizeNormal" onclick="setCardSizeMode('normal')">Standard</button>
         <button type="button" class="seg-btn" id="cardSizeLarge" onclick="setCardSizeMode('large')">Large</button>
+        <button type="button" class="seg-btn" id="cardSizeTall" onclick="setCardSizeMode('tall')">Tall</button>
       </div>
       <label class="edit-field-label">Text Size</label>
       <div class="settings-grid-3">
@@ -912,12 +916,15 @@
       document.getElementById('headerCompactBtn').classList.toggle('active', appSettings.headerSize !== 'large');
       document.getElementById('headerLargeBtn').classList.toggle('active', appSettings.headerSize === 'large');
 
-      document.body.classList.remove('card-compact', 'card-large');
+      document.body.classList.remove('card-compact', 'card-large', 'card-tall');
       if (appSettings.cardSize === 'compact') document.body.classList.add('card-compact');
       if (appSettings.cardSize === 'large') document.body.classList.add('card-large');
+      if (appSettings.cardSize === 'tall') document.body.classList.add('card-tall');
       document.getElementById('cardSizeCompact').classList.toggle('active', appSettings.cardSize === 'compact');
       document.getElementById('cardSizeNormal').classList.toggle('active', !appSettings.cardSize || appSettings.cardSize === 'normal');
       document.getElementById('cardSizeLarge').classList.toggle('active', appSettings.cardSize === 'large');
+      const tallBtn = document.getElementById('cardSizeTall');
+      if (tallBtn) tallBtn.classList.toggle('active', appSettings.cardSize === 'tall');
     // ==================== PART 19B: SETTINGS SETTERS & ROLLOVER ====================
       document.body.classList.toggle('menu-text-only', appSettings.menuView === 'text');
       document.getElementById('menuViewPhotoBtn').classList.toggle('active', appSettings.menuView === 'photo');
