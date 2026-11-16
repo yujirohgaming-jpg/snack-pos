@@ -1267,13 +1267,23 @@
             '<button class="move-btn" onclick="moveItem(event, ' + catIdx + ', ' + itemIndex + ', 1)">▶</button>' +
           '</div>';
 
-        card.addEventListener('pointerdown', () => {
+        let startX = 0;
+        let startY = 0;
+        card.addEventListener('pointerdown', (ev) => {
           longPressTriggered = false;
+          startX = ev.clientX;
+          startY = ev.clientY;
+          clearTimeout(longPressTimer);
           if (!isEditMode && !isSoldOutMode) {
             longPressTimer = setTimeout(() => {
               longPressTriggered = true;
               triggerSoldOutAction(catIdx, itemIndex);
-            }, 550);
+            }, 1100);
+          }
+        });
+        card.addEventListener('pointermove', (ev) => {
+          if (Math.abs(ev.clientX - startX) > 8 || Math.abs(ev.clientY - startY) > 8) {
+            clearTimeout(longPressTimer);
           }
         });
         card.addEventListener('pointerup', () => clearTimeout(longPressTimer));
@@ -1301,6 +1311,11 @@
         customCard.onclick = openCustomOrderModal;
         gridEl.appendChild(customCard);
       }
+    }
+
+    const kioskScrollEl = document.getElementById('kioskSection');
+    if (kioskScrollEl) {
+      kioskScrollEl.addEventListener('scroll', () => clearTimeout(longPressTimer), { passive: true });
     }
 
     function selectCategoryTab(idx) {
