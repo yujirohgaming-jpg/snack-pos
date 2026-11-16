@@ -2314,121 +2314,121 @@
         '</div>';
       }).join('');
     }
-    // ==================== PART 30: REPORTS & PAST HISTORY ====================
+    // ==================== PART 30: RESTOCK TALLY, SUMMARIES, BACKUP & IMPORT ====================
     function applyTallyLinesClass() {
-      const lines = appSettings.tallyLines || 3;
-      document.body.classList.remove('tally-lines-3', 'tally-lines-5', 'tally-lines-7');
-      document.body.classList.add('tally-lines-' + lines);
-      const btn = document.getElementById('tallyLinesCycleBtn');
-      if (btn) btn.innerText = 'Lines: ' + lines;
-    }
-
-    function cycleTallyLines() {
-      const curr = appSettings.tallyLines || 3;
-      appSettings.tallyLines = curr === 3 ? 5 : (curr === 5 ? 7 : 3);
-      saveSettings();
-      applyTallyLinesClass();
+      const lines = appSettings.tallyLines || 2;
+      document.body.classList.remove('tally-lines-1', 'tally-lines-2', 'tally-lines-3');
+      if (lines !== 2) document.body.classList.add('tally-lines-' + lines);
     }
 
     function applyTallyDockPos() {
-      const isTop = appSettings.tallyPos === 'top';
-      document.body.classList.toggle('tally-top', isTop);
-      const posBtn = document.getElementById('tallyPosCycleBtn');
-      if (posBtn) posBtn.innerText = isTop ? '⬇ Bot' : '⬆ Top';
+      const pos = appSettings.tapsPos || appSettings.tallyDock || 'bottom';
+      document.body.classList.remove('taps-pos-top', 'taps-pos-left', 'taps-pos-right');
+      if (pos !== 'bottom') document.body.classList.add('taps-pos-' + pos);
     }
 
-    function toggleTallyDockPos() {
-      appSettings.tallyPos = appSettings.tallyPos === 'top' ? 'bottom' : 'top';
-      saveSettings();
-      applyTallyDockPos();
-    }
-
-    function askDeleteSale(index) {
-      const sale = salesHistory.at(index);
-      if (!sale) return;
-      openConfirmBox('Delete Sale?', 'Remove mistaken sale: ₱' + sale.total.toFixed(2) + ' (' + sale.summary + ')?', 'Delete', () => {
-        salesHistory.splice(index, 1);
-        localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
-        renderHistory();
-        showToast('✓ Sale Removed');
-      });
-    }
-
-    function getRestockCounts() {
+    function getRestockCounts(salesList) {
       const counts = {};
-      salesHistory.forEach(sale => {
+      (salesList || new Array()).forEach(sale => {
         if (sale.items) {
-          Object.entries(sale.items).forEach(p => { counts[p.at(0)] = (counts[p.at(0)] || 0) + p.at(1); });
+          Object.entries(sale.items).forEach(pair => {
+            const name = pair.at(0);
+            const qty = pair.at(1);
+            counts[name] = (counts[name] || 0) + qty;
+          });
         }
       });
       return Object.entries(counts).sort((a, b) => b.at(1) - a.at(1));
     }
 
-    function openPastDetailScreen(idx) {
-      const h = pastHistory.at(idx);
-      if (!h) return;
-      document.getElementById('pastDetailHeaderTitle').innerText = h.label;
-      document.getElementById('pastDetailCopyBtn').onclick = function() { copyPastHistoryEntry(idx); };
-
-      const itemsHtml = (h.sortedItems && h.sortedItems.length > 0)
-        ? h.sortedItems.map(p => '<div class="restock-item"><span>' + p.at(0) + '</span><span class="restock-qty">' + p.at(1) + ' sold</span></div>').join('')
-        : '<div style="color:#9ca3af; font-size:13px;">No items recorded</div>';
-
-      const salesHtml = (h.sales && h.sales.length > 0)
-        ? h.sales.map(s => '<div class="log-item"><div class="log-header"><span>' + s.time + '</span><span>₱' + s.total.toFixed(2) + '</span></div><div class="log-details">' + s.summary + '</div></div>').join('')
-        : '<div style="color:#9ca3af; font-size:13px;">No order logs saved</div>';
-
-      document.getElementById('pastDetailBody').innerHTML =
-        '<div class="card-box" style="text-align:center; background:#0f172a; color:white;">' +
-          '<div style="font-size:11px; text-transform:uppercase; color:#94a3b8; letter-spacing:1px;">Total Shift Earnings (' + h.orderCount + ' orders)</div>' +
-          '<div style="font-size:30px; font-weight:900; color:#4ade80; margin-top:4px;">₱' + h.total.toFixed(2) + '</div>' +
-        '</div>' +
-        '<div class="card-box"><h3>📦 Items Sold (Highest → Lowest)</h3>' + itemsHtml + '</div>' +
-        '<div class="card-box"><h3>🧾 Complete Order Log</h3>' + salesHtml + '</div>';
-
-      const detScreen = document.getElementById('pastDetailScreen');
-      detScreen.classList.add('open');
-      resetDrawerScroll('pastDetailBody');
-    }
-
-    function copyPastHistoryEntry(idx) {
-      const h = pastHistory.at(idx);
-      if (!h) return;
-      const headerTitle = appSettings.stallName ? appSettings.stallName + " — " : "";
-      let text = headerTitle + "Sales Report (" + h.label + ")\nTotal Earnings: ₱" + h.total.toFixed(2) + "\nTotal Orders: " + h.orderCount + "\n\n";
-      if (h.sortedItems && h.sortedItems.length > 0) {
-        text += "--- ITEMS SOLD (HIGHEST TO LOWEST) ---\n";
-        h.sortedItems.forEach(p => text += p.at(1) + "x " + p.at(0) + "\n");
-        text += "\n--- ORDER LOG ---\n";
-      }
-      (h.sales || new Array()).forEach(s => text += "[" + s.time + "] ₱" + s.total.toFixed(2) + " - " + s.summary + "\n");
+    function copyTextSafe(text, successMsg) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        ta.setSelectionRange(0, text.length);
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (ok) {
+          showToast(successMsg || '✓ Copied!');
+          return;
+        }
+      } catch (e) {}
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => showToast('✓ Report Copied')).catch(() => openImportModalWithText(text));
+        navigator.clipboard.writeText(text)
+          .then(() => showToast(successMsg || '✓ Copied!'))
+          .catch(() => showToast('Copy blocked — try exporting text'));
       } else {
-        openImportModalWithText(text);
+        showToast('Copy failed on this browser');
       }
     }
 
-    function askDeletePastHistoryEntry(event, idx) {
-      event.stopPropagation();
-      const target = pastHistory.at(idx);
-      if (!target) return;
-      openConfirmBox('Delete Saved Report?', 'Remove report for "' + target.label + '"?', 'Delete', () => {
-        pastHistory.splice(idx, 1);
-        localStorage.setItem('miniPosPastHistoryPH', JSON.stringify(pastHistory));
-        renderHistory();
-        showToast('✓ Report Deleted');
-      });
+    function buildSummaryReportText(label, salesList) {
+      const total = salesList.reduce((sum, s) => sum + s.total, 0);
+      const sorted = getRestockCounts(salesList);
+      const stallTitle = appSettings.stallName || 'Gonzales Snack Bar';
+      const lines = new Array(
+        stallTitle + ' — ' + label,
+        'Orders: ' + salesList.length + ' | Total Sales: ' + fmtPeso(total),
+        '------------------------'
+      );
+      sorted.forEach(pair => lines.push(pair.at(1) + 'x ' + pair.at(0)));
+      return lines.join('\n');
     }
 
-    function askClearAllHistory() {
-      if (!pastHistory || pastHistory.length === 0) return showToast('History is already empty');
-      openConfirmBox('Clear All History?', 'Delete all saved 7-day history reports permanently?', 'Clear All', () => {
-        pastHistory = new Array();
-        localStorage.removeItem('miniPosPastHistoryPH');
-        renderHistory();
-        showToast('✓ All History Cleared');
-      });
+    function copyTodaySummary() {
+      if (!salesHistory || salesHistory.length === 0) return showToast('No sales today yet');
+      const txt = buildSummaryReportText(formatDisplayDate(savedDayKey), salesHistory);
+      copyTextSafe(txt, '✓ Today Summary Copied!');
+    }
+
+    function copyPastSummary(idx) {
+      const entry = pastHistory && pastHistory.at(idx);
+      if (!entry) return;
+      const txt = buildSummaryReportText(entry.label, entry.sales || new Array());
+      copyTextSafe(txt, '✓ Past Summary Copied!');
+    }
+
+    function exportMenuBackup() {
+      const jsonStr = JSON.stringify(menuData);
+      copyTextSafe(jsonStr, '✓ Menu Backup Copied!');
+    }
+
+    function openImportModal() {
+      const box = document.getElementById('importMenuJsonInput');
+      if (box) box.value = '';
+      const modal = document.getElementById('importMenuModal');
+      if (modal) modal.classList.add('open');
+    }
+
+    function closeImportModal() {
+      const modal = document.getElementById('importMenuModal');
+      if (modal) modal.classList.remove('open');
+    }
+
+    function confirmImportMenu() {
+      const raw = ((document.getElementById('importMenuJsonInput') || {}).value || '').trim();
+      if (!raw) return showToast('Paste menu backup code first');
+      try {
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed) || parsed.length === 0) {
+          return showToast('Invalid menu format');
+        }
+        menuData = parsed;
+        activeCatIndex = 0;
+        saveMenuData();
+        renderMenu();
+        closeImportModal();
+        showToast('✓ Menu Imported!');
+      } catch (e) {
+        showToast('Invalid backup code — check paste');
+      }
     }
     // ==================== PART 31: RENDER HISTORY & STARTUP ====================
     function renderHistory() {
