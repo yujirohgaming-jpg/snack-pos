@@ -1224,9 +1224,11 @@
     }
 
     function openAddonChoiceForm(idx) {
-      editingAddonChoiceIdx = idx;
+      const hasIdx = typeof idx === 'number' && idx >= 0;
+      editingAddonChoiceIdx = hasIdx ? idx : -1;
+      editingAddonIdx = editingAddonChoiceIdx;
       namePriceMode = 'addonChoice';
-      const existing = idx >= 0 ? tempItemAddons.at(idx) : null;
+      const existing = hasIdx ? tempItemAddons.at(idx) : null;
       document.getElementById('namePriceModalTitle').innerText = tempItemIsCombo
         ? (existing ? 'Edit Combo Pairing' : '+ Add Combo Pairing')
         : (existing ? 'Edit Add-on Option' : '+ Add Add-on Option');
@@ -1253,13 +1255,14 @@
         menuData.at(activeCatIndex).items.push({ name: name, price: price, icon: "🍽️", photo: "", isCombo: false, soldOut: false, addons: new Array() });
         saveMenuData(); renderMenu();
       } else if (namePriceMode === 'addonChoice') {
-        if (editingAddonChoiceIdx >= 0) {
-          tempItemAddons.at(editingAddonChoiceIdx).name = name;
-          tempItemAddons.at(editingAddonChoiceIdx).price = price;
+        const targetIdx = typeof editingAddonChoiceIdx === 'number' ? editingAddonChoiceIdx : -1;
+        if (targetIdx >= 0 && tempItemAddons.at(targetIdx)) {
+          tempItemAddons.at(targetIdx).name = name;
+          tempItemAddons.at(targetIdx).price = price;
         } else {
           tempItemAddons.push({ name: name, price: price, photo: '', soldOut: false });
         }
-        renderItemSpecificAddonsList();
+        renderItemSpecificAddons();
       }
     }
     // ==================== PART 21A: MENU HELPERS, DIAL TABS & PAGE DOTS ====================
@@ -1872,7 +1875,7 @@
       tempItemAddons.at(idx).photo = '';
       renderItemSpecificAddons();
     }
-    // ==================== PART 25: ITEM ADD-ONS EDITOR & SAVE ====================
+    // ==================== PART 25: ITEM ADD-ONS EDITOR & COMBO BUILDER ====================
     function renderItemSpecificAddons() {
       const list = document.getElementById('itemSpecificAddonsList');
       list.innerHTML = '';
@@ -1895,19 +1898,6 @@
           '</div>';
         list.appendChild(row);
       });
-    }
-
-    function openAddonChoiceForm(idx) {
-      editingAddonIdx = idx;
-      const isEdit = idx !== null;
-      const existing = isEdit ? tempItemAddons.at(idx) : { name: '', price: '' };
-      document.getElementById('namePriceModalTitle').innerText = isEdit ? 'Edit Option' : (tempItemIsCombo ? 'Add Paired Item' : 'Add Add-on Option');
-      document.getElementById('namePriceNameLbl').innerText = tempItemIsCombo ? 'Paired Item Name (e.g., Fries)' : 'Add-on Name (e.g., Extra Cheese)';
-      document.getElementById('namePriceAmtLbl').innerText = tempItemIsCombo ? 'Full Combo Price (₱)' : 'Extra Charge (₱ — 0 if Free)';
-      document.getElementById('namePriceNameInput').value = existing.name;
-      document.getElementById('namePriceAmtInput').value = existing.price;
-      namePriceMode = 'addonChoice';
-      document.getElementById('namePriceModal').classList.add('open');
     }
 
     function removeItemSpecificAddon(idx) {
@@ -1938,6 +1928,70 @@
     function closeItemEditorModal() {
       document.getElementById('itemEditorModal').classList.remove('open');
       editingItemIdx = null;
+    }
+
+    function openAddComboModal() {
+      newComboPairsTemp = new Array();
+      document.getElementById('newComboMainInput').value = '';
+      document.getElementById('newComboPairName').value = '';
+      document.getElementById('newComboPairPrice').value = '';
+      renderNewComboPairsPreview();
+      document.getElementById('addComboModal').classList.add('open');
+      setTimeout(() => document.getElementById('newComboMainInput').focus(), 80);
+    }
+
+    function closeAddComboModal() {
+      document.getElementById('addComboModal').classList.remove('open');
+    }
+
+    function renderNewComboPairsPreview() {
+      const box = document.getElementById('newComboPairsPreview');
+      if (!box) return;
+      if (newComboPairsTemp.length === 0) {
+        box.innerHTML = '<div style="font-size:12px; color:#9ca3af;">No pairings added yet.</div>';
+        return;
+      }
+      box.innerHTML = newComboPairsTemp.map((p, i) =>
+        '<div class="item-addon-row">' +
+          '<span>' + p.name + ' — ' + fmtPeso(p.price) + '</span>' +
+          '<button type="button" class="btn-sm-pill" style="background:#ef4444; color:white;" onclick="removeNewComboPair(' + i + ')">✕</button>' +
+        '</div>'
+      ).join('');
+    }
+
+    function appendNewComboPair() {
+      const pName = document.getElementById('newComboPairName').value.trim();
+      const pPrice = parseFloat(document.getElementById('newComboPairPrice').value);
+      if (!pName) return showToast('Enter pairing item name');
+      if (isNaN(pPrice) || pPrice < 0) return showToast('Enter combo price');
+      newComboPairsTemp.push({ name: pName, price: pPrice, photo: '', soldOut: false });
+      document.getElementById('newComboPairName').value = '';
+      document.getElementById('newComboPairPrice').value = '';
+      renderNewComboPairsPreview();
+    }
+
+    function removeNewComboPair(idx) {
+      newComboPairsTemp.splice(idx, 1);
+      renderNewComboPairsPreview();
+    }
+
+    function saveNewComboModal() {
+      const mainName = document.getElementById('newComboMainInput').value.trim();
+      if (!mainName) return showToast('Enter main combo item name');
+      if (newComboPairsTemp.length === 0) return showToast('Add at least 1 pairing');
+      menuData.at(activeCatIndex).items.push({
+        name: mainName,
+        price: 0,
+        icon: '🥤',
+        photo: '',
+        isCombo: true,
+        soldOut: false,
+        addons: newComboPairsTemp
+      });
+      saveMenuData();
+      closeAddComboModal();
+      renderMenu();
+      showToast('✓ Combo Created');
     }
     // ==================== PART 26: EDIT & STOCK MODES ====================
     function startEditMenuFromHub() {
@@ -2425,7 +2479,7 @@
         '</div>';
       }).join('');
     }
-    // ==================== PART 30: RESTOCK TALLY, SUMMARIES, BACKUP & IMPORT ====================
+    // ==================== PART 30A: HISTORY ACTIONS & DELETE HANDLERS ====================
     function applyTallyLinesClass() {
       const lines = appSettings.tallyLines || 2;
       document.body.classList.remove('tally-lines-1', 'tally-lines-2', 'tally-lines-3');
@@ -2439,8 +2493,9 @@
     }
 
     function getRestockCounts(salesList) {
+      const list = salesList || salesHistory || new Array();
       const counts = {};
-      (salesList || new Array()).forEach(sale => {
+      list.forEach(sale => {
         if (sale.items) {
           Object.entries(sale.items).forEach(pair => {
             const name = pair.at(0);
@@ -2452,6 +2507,68 @@
       return Object.entries(counts).sort((a, b) => b.at(1) - a.at(1));
     }
 
+    function askDeleteSale(index) {
+      const sale = salesHistory.at(index);
+      if (!sale) return;
+      openConfirmBox('Delete Order?', 'Remove this ₱' + sale.total.toFixed(2) + ' order (' + sale.summary + ')?', 'Delete', () => {
+        salesHistory.splice(index, 1);
+        localStorage.setItem('miniPosSalesPH', JSON.stringify(salesHistory));
+        renderHistory();
+        showToast('✓ Order Deleted');
+      });
+    }
+
+    function openPastDetailScreen(idx) {
+      const entry = pastHistory.at(idx);
+      if (!entry) return;
+      document.getElementById('pastDetailHeaderTitle').innerText = '📅 ' + entry.label;
+      const body = document.getElementById('pastDetailBody');
+      const sorted = getRestockCounts(entry.sales || new Array());
+      let html =
+        '<div style="background:#0f172a; color:white; padding:16px; border-radius:16px; text-align:center; margin-bottom:12px;">' +
+          '<div style="font-size:11px; text-transform:uppercase; color:#94a3b8;">Total Sales (' + (entry.sales || new Array()).length + ' orders)</div>' +
+          '<div style="font-size:28px; font-weight:900; color:#4ade80; margin-top:4px;">₱' + (entry.total || 0).toFixed(2) + '</div>' +
+        '</div>' +
+        '<div style="font-weight:900; font-size:14px; margin-bottom:6px;">Items Sold</div>';
+      html += sorted.length === 0
+        ? '<div style="color:#9ca3af; font-size:13px; margin-bottom:12px;">No itemized breakdown</div>'
+        : sorted.map(p => '<div class="restock-item"><span>' + p.at(0) + '</span><span class="restock-qty">' + p.at(1) + ' sold</span></div>').join('');
+      html += '<div style="font-weight:900; font-size:14px; margin:14px 0 6px;">Order Log</div>';
+      html += (entry.sales || new Array()).map(s =>
+        '<div class="log-item"><div class="log-header"><span>' + s.time + '</span><span>₱' + s.total.toFixed(2) + '</span></div><div class="log-details">' + s.summary + '</div></div>'
+      ).join('');
+      body.innerHTML = html;
+      const copyBtn = document.getElementById('pastDetailCopyBtn');
+      if (copyBtn) copyBtn.onclick = () => copyPastSummary(idx);
+      document.getElementById('pastDetailScreen').classList.add('open');
+      resetDrawerScroll('pastDetailBody');
+    }
+
+    function askDeletePastHistoryEntry(event, idx) {
+      if (event) event.stopPropagation();
+      const entry = pastHistory.at(idx);
+      if (!entry) return;
+      openConfirmBox('Delete Saved Day?', 'Remove "' + entry.label + '" (₱' + (entry.total || 0).toFixed(2) + ') from 7-Day History?', 'Delete', () => {
+        pastHistory.splice(idx, 1);
+        localStorage.setItem('miniPosPastHistoryPH', JSON.stringify(pastHistory));
+        renderHistory();
+        showToast('✓ Report Deleted');
+      });
+    }
+
+    function askClearPastHistory() {
+      if (pastHistory.length === 0) return showToast('History is already empty');
+      openConfirmBox('Clear All 7-Day History?', 'Permanently delete all saved past reports?', 'Clear All', () => {
+        pastHistory = new Array();
+        localStorage.setItem('miniPosPastHistoryPH', JSON.stringify(pastHistory));
+        renderHistory();
+        showToast('✓ All Past History Cleared');
+      });
+    }
+    const askClearAllHistory = askClearPastHistory;
+    const clearAllPastHistory = askClearPastHistory;
+    const askClearHistory = askClearPastHistory;
+    // ==================== PART 30B: SUMMARY COPY & .JSON FILE BACKUP / IMPORT ====================
     function copyTextSafe(text, successMsg) {
       try {
         const ta = document.createElement('textarea');
@@ -2507,8 +2624,49 @@
     }
 
     function exportMenuBackup() {
-      const jsonStr = JSON.stringify(menuData);
-      copyTextSafe(jsonStr, '✓ Menu Backup Copied!');
+      try {
+        const jsonStr = JSON.stringify(menuData);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'gonzales-menu-' + getTodayDateKey() + '.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+        showToast('✓ Backup File Downloaded!');
+      } catch (e) {
+        copyTextSafe(JSON.stringify(menuData), '✓ Menu Copied!');
+      }
+    }
+
+    function applyImportedMenuJson(rawText) {
+      try {
+        const parsed = JSON.parse(rawText);
+        if (!Array.isArray(parsed) || parsed.length === 0) {
+          return showToast('Invalid menu file');
+        }
+        menuData = parsed;
+        activeCatIndex = 0;
+        saveMenuData();
+        renderMenu();
+        closeImportModal();
+        showToast('✓ Menu & Photos Restored!');
+      } catch (e) {
+        showToast('Could not read backup file');
+      }
+    }
+
+    function handleImportFileChange(e) {
+      const file = e.target.files && e.target.files.item(0);
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        applyImportedMenuJson(ev.target.result);
+        e.target.value = '';
+      };
+      reader.readAsText(file);
     }
 
     function ensureImportModalExists() {
@@ -2521,11 +2679,14 @@
       modal.innerHTML =
         '<div class="modal-box">' +
           '<div class="modal-title">📥 Import Menu Backup</div>' +
-          '<div class="modal-sub">Paste the copied menu backup code below:</div>' +
-          '<textarea id="importMenuJsonInput" class="edit-text-input" rows="5" placeholder="Paste menu backup text here..." style="resize:vertical; font-size:12px;"></textarea>' +
+          '<div class="modal-sub">Select your saved .json menu backup file (includes all photos):</div>' +
+          '<input type="file" id="importMenuFileInput" accept=".json,application/json,text/plain" style="display:none;" onchange="handleImportFileChange(event)">' +
+          '<button type="button" class="btn" style="background:#2563eb; width:100%; margin-bottom:10px;" onclick="document.getElementById(\'importMenuFileInput\').click()">📁 Choose Backup File (.json)</button>' +
+          '<label class="edit-field-label">Or Paste Backup Text</label>' +
+          '<textarea id="importMenuJsonInput" class="edit-text-input" rows="3" placeholder="Optional: paste text here..." style="resize:vertical; font-size:12px;"></textarea>' +
           '<div class="modal-actions">' +
             '<button type="button" class="btn" style="background:#94a3b8;" onclick="closeImportModal()">Cancel</button>' +
-            '<button type="button" class="btn" style="background:#16a34a;" onclick="confirmImportMenu()">Import Menu</button>' +
+            '<button type="button" class="btn" style="background:#16a34a;" onclick="confirmImportMenu()">Import Text</button>' +
           '</div>' +
         '</div>';
       document.body.appendChild(modal);
@@ -2546,21 +2707,8 @@
 
     function confirmImportMenu() {
       const raw = ((document.getElementById('importMenuJsonInput') || {}).value || '').trim();
-      if (!raw) return showToast('Paste menu backup code first');
-      try {
-        const parsed = JSON.parse(raw);
-        if (!Array.isArray(parsed) || parsed.length === 0) {
-          return showToast('Invalid menu format');
-        }
-        menuData = parsed;
-        activeCatIndex = 0;
-        saveMenuData();
-        renderMenu();
-        closeImportModal();
-        showToast('✓ Menu Imported!');
-      } catch (e) {
-        showToast('Invalid backup code — check paste');
-      }
+      if (!raw) return showToast('Choose a .json file or paste text first');
+      applyImportedMenuJson(raw);
     }
     // ==================== PART 31: RENDER HISTORY & STARTUP ====================
     function renderHistory() {
