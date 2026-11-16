@@ -1445,7 +1445,7 @@
         }
       }, { passive: true });
     }
-    // ==================== PART 22: POPUP OPEN & VISUAL MATCH ====================
+    // ==================== PART 22: POPUP OPEN & INSTANT TAP RESPONSE ====================
     function findVisualForChoice(choiceObj) {
       const choiceName = typeof choiceObj === 'string' ? choiceObj : choiceObj.name;
       if (choiceObj && choiceObj.photo) {
@@ -1471,10 +1471,7 @@
         return;
       }
       addItem({ name: item.name, price: item.price }, 1);
-      if (cardEl) {
-        cardEl.classList.add('just-added');
-        setTimeout(() => renderMenu(), 220);
-      }
+      renderMenu();
     }
 
     function handleFooterTap(event, catIdx, itemIndex) {
