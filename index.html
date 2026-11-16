@@ -137,14 +137,15 @@
     .text-only-controls { display: none; width: 100%; justify-content: space-between; align-items: center; margin-bottom: 4px; }
     body.menu-text-only .text-only-controls { display: flex; }
     .visual-wrap { position: relative; width: 100%; margin-bottom: 4px; display: flex; justify-content: center; align-items: center; }
-    .has-photo-card .visual-wrap { margin-bottom: 0; height: 136px; overflow: hidden; display: block; }
-    body.card-compact .has-photo-card .visual-wrap { height: 102px; }
+    .has-photo-card .card-top-body { height: 136px; padding: 0; flex: none; }
+    .has-photo-card .visual-wrap { margin-bottom: 0; height: 100%; width: 100%; overflow: hidden; display: block; }
+    body.card-compact .has-photo-card .card-top-body { height: 102px; }
     body.card-compact .food-icon { height: 48px; font-size: 34px; margin: 6px 0 0; }
     body.card-compact .food-footer-bar { padding: 6px 8px; }
-    body.card-large .has-photo-card .visual-wrap { height: 170px; }
+    body.card-large .has-photo-card .card-top-body { height: 170px; }
     body.card-large .food-icon { height: 84px; font-size: 52px; }
     body.card-large .food-footer-bar { padding: 10px 12px; }
-    body.card-tall .has-photo-card .visual-wrap { height: 210px; }
+    body.card-tall .has-photo-card .card-top-body { height: 210px; }
     body.card-tall .food-icon { height: 112px; font-size: 60px; }
     body.card-tall .food-footer-bar { padding: 10px 12px; }
     .card-minus-btn { position: absolute; top: 8px; left: 8px; width: 28px; height: 28px; border-radius: 50%; background: #dc2626; color: #ffffff; border: 2px solid #ffffff; font-size: 18px; font-weight: 900; line-height: 22px; text-align: center; cursor: pointer; z-index: 5; box-shadow: 0 3px 8px rgba(220, 38, 38, 0.45); padding: 0; }
@@ -1203,6 +1204,8 @@
 
     function renderMenu() {
       if (activeCatIndex >= menuData.length) activeCatIndex = Math.max(0, menuData.length - 1);
+      const secEl = document.getElementById('kioskSection');
+      const savedScrollTop = secEl ? secEl.scrollTop : 0;
       const tabsEl = document.getElementById('categoryTabs');
       const gridEl = document.getElementById('menuGrid');
       tabsEl.innerHTML = '';
@@ -1238,6 +1241,9 @@
       const activeTabEl = tabsEl.querySelector('.cat-tab-wrap.active');
       if (activeTabEl && activeTabEl.scrollIntoView) {
         activeTabEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+      if (secEl && savedScrollTop > 0) {
+        requestAnimationFrame(() => { secEl.scrollTop = savedScrollTop; });
       }
     // ==================== PART 21B: MENU CARDS RENDER LOOP ====================
       const isSimple = appSettings.opMode === 'simple';
