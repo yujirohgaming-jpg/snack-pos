@@ -20,7 +20,7 @@
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     html, body { height: 100dvh; overflow: hidden; overscroll-behavior: none; margin: 0; padding: 0; }
     body { display: flex; flex-direction: column; background: var(--bg); color: var(--text); transition: background-color 0.2s ease; }
-    #kioskSection { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: auto; padding: 6px 12px calc(96px + env(safe-area-inset-bottom)); background: transparent; }
+    #kioskSection { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; overscroll-behavior-y: auto; padding: 6px 12px calc(96px + env(safe-area-inset-bottom)); background: transparent; }
     body.font-large .food-name { font-size: 16px; }
     body.font-large .food-price { font-size: 16px; }
     body.font-large .order-item, body.font-large .queue-bullet-item { font-size: 16px; }
@@ -72,8 +72,8 @@
     body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .category-tabs, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .category-tabs { flex-direction: column; width: 100%; overflow-y: auto; overflow-x: hidden; gap: 8px; }
     body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .cat-tab-wrap, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .cat-tab-wrap { width: 100%; border-radius: 14px; justify-content: center; }
     body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-left .cat-tab-btn, body:not(.simple-tally):not(.edit-mode):not(.soldout-mode).cat-pos-right .cat-tab-btn { white-space: normal; text-align: center; padding: 10px 4px; font-size: 11px; line-height: 1.2; width: 100%; }
-    /* ==================== PART 04: MENU GRID & NOT AVAILABLE ==================== */
-    .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    /* ==================== PART 04: STUDIO ELEVATION CARDS ==================== */
+    .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; will-change: transform, opacity; }
     body.layout-tablet .menu-grid { grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 14px; }
     @media (min-width: 768px) { body.layout-auto .menu-grid { grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 14px; } }
     body.card-compact .menu-grid { gap: 9px; }
@@ -83,9 +83,11 @@
     body.card-large .has-photo-card .visual-wrap { height: 175px; }
     body.card-large .food-icon { height: 86px; font-size: 52px; }
     body.card-large .food-footer-bar { padding: 10px 12px; }
-    .menu-card-item { position: relative; background: var(--card); border: 1px solid rgba(28, 25, 23, 0.08); border-radius: 22px; overflow: hidden; text-align: center; cursor: pointer; box-shadow: 0 6px 18px rgba(28, 25, 23, 0.08), 0 1px 3px rgba(28, 25, 23, 0.04); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.14s ease, box-shadow 0.2s ease; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
-    .menu-card-item:active { transform: scale(0.96); box-shadow: 0 2px 8px rgba(28, 25, 23, 0.08); }
-    .menu-card-item.just-added { box-shadow: 0 0 0 3px #16a34a, 0 8px 20px rgba(22, 163, 74, 0.22); }
+    .menu-card-item { position: relative; background: linear-gradient(180deg, var(--card) 0%, rgba(250, 250, 249, 0.96) 100%); border: 1px solid rgba(28, 25, 23, 0.08); border-radius: 22px; overflow: hidden; text-align: center; cursor: pointer; box-shadow: 0 10px 24px -4px rgba(28, 25, 23, 0.1), 0 2px 6px -1px rgba(28, 25, 23, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.14s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+    body.theme-dark .menu-card-item { background: linear-gradient(180deg, #24201d 0%, #171412 100%); border-color: rgba(255, 255, 255, 0.08); box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.07); }
+    .menu-card-item:active { transform: scale(0.95); box-shadow: 0 3px 10px rgba(28, 25, 23, 0.12); }
+    .menu-card-item.in-cart-card { border: 2px solid #16a34a; box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.22), 0 10px 22px rgba(22, 163, 74, 0.18); }
+    .menu-card-item.just-added { border-color: #ffb81c; box-shadow: 0 0 0 4px rgba(255, 184, 28, 0.55), 0 10px 24px rgba(22, 163, 74, 0.28); }
     .menu-card-item.is-soldout { background: #e7e5e4; border-color: #d6d3d1; cursor: default; box-shadow: none; }
     body.theme-dark .menu-card-item.is-soldout { background: #141210; border-color: #292524; }
     .menu-card-item.is-soldout:active { transform: none; }
@@ -1127,7 +1129,7 @@
         renderItemSpecificAddonsList();
       }
     }
-    // ==================== PART 21: MENU RENDERING & NOT AVAILABLE ====================
+    // ==================== PART 21A: MENU HELPERS & CATEGORY TABS ====================
     function saveMenuData() {
       try { localStorage.setItem('miniPosMenuPH_v4', JSON.stringify(menuData)); }
       catch (e) { showToast('Storage full! Remove some photos'); }
@@ -1199,6 +1201,11 @@
         tabsEl.appendChild(wrap);
       });
 
+      const activeTabEl = tabsEl.querySelector('.cat-tab-wrap.active');
+      if (activeTabEl && activeTabEl.scrollIntoView) {
+        activeTabEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+    // ==================== PART 21B: MENU CARDS RENDER LOOP ====================
       const isSimple = appSettings.opMode === 'simple';
       let renderList = new Array();
       if (isSimple) {
@@ -1312,17 +1319,100 @@
         gridEl.appendChild(customCard);
       }
     }
+    // ==================== PART 21C: IPHONE CATEGORY SWIPE & SLIDE ANIMATION ====================
+    function animateCategorySwitch(nextIdx, direction) {
+      const gridEl = document.getElementById('menuGrid');
+      const sec = document.getElementById('kioskSection');
+      if (!gridEl) {
+        activeCatIndex = nextIdx;
+        renderMenu();
+        return;
+      }
+      const outX = direction > 0 ? '-42%' : '42%';
+      const inX = direction > 0 ? '42%' : '-42%';
+      gridEl.style.transition = 'transform 0.16s cubic-bezier(0.4, 0, 1, 1), opacity 0.14s ease';
+      gridEl.style.transform = 'translateX(' + outX + ')';
+      gridEl.style.opacity = '0.15';
+
+      setTimeout(() => {
+        activeCatIndex = nextIdx;
+        renderMenu();
+        if (sec) sec.scrollTop = 0;
+        gridEl.style.transition = 'none';
+        gridEl.style.transform = 'translateX(' + inX + ')';
+        gridEl.style.opacity = '0.2';
+        void gridEl.offsetWidth;
+        gridEl.style.transition = 'transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease';
+        gridEl.style.transform = 'translateX(0)';
+        gridEl.style.opacity = '1';
+      }, 155);
+    }
+
+    function selectCategoryTab(idx) {
+      if (idx === activeCatIndex) return;
+      const dir = idx > activeCatIndex ? 1 : -1;
+      animateCategorySwitch(idx, dir);
+    }
 
     const kioskScrollEl = document.getElementById('kioskSection');
     if (kioskScrollEl) {
       kioskScrollEl.addEventListener('scroll', () => clearTimeout(longPressTimer), { passive: true });
-    }
 
-    function selectCategoryTab(idx) {
-      activeCatIndex = idx;
-      renderMenu();
-      const sec = document.getElementById('kioskSection');
-      if (sec) sec.scrollTo({ top: 0, behavior: 'smooth' });
+      let swipeStartX = 0;
+      let swipeStartY = 0;
+      let swipeActive = false;
+      let swipeLockedHorizontal = false;
+      let swipeDx = 0;
+
+      kioskScrollEl.addEventListener('touchstart', (e) => {
+        if (appSettings.opMode === 'simple' || menuData.length <= 1 || e.touches.length !== 1) return;
+        swipeStartX = e.touches.clientX;
+        swipeStartY = e.touches.clientY;
+        swipeActive = true;
+        swipeLockedHorizontal = false;
+        swipeDx = 0;
+      }, { passive: true });
+
+      kioskScrollEl.addEventListener('touchmove', (e) => {
+        if (!swipeActive || e.touches.length !== 1) return;
+        const dx = e.touches.clientX - swipeStartX;
+        const dy = e.touches.clientY - swipeStartY;
+        if (!swipeLockedHorizontal) {
+          if (Math.abs(dy) > 12 && Math.abs(dy) > Math.abs(dx)) {
+            swipeActive = false;
+            return;
+          }
+          if (Math.abs(dx) > 14 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+            swipeLockedHorizontal = true;
+            clearTimeout(longPressTimer);
+          }
+        }
+        if (swipeLockedHorizontal) {
+          swipeDx = dx;
+          const gridEl = document.getElementById('menuGrid');
+          if (gridEl) {
+            const atEdge = (activeCatIndex === 0 && dx > 0) || (activeCatIndex === menuData.length - 1 && dx < 0);
+            const dampened = atEdge ? dx * 0.28 : dx * 0.65;
+            gridEl.style.transition = 'none';
+            gridEl.style.transform = 'translateX(' + dampened + 'px)';
+          }
+        }
+      }, { passive: true });
+
+      kioskScrollEl.addEventListener('touchend', () => {
+        if (!swipeActive) return;
+        swipeActive = false;
+        const gridEl = document.getElementById('menuGrid');
+        if (!swipeLockedHorizontal) return;
+        if (swipeDx < -55 && activeCatIndex < menuData.length - 1) {
+          animateCategorySwitch(activeCatIndex + 1, 1);
+        } else if (swipeDx > 55 && activeCatIndex > 0) {
+          animateCategorySwitch(activeCatIndex - 1, -1);
+        } else if (gridEl) {
+          gridEl.style.transition = 'transform 0.22s cubic-bezier(0.22, 1, 0.36, 1)';
+          gridEl.style.transform = 'translateX(0)';
+        }
+      }, { passive: true });
     }
     // ==================== PART 22: POPUP OPEN & VISUAL MATCH ====================
     function findVisualForChoice(choiceObj) {
