@@ -137,15 +137,16 @@
     .text-only-controls { display: none; width: 100%; justify-content: space-between; align-items: center; margin-bottom: 4px; }
     body.menu-text-only .text-only-controls { display: flex; }
     .visual-wrap { position: relative; width: 100%; margin-bottom: 4px; display: flex; justify-content: center; align-items: center; }
-    .has-photo-card .card-top-body { height: 136px; padding: 0; flex: none; }
-    .has-photo-card .visual-wrap { margin-bottom: 0; height: 100%; width: 100%; overflow: hidden; display: block; }
-    body.card-compact .has-photo-card .card-top-body { height: 102px; }
+    .menu-card-item.has-photo-card { background: var(--cardfoot); }
+    .menu-card-item.has-photo-card .card-top-body { height: 136px !important; padding: 0 !important; flex: 1 1 auto !important; }
+    .menu-card-item.has-photo-card .visual-wrap { margin-bottom: 0; height: 100% !important; width: 100%; overflow: hidden; display: block; }
+    body.card-compact .menu-card-item.has-photo-card .card-top-body { height: 102px !important; }
     body.card-compact .food-icon { height: 48px; font-size: 34px; margin: 6px 0 0; }
     body.card-compact .food-footer-bar { padding: 6px 8px; }
-    body.card-large .has-photo-card .card-top-body { height: 170px; }
+    body.card-large .menu-card-item.has-photo-card .card-top-body { height: 170px !important; }
     body.card-large .food-icon { height: 84px; font-size: 52px; }
     body.card-large .food-footer-bar { padding: 10px 12px; }
-    body.card-tall .has-photo-card .card-top-body { height: 210px; }
+    body.card-tall .menu-card-item.has-photo-card .card-top-body { height: 210px !important; }
     body.card-tall .food-icon { height: 112px; font-size: 60px; }
     body.card-tall .food-footer-bar { padding: 10px 12px; }
     .card-minus-btn { position: absolute; top: 8px; left: 8px; width: 28px; height: 28px; border-radius: 50%; background: #dc2626; color: #ffffff; border: 2px solid #ffffff; font-size: 18px; font-weight: 900; line-height: 22px; text-align: center; cursor: pointer; z-index: 5; box-shadow: 0 3px 8px rgba(220, 38, 38, 0.45); padding: 0; }
@@ -1368,11 +1369,11 @@
         renderMenu();
         return;
       }
-      const outX = direction > 0 ? '-42%' : '42%';
-      const inX = direction > 0 ? '42%' : '-42%';
-      gridEl.style.transition = 'transform 0.16s cubic-bezier(0.4, 0, 1, 1), opacity 0.14s ease';
+      const outX = direction > 0 ? '-105%' : '105%';
+      const inX = direction > 0 ? '105%' : '-105%';
+      gridEl.style.opacity = '1';
+      gridEl.style.transition = 'transform 0.18s cubic-bezier(0.32, 0.72, 0, 1)';
       gridEl.style.transform = 'translateX(' + outX + ')';
-      gridEl.style.opacity = '0.15';
 
       setTimeout(() => {
         activeCatIndex = nextIdx;
@@ -1380,12 +1381,11 @@
         if (sec) sec.scrollTop = 0;
         gridEl.style.transition = 'none';
         gridEl.style.transform = 'translateX(' + inX + ')';
-        gridEl.style.opacity = '0.2';
-        void gridEl.offsetWidth;
-        gridEl.style.transition = 'transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease';
-        gridEl.style.transform = 'translateX(0)';
         gridEl.style.opacity = '1';
-      }, 155);
+        void gridEl.offsetWidth;
+        gridEl.style.transition = 'transform 0.26s cubic-bezier(0.22, 1, 0.36, 1)';
+        gridEl.style.transform = 'translateX(0)';
+      }, 175);
     }
 
     function selectCategoryTab(idx) {
@@ -1435,7 +1435,8 @@
           const gridEl = document.getElementById('menuGrid');
           if (gridEl) {
             const atEdge = (activeCatIndex === 0 && dx > 0) || (activeCatIndex === menuData.length - 1 && dx < 0);
-            const dampened = atEdge ? dx * 0.25 : dx * 0.65;
+            const dampened = atEdge ? dx * 0.25 : dx * 0.85;
+            gridEl.style.opacity = '1';
             gridEl.style.transition = 'none';
             gridEl.style.transform = 'translateX(' + dampened + 'px)';
           }
@@ -1453,7 +1454,7 @@
         } else if (swipeDx > 50 && activeCatIndex > 0) {
           animateCategorySwitch(activeCatIndex - 1, -1);
         } else if (gridEl) {
-          gridEl.style.transition = 'transform 0.22s cubic-bezier(0.22, 1, 0.36, 1)';
+          gridEl.style.transition = 'transform 0.24s cubic-bezier(0.22, 1, 0.36, 1)';
           gridEl.style.transform = 'translateX(0)';
         }
       }, { passive: true });
