@@ -1167,9 +1167,26 @@
       catch (e) { showToast('Storage full! Remove some photos'); }
     }
 
+    function isOtherExactMenuItem(orderItemName, targetItemName) {
+      if (orderItemName === targetItemName) return false;
+      for (let c = 0; c < menuData.length; c++) {
+        const list = menuData.at(c).items || new Array();
+        for (let i = 0; i < list.length; i++) {
+          if (list.at(i).name === orderItemName) return true;
+        }
+      }
+      return false;
+    }
+
     function getItemCartQty(itemName) {
       let count = 0;
-      currentOrder.forEach(o => { if (o.name === itemName || o.name.startsWith(itemName + ' + ') || o.name.startsWith(itemName + ' (')) count++; });
+      currentOrder.forEach(o => {
+        if (o.name === itemName) {
+          count++;
+        } else if ((o.name.startsWith(itemName + ' + ') || o.name.startsWith(itemName + ' (')) && !isOtherExactMenuItem(o.name, itemName)) {
+          count++;
+        }
+      });
       return count;
     }
 
@@ -1177,7 +1194,8 @@
       event.stopPropagation();
       for (let i = currentOrder.length - 1; i >= 0; i--) {
         const n = currentOrder.at(i).name;
-        if (n === itemName || n.startsWith(itemName + ' + ') || n.startsWith(itemName + ' (')) {
+        const isMatch = n === itemName || ((n.startsWith(itemName + ' + ') || n.startsWith(itemName + ' (')) && !isOtherExactMenuItem(n, itemName));
+        if (isMatch) {
           currentOrder.splice(i, 1);
           renderOrder(); renderMenu(); triggerFeedback(false);
           return;
